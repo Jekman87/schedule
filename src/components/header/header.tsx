@@ -3,7 +3,10 @@ import React from 'react';
 import './header.scss';
 
 
-function Header() {
+
+const Header: React.FunctionComponent = props => {
+
+
   return (
     <div className="header">Header</div>
   );

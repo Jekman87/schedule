@@ -3,7 +3,7 @@ import React from 'react';
 import './list.scss';
 
 
-function List() {
+const List: React.FunctionComponent = () => {
   return (
     <div className="list">List</div>
   );

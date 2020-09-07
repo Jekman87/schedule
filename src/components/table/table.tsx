@@ -3,7 +3,7 @@ import React from 'react';
 import './table.scss';
 
 
-function Table() {
+const Table: React.FunctionComponent = () => {
   return (
     <div className="table">Table</div>
   );

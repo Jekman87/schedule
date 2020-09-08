@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Header from '../header';
 import Table from '../table';
@@ -9,31 +9,34 @@ import InfoWindow from '../info-window'
 import EditWindow from '../edit-window'
 
 import './app.scss';
+import 'antd/dist/antd.css'
 
 
 const App: React.FunctionComponent = () => {
 
-/*   const [workSpace, setWorkSpace] = useState<string>('table')
+  const [workSpace, setWorkSpace] = useState<string>('table')
+
+  const changeWorkSpace = (clickSpace:string):void => {
+    setWorkSpace(clickSpace)
+  }
 
   const addWorkSpace = (currentWorkSpace:string) => {
     switch(currentWorkSpace) {
       case 'table':
-        return <Table />
+        return <Table text="TABLE" />
       case 'list': 
-      return <Table />
-      case 'Calendar':
+      return <List />
+      case 'calendar':
         return <Calendar />
       default:
-        console.log('table')
+        console.log(currentWorkSpace)
     }
-  } */
+  }
 
   return (
     <div className="app">
-      <Header />
-      <Table />
-      <List />
-      <Calendar />
+      <Header onChangeWorkSpace={changeWorkSpace} />
+      { addWorkSpace(workSpace) }
       <Footer />
       <InfoWindow />
       <EditWindow />

@@ -1,3 +1,16 @@
 .header {
   font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+}
+
+.header__button-block {
+  display: flex;
+
+  button {
+    margin: 1rem;
+  }
 }

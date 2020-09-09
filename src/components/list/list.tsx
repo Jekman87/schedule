@@ -1,4 +1,5 @@
 import React from 'react';
+// import { VariableSizeList } from 'react-window';
 import { List, Avatar, Badge } from 'antd';
 import { YoutubeOutlined, LaptopOutlined, TeamOutlined, QuestionOutlined } from '@ant-design/icons';
 import { grey } from '@ant-design/colors';
@@ -45,6 +46,8 @@ const data = [
   },
 ];
 
+// Сделать виртуализацию!
+
 function SList() {
   return (
     <div className='list'>
@@ -59,7 +62,11 @@ function SList() {
                   <Avatar
                     size='large'
                     shape='square'
-                    style={{ color: 'black', backgroundColor: 'transparent', fontWeight: 'bold' }}>
+                    style={{
+                      color: 'black',
+                      backgroundColor: 'transparent',
+                      fontWeight: 'bold',
+                    }}>
                     {item.type === 'Lecture' ? (
                       <YoutubeOutlined />
                     ) : item.type === 'Task' ? (

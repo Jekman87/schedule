@@ -46,13 +46,9 @@ const data = [
   },
 ];
 
-<<<<<<< HEAD
-const List: React.FunctionComponent = () => {
-=======
 // Сделать виртуализацию!
 
 function SList() {
->>>>>>> origin/List-component
   return (
     <div className='list'>
       <List

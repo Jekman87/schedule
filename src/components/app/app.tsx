@@ -5,8 +5,8 @@ import Table from '../table';
 import List from '../list';
 import Calendar from '../calendar';
 import Footer from '../footer'
-import InfoWindow from '../info-window'
-import EditWindow from '../edit-window'
+// import InfoWindow from '../info-window'
+// import EditWindow from '../edit-window'
 
 import './app.scss';
 import 'antd/dist/antd.css'
@@ -49,8 +49,8 @@ const App: React.FunctionComponent = () => {
       <Header onChangeWorkSpace={changeWorkSpace} />
       { addWorkSpace(workSpace) }
       <Footer />
-      <InfoWindow />
-      <EditWindow />
+      {/* <InfoWindow />
+      <EditWindow /> */}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Header from '../header';
 import Table from '../table';
@@ -15,6 +15,16 @@ import 'antd/dist/antd.css'
 const App: React.FunctionComponent = () => {
 
   const [workSpace, setWorkSpace] = useState<string>('table')
+
+  useEffect(() => {
+    fetch('rs-react-schedule.firebaseapp.com/api')
+    console.log(13)
+  }, []);
+
+  useEffect(() => {
+    console.log(14)
+  });
+
 
   const changeWorkSpace = (clickSpace:string):void => {
     setWorkSpace(clickSpace)

@@ -16,24 +16,25 @@ const App: React.FunctionComponent = () => {
 
   const [workSpace, setWorkSpace] = useState<string>('table')
 
-  useEffect(() => {
+  // for fetch from API
+/*   useEffect(() => {
     fetch('rs-react-schedule.firebaseapp.com/api')
     console.log(13)
-  }, []);
+  }, []); */
 
   useEffect(() => {
-    console.log(14)
+    console.log(workSpace)
   });
 
 
-  const changeWorkSpace = (clickSpace:string):void => {
-    setWorkSpace(clickSpace)
+  const changeWorkSpace = (clickedWorkSpace:any):void => {
+    setWorkSpace(clickedWorkSpace)
   }
 
   const addWorkSpace = (currentWorkSpace:string) => {
     switch(currentWorkSpace) {
       case 'table':
-        return <Table text="TABLE" />
+        return <Table text="table" />
       case 'list': 
       return <List />
       case 'calendar':

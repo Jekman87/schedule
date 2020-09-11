@@ -7,6 +7,7 @@ import Calendar from '../calendar';
 import Footer from '../footer';
 
 import './app.scss';
+import TestApi from '../test-api';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
       <List />
       <Calendar />
       <Footer />
+      <TestApi />
     </div>
   );
 }

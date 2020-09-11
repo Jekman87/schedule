@@ -3,7 +3,7 @@ import React from 'react';
 import './calendar.scss';
 
 
-function Calendar() {
+const Calendar: React.FunctionComponent = () => {
   return (
     <div className="calendar">Calendar</div>
   );

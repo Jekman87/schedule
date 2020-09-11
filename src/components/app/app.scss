@@ -5,12 +5,13 @@
 }
 
 body {
-  background-color: #8bc34ad4;
+  background-color: #e3e3e3d4;
 }
 
 .app {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }

@@ -6,7 +6,12 @@ import './table.scss';
 
 const columns = [
   { title: 'Name', dataIndex: 'name', key: 'name' },
-  { title: 'DescriptionUrl', dataIndex: 'descriptionUrl', key: 'descriptionUrl' },
+  { 
+    title: 'DescriptionUrl', 
+    dataIndex: 'descriptionUrl', 
+    key: 'descriptionUrl',
+    render: (text:any) => <a href={text} rel="noopener noreferrer" target="_blank">GitHub</a>
+  },
   { title: 'Type', dataIndex: 'type', key: 'type' },
   { title: 'TimeZone', dataIndex: 'timeZone', key: 'timeZone' },
   { title: 'Place', dataIndex: 'place', key: 'place' },
@@ -70,6 +75,7 @@ const data = [
 const TableComponent: React.FunctionComponent = () => {
   return (
     <Table
+    
     columns={columns}
 
     expandable={{

@@ -9,7 +9,11 @@ import Footer from '../footer'
 // import EditWindow from '../edit-window'
 
 import './app.scss';
+
 import 'antd/dist/antd.css'
+
+import TestApi from '../test-api';
+
 
 
 const App: React.FunctionComponent = () => {
@@ -49,8 +53,12 @@ const App: React.FunctionComponent = () => {
       <Header onChangeWorkSpace={changeWorkSpace} />
       { addWorkSpace(workSpace) }
       <Footer />
+<<<<<<< HEAD
       {/* <InfoWindow />
       <EditWindow /> */}
+=======
+      <TestApi />
+>>>>>>> origin/develop
     </div>
   );
 }

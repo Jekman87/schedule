@@ -48,7 +48,11 @@ const data = [
 
 // Сделать виртуализацию!
 
-function SList() {
+interface Props {
+  appData: any[]
+}
+
+const SList: React.FunctionComponent<Props> = ({ appData }) => {
   return (
     <div className='list'>
       <List

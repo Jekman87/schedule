@@ -2,10 +2,13 @@ import React from 'react';
 
 import './calendar.scss';
 
+interface Props {
+  appData: any[]
+}
 
-const Calendar: React.FunctionComponent = () => {
+const Calendar: React.FunctionComponent<Props> = ({ appData }) => {
   return (
-    <div className="calendar">Calendar</div>
+    <div className="calendar" onClick={() => console.log(appData)}>Calendar</div>
   );
 }
 

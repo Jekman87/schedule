@@ -3,12 +3,12 @@ import React from 'react';
 import './table.scss';
 
 interface Props {
-  text: string
+  appData: any[]
 }
 
-const Table: React.FunctionComponent<Props> = ({ text }) => {
+const Table: React.FunctionComponent<Props> = ({ appData }) => {
   return (
-    <div className="table">{text}</div>
+    <div className="table">Table</div>
   );
 }
 

@@ -11,9 +11,6 @@ import arrow from './data/arrow.png';
 
 import './header.scss';
 
-
-
-
 interface Props {
   onChangeWorkSpace: (event:any) => void
 }

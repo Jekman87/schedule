@@ -3,16 +3,15 @@ import React, { useState, useEffect } from 'react';
 import ApiService from '../../services/api-service';
 
 import Header from '../header';
-import Table from '../table';
-import List from '../list';
+import TableComponent from '../table';
+import SList from '../list';
 import Calendar from '../calendar';
 import Footer from '../footer'
 // import InfoWindow from '../info-window'
 // import EditWindow from '../edit-window'
 
-// import { IAppData } from './interfaces'
-
 import './app.scss';
+import 'antd/dist/antd.css'
 
 import 'antd/dist/antd.css'
 
@@ -32,13 +31,12 @@ const App: React.FunctionComponent = () => {
 
   useEffect(() => {
     api.getAllEvents().then((data) => setAppData(data.data)); // to state
+    api.getEventById("CendyYTicEvwd0rofuDD")
   }, []);
 
-/*   useEffect(() => {
+  useEffect(() => {
     console.log(appData)
-  }); */
-
-
+  });
 
   const changeWorkSpace = (clickedWorkSpace:any):void => {
     setWorkSpace(clickedWorkSpace)
@@ -47,10 +45,10 @@ const App: React.FunctionComponent = () => {
   const addWorkSpace = (currentWorkSpace:string) => {
     switch(currentWorkSpace) {
       case 'table':
-        return <Table
+        return <TableComponent
                 appData={appData} />
       case 'list':
-        return <List
+        return <SList
                 appData={appData} />
       case 'calendar':
         return <Calendar

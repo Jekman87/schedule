@@ -11,68 +11,113 @@ import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 // import InfoWindow from '../info-window'
 // import EditWindow from '../edit-window'
+import { storage } from '../../helpers/utils';
 
 import './app.scss';
 import 'antd/dist/antd.css'
 
+interface LoadDataType {
+  appData: string[]
+  loading: boolean
+  error: boolean
+}
+
+interface settingsType {
+  workSpace: string
+  role: string
+  accessibility: boolean
+  timeZone: string
+  styles: object
+  visibility: string
+};
+
 const api = new ApiService();
 
-//создать константы для настроек. Используем здесь, в хедере и возможно в др местах
+const initialSettings: settingsType = {
+  workSpace: 'table',
+  role: 'student',
+  accessibility: false,
+  timeZone: 'Europe/Minsk', // уточнить
+  styles: {color: 'black'}, // уточнить
+  visibility: '1111' // уточнить - видимость столбцов
+};
 
-const initialSettings = {};
-const savedSettings = {} || null; // забираем из LocalStorage
-const currentSettings = savedSettings ? savedSettings : initialSettings;
+const savedSettings = storage('scheduleSettings') || initialSettings;
 
-// const createEvent = (newEvent: object) => api.createEvent(newEvent).then((data) => console.log(data)); // pass to hedear + call modal window + time-zone + eye +
-// const getEventById = (id: string) => api.getEventById(id).then((data) => console.log(data));
-// const updateEvent = (id: string, newEvent: object) => api.updateEvent(id, newEvent).then((data) => console.log(data)); // pass to all (without header)
-// const deleteEvent = (id: string) => api.deleteEvent(id).then((data) => console.log(data)); // pass to all (without header)
+// console.log('savedSettings', savedSettings);
 
 const App: React.FC = () => {
-  // при обновлении страницы настройки берутся из LocalStorage - currentSettings
-
-  const [appData, setAppData] = useState<string[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
-
-  // объединить настройки в 1 объект стейт?
-  //const [settings, setSettings] = useState<{}>(currentSettings);
-
-  const [workSpace, setWorkSpace] = useState<string>('table');
-  const [role, setRole] = useState<string>('student');
-  const [accessibility, setAccessibility] = useState<boolean>(false);
-  const [timeZone, setTimeZone] = useState<string>('ru-Ru');
+  const [loadData, setLoadData] = useState<LoadDataType>({
+    appData: [],
+    loading: true,
+    error: false
+  });
+  const [settings, setSettings] = useState<settingsType>(savedSettings);
 
   useEffect(() => {
     api.getAllEvents()
       .then((data) => {
-        setLoading(false);
-        setAppData(data.data);
+        setLoadData((state) => ({
+          ...state,
+          loading: false,
+          appData: data.data
+        }));
       })
       .catch((err) => {
         console.log(err);
-        setLoading(false);
-        setError(true);
+        setLoadData((state) => ({
+          ...state,
+          loading: false,
+          error: true
+        }));
       });
   }, []);
 
-  const changeWorkSpace = (clickedWorkSpace: string):void => {
-    setWorkSpace(clickedWorkSpace);
+  const changeSettings = (newSettings: settingsType): void => {
+    storage('scheduleSettings', newSettings);
+    setSettings(newSettings);
+  }
+
+  const changeWorkSpace = (workSpace: string): void => {
+    const newSettings: settingsType = {...settings, workSpace};
+    changeSettings(newSettings);
+
+    console.log('Setting changeWorkSpace: ', workSpace);
   }
 
   const changeRole = (role: string):void => {
-    setRole(role);
+    const newSettings: settingsType = {...settings, role};
+    changeSettings(newSettings);
+
     console.log('Setting changeRole: ', role);
   }
 
-  const changeAccessibility = (isOn: boolean):void => {
-    setAccessibility(isOn);
-    console.log('Setting changeAccessibility: ', isOn);
+  const changeAccessibility = (accessibility: boolean):void => {
+    const newSettings: settingsType = {...settings, accessibility};
+    changeSettings(newSettings);
+
+    console.log('Setting changeAccessibility: ', accessibility);
   }
 
   const changeTimeZone= (timeZone: string):void => {
-    setTimeZone(timeZone);
+    const newSettings: settingsType = {...settings, timeZone};
+    changeSettings(newSettings);
+
     console.log('Setting changeTimeZone: ', timeZone);
+  }
+
+  const changeStyles = (styles: object):void => {
+    const newSettings: settingsType = {...settings, styles};
+    changeSettings(newSettings);
+
+    console.log('Setting changeStyles: ', styles);
+  }
+
+  const changeVisibility= (visibility: string):void => {
+    const newSettings: settingsType = {...settings, visibility};
+    changeSettings(newSettings);
+
+    console.log('Setting changchangeVisibilityeTimeZone: ', visibility);
   }
 
   const saveSchedule = (format: string):void => {
@@ -80,30 +125,27 @@ const App: React.FC = () => {
     console.log('Setting saveSchedule: ', format);
   }
 
-  const changeStyles= (style: string):void => {
-    // setStyles(style);
-    console.log('Setting changeStyles: ', style);
-  }
-
-  const changeVisibility= (visibility: string):void => {
-    // setVisibility(visibility);
-    console.log('Setting changchangeVisibilityeTimeZone: ', visibility);
-  }
-
   // метод вызывается из модалки при создании нового события
   const createEvent = (newEvent: object):void => {
-    // api.createEvent(newEvent)
-    console.log('Setting addEvent');
+    // api.createEvent(newEvent);
+    console.log('Setting createEvent');
   }
 
   // метод вызывается из модалки при редактировании события. Или из таблицы.
   const updateEvent = (id: string, newEvent: object):void => {
-    // api.updateEvent(id, newEvent)
-    console.log('Setting addEvent');
+    // api.updateEvent(id, newEvent);
+    console.log('Setting updateEvent');
   }
 
+  // метод вызывается из модалки при редактировании события. Или из таблицы.
+  const deleteEvent = (id: string):void => {
+    // api.deleteEvent(id);
+    console.log('Setting deleteEvent');
+  }
 
-  const addWorkSpace = (currentWorkSpace:string) => {
+  const { appData, loading, error } = loadData;
+
+  const addWorkSpace = (currentWorkSpace: string) => {
     console.log(appData);
 
     switch(currentWorkSpace) {
@@ -123,18 +165,16 @@ const App: React.FC = () => {
 
   const errorMessage = error ? <ErrorIndicator /> : null;
   const spinner = loading ? <Spinner /> : null;
-  const content = appData.length ? addWorkSpace(workSpace) : null;
+  const content = appData.length ? addWorkSpace(settings.workSpace) : null;
+
+  console.log('Settings: ', settings);
+  console.log('LoadData: ', loadData);
 
   return (
     <>
       <Header
         /*
         settings={settings}
-
-        workSpace={workSpace}
-        role={role}
-        accessibility={accessibility}
-        timeZone={timeZone}
         */
 
         onChangeWorkSpace={changeWorkSpace}

@@ -1,21 +1,20 @@
 import React from 'react';
 
-import './error-indicator.css';
-import icon from './death-star.png';
+import './error-indicator.scss';
+import icon from './error-fox.jpg';
 
 const ErrorIndicator = () => {
   return (
     <div className="error-indicator">
       <img src={icon} alt="error icon"/>
-      <span className="boom">BOOM!</span>
+      <span className="oops">OOPS!</span>
       <span>
-        something has gone terribly wrong
+        Server connection error:(
       </span>
       <span>
-        (but we already sent droids to fix it)
+        Please try again later!
       </span>
     </div>
   );
 }
-
 export default ErrorIndicator;

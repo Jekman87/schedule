@@ -4,12 +4,13 @@
   flex-direction: column;
   align-items: center;
   color: #c78f22;
-}
+  margin: 20px auto;
 
-.error-indicator img {
-  margin-bottom: 1rem;
-}
+  img {
+    margin-bottom: 1rem;
+  }
 
-.error-indicator .boom {
-  font-size: 1.7rem;
+  .oops {
+    font-size: 1.7rem;
+  }
 }

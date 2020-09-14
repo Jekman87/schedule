@@ -8,12 +8,12 @@ import SList from '../list';
 import Calendar from '../calendar';
 import Footer from '../footer'
 import Spinner from '../spinner';
+import ErrorIndicator from '../error-indicator';
 // import InfoWindow from '../info-window'
 // import EditWindow from '../edit-window'
 
 import './app.scss';
 import 'antd/dist/antd.css'
-
 
 const api = new ApiService();
 
@@ -64,7 +64,7 @@ const App: React.FC = () => {
     }
   }
 
-  const errorMessage = error ? <p>Server error!</p> : null;
+  const errorMessage = error ? <ErrorIndicator /> : null;
   const spinner = loading ? <Spinner /> : null;
   const content = appData.length ? addWorkSpace(workSpace) : null;
 

@@ -18,20 +18,13 @@ import 'antd/dist/antd.css'
 
 const api = new ApiService();
 
-const createEvent = (newEvent: object) => api.createEvent(newEvent).then((data) => console.log(data)); // pass to hedear + call modal window + time-zone + eye +
-// const getEventById = (id: string) => api.getEventById(id).then((data) => console.log(data));
-const updateEvent = (id: string, newEvent: object) => api.updateEvent(id, newEvent).then((data) => console.log(data)); // pass to all (without header)
-const deleteEvent = (id: string) => api.deleteEvent(id).then((data) => console.log(data)); // pass to all (without header)
-
-
 const App: React.FunctionComponent = () => {
 
   const [workSpace, setWorkSpace] = useState<string>('table')
   const [appData, setAppData] = useState<any[]>([])
 
   useEffect(() => {
-    api.getAllEvents().then((data) => setAppData(data.data)); // to state
-    api.getEventById("CendyYTicEvwd0rofuDD")
+    fetch('https://rs-react-schedule.firebaseapp.com/api/team/100/events').then(data => data.json()).then(data2 => console.log(data2.data))
   }, []);
 
   useEffect(() => {

@@ -1,9 +1,9 @@
-import React from 'react';
-import { Table } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Table, Popover, Checkbox } from 'antd';
+import { EyeInvisibleTwoTone, EyeTwoTone, EditTwoTone, DownSquareTwoTone } from '@ant-design/icons';
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 import './table.scss';
-
 
 
 const columns = [
@@ -60,7 +60,7 @@ const data = [
     name: 'SongBird1',
     description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'Task',
+    type: 'project task',
     timeZone: 'Minsk / Europe 30.08.2020 23:59',
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
@@ -70,7 +70,7 @@ const data = [
     name: 'SongBird2',
     description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'Task',
+    type: 'js task',
     timeZone: 'Minsk / Europe 30.08.2020 23:59',
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
@@ -80,7 +80,7 @@ const data = [
     name: 'SongBird3',
     description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'Task',
+    type: 'test',
     timeZone: 'Minsk / Europe 30.08.2020 23:59',
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
@@ -90,7 +90,7 @@ const data = [
     name: 'SongBird4',
     description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'Task',
+    type: 'meetup',
     timeZone: 'Minsk / Europe 30.08.2020 23:59',
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
@@ -100,7 +100,7 @@ const data = [
     name: 'SongBird5',
     description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'Task',
+    type: 'interview',
     timeZone: 'Minsk / Europe 30.08.2020 23:59',
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
@@ -111,27 +111,121 @@ interface Props {
   appData: any[]
 }
 
-const rowSelection = {
-  onChange: (selectedRowKeys:any, selectedRows:any) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  getCheckboxProps: (record:any) => ({
-    disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    name: record.name,
-  }),
-};
-  
+
 const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
   const selectionType = 'checkbox';
 
+  const [dataWithoutHiddenComponents, setNewData] = useState<any[]>([])
+  const [activeRows, setActiveRows] = useState<any[]>([])
+  const [hideComponents, setHideComponents] = useState<boolean>(false)
+
+  function onChange(checkedValues:any) {
+    console.log('checked = ', checkedValues);
+  }
+  
+  const plainOptions = ['Name', 'DescriptionUrl', 'Type', 'TimeZone', 'Description' , 'Comment'];
+
+  const rowSelection = {
+    onChange: (selectedRowKeys:any, selectedRows:any) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      setActiveRows(selectedRows)
+    }
+  };
+
+  function getNewData() {
+    let currentData:any = []
+
+    if(hideComponents) {
+      currentData = dataWithoutHiddenComponents
+    } else {
+      currentData = [...data]
+    }
+
+    activeRows.forEach((el) => {
+      currentData = currentData.filter((element:any) => element.name !== el.name)
+    })
+
+    setNewData(currentData)
+  }
+
+  useEffect(() => {
+    console.log(activeRows.length)
+    console.log(hideComponents)
+  });
+
+  function hideSelectedRows() {
+    getNewData();
+    setHideComponents(true);
+    // setActiveRows([]);
+  }
+
+  function showHiddenRows() {
+    // setActiveRows(['']);
+    setHideComponents(false);
+  }
+
+
+  const content = (
+    <div>
+    <Checkbox.Group 
+      options={plainOptions} 
+      defaultValue={['Name', 'DescriptionUrl', 'Type', 'TimeZone', 'Description' , 'Comment']} 
+      onChange={onChange} />
+    </div>
+  );
+
   return (
     <div>
+      <div className="table-header">
+        <EyeInvisibleTwoTone 
+          twoToneColor="#fd594d" 
+          style={{ fontSize: '2rem' }} 
+          className={
+            activeRows.length 
+            ? "table-header__icon table-header__icon-hide"
+            : "table-header__icon table-header__icon-hide none-visibility"}
+          onClick={() => hideSelectedRows()} />
+        <EyeTwoTone 
+          twoToneColor="#00a80ed9"
+          style={{ fontSize: '2rem' }}
+          className={
+            hideComponents
+            ? "table-header__icon table-header__icon-show"
+            : "table-header__icon table-header__icon-show none-visibility"}
+          onClick={() => showHiddenRows()} />
+
+        <EditTwoTone 
+          twoToneColor="#1890ff"
+          style={{ fontSize: '2rem' }}
+          className={
+            activeRows.length 
+            ? "table-header__icon"
+            : "table-header__icon table-header__icon-hide none-visibility"}
+        />
+
+        <div>
+          <Popover content={content} placement="right" trigger="click">
+            <DownSquareTwoTone 
+              twoToneColor="#1890ff"
+              style={{ fontSize: '2rem' }}
+              className="table-header__icon"
+            />
+          </Popover>
+        </div>
+
+      </div>
+
       <Table
         pagination={{ 
-          pageSize: 3,
+          pageSize: 13,
           position: ['bottomCenter']
          }}
+
         size="middle"
+        onRow = {record =>({
+          onClick:() => console.warn(record.key)
+        })}
+        // rowClassName={(record, index) => index % 2 === 0 ? record.type : 'table-row-dark'}
         rowSelection={{
           type: selectionType,
           ...rowSelection,
@@ -139,7 +233,7 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
 
         columns={columns}
 
-        dataSource={data}
+        dataSource={hideComponents ? dataWithoutHiddenComponents : data}
       />
     </div>
   );

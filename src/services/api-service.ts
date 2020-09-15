@@ -1,6 +1,6 @@
 export default class ApiService {
 
-  _apiBase = 'https://rs-react-schedule.firebaseapp.com/api/team/team10';
+  _apiBase = 'https://rs-react-schedule.firebaseapp.com/api/team/16';
 
   getAllData = async (url: string) => {
     const res = await fetch(`${this._apiBase}${url}`);

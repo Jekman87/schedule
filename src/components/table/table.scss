@@ -1,0 +1,34 @@
+.table-header {
+  display: flex;
+}
+
+.table-header__icon {
+  padding: 0.5rem;
+  transition: all 0.8s;
+}
+
+/* .ant-table-row-selected {
+  display: none;
+}
+ */
+
+.none-visibility {
+  display: none !important;
+}
+
+@media (hover:hover) {
+  .table-header__icon:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: all 0.8s;
+  }
+}
+
+
+.table-row-light {
+  background-color: red;
+}
+
+.table-row-dark {
+  background-color: rgba(0, 0, 0, 0.281);
+}

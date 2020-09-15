@@ -1,9 +1,8 @@
+import { API_BASE } from '../constants/constants'
+
 export default class ApiService {
-
-  _apiBase = 'https://rs-react-schedule.firebaseapp.com/api/team/team10';
-
   getAllData = async (url: string) => {
-    const res = await fetch(`${this._apiBase}${url}`);
+    const res = await fetch(`${API_BASE}${url}`);
 
     if (!res.ok) {
       throw new Error(`Server error, received ${res.status}`)
@@ -13,7 +12,7 @@ export default class ApiService {
   };
 
   createData = async (url: string, data: object) => {
-    const res = await fetch(`${this._apiBase}${url}`, {
+    const res = await fetch(`${API_BASE}${url}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -30,7 +29,7 @@ export default class ApiService {
   };
 
   getDataById = async (url: string, id: string) => {
-    const res = await fetch(`${this._apiBase}${url}${id}`);
+    const res = await fetch(`${API_BASE}${url}${id}`);
 
     if (!res.ok) {
       throw new Error(`Server error, received ${res.status}`)
@@ -40,7 +39,7 @@ export default class ApiService {
   };
 
   updateData = async (url: string, id: string, data: object) => {
-    const res = await fetch(`${this._apiBase}${url}${id}`, {
+    const res = await fetch(`${API_BASE}${url}${id}`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -57,7 +56,7 @@ export default class ApiService {
   };
 
   deleteData = async (url: string, id: string) => {
-    const res = await fetch(`${this._apiBase}${url}${id}`, {
+    const res = await fetch(`${API_BASE}${url}${id}`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',

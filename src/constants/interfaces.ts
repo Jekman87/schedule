@@ -13,6 +13,12 @@ export interface SettingsType {
   visibility: string
 };
 
+export interface ModalStateType {
+  isShow: boolean
+  isViewEvent: boolean
+  eventData: EventType | undefined | null
+}
+
 export interface EventType {
   id?: string
   name: string

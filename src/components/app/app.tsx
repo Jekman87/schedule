@@ -8,11 +8,11 @@ import Footer from '../footer'
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 // import InfoWindow from '../info-window'
-// import EditWindow from '../edit-window'
+import EditWindow from '../edit-window'
 
 import ApiService from '../../services/api-service';
 import { storage } from '../../helpers/utils';
-import { LoadDataType, SettingsType, EventType } from '../../constants/interfaces';
+import { LoadDataType, SettingsType, EventType, ModalStateType } from '../../constants/interfaces';
 import {
   ROLE,
   TIME_ZONE,
@@ -30,13 +30,17 @@ const initialSettings: SettingsType = {
   role: ROLE.student,
   accessibility: false,
   timeZone: TIME_ZONE.minsk.location,
-  styles: {color: 'black'}, // уточнить
-  visibility: '1111' // уточнить - видимость столбцов
+  styles: {color: 'black'}, // уточнить стилизацию
+  visibility: '1111' // уточнить видимость столбцов
+};
+
+const initialModalState: ModalStateType = {
+  isShow: false,
+  isViewEvent: false,
+  eventData: null
 };
 
 const savedSettings = storage(SCHEDULE_STORAGE_KEY) || initialSettings;
-
-// console.log('savedSettings', savedSettings);
 
 const App: React.FC = () => {
   const [loadData, setLoadData] = useState<LoadDataType>({
@@ -45,6 +49,7 @@ const App: React.FC = () => {
     error: false
   });
   const [settings, setSettings] = useState<SettingsType>(savedSettings);
+  const [modalState, setModalState] = useState<ModalStateType>(initialModalState);
 
   useEffect(() => {
     api.getAllEvents()
@@ -65,98 +70,153 @@ const App: React.FC = () => {
       });
   }, []);
 
-  const changeSettings = (newSettings: SettingsType): void => {
-    storage(SCHEDULE_STORAGE_KEY, newSettings);
-    setSettings(newSettings);
-  }
-
-  const changeWorkSpace = (workSpace: string): void => {
-    const newSettings: SettingsType = {...settings, workSpace};
-    changeSettings(newSettings);
-
-    console.log('Setting changeWorkSpace: ', workSpace);
-  }
-
-  const changeRole = (role: string):void => {
-    const newSettings: SettingsType = {...settings, role};
-    changeSettings(newSettings);
-
-    console.log('Setting changeRole: ', role);
-  }
-
-  const changeAccessibility = (accessibility: boolean):void => {
-    const newSettings: SettingsType = {...settings, accessibility};
-    changeSettings(newSettings);
-
-    console.log('Setting changeAccessibility: ', accessibility);
-  }
-
-  const changeTimeZone= (timeZone: string):void => {
-    const newSettings: SettingsType = {...settings, timeZone};
-    changeSettings(newSettings);
-
-    console.log('Setting changeTimeZone: ', timeZone);
-  }
-
-  const changeStyles = (styles: object):void => {
-    const newSettings: SettingsType = {...settings, styles};
-    changeSettings(newSettings);
-
-    console.log('Setting changeStyles: ', styles);
-  }
-
-  const changeVisibility= (visibility: string):void => {
-    const newSettings: SettingsType = {...settings, visibility};
-    changeSettings(newSettings);
-
-    console.log('Setting changchangeVisibilityeTimeZone: ', visibility);
-  }
-
-  const saveSchedule = (format: string):void => {
-    // созранение расписание в зависимости от формата
-    console.log('Setting saveSchedule: ', format);
-  }
-
-  // метод вызывается из модалки при создании нового события
-  const showAddEventModal = ():void => {
-    // показываем подалку
-    console.log('showAddEventModal');
-  }
-
-  // метод вызывается из модалки при создании нового события
-  const createEvent = (newEvent: object):void => {
-    // api.createEvent(newEvent);
-    console.log('Setting createEvent');
-  }
-
-  // метод вызывается из модалки при редактировании события. Или из таблицы.
-  const updateEvent = (id: string, newEvent: object):void => {
-    // api.updateEvent(id, newEvent);
-    console.log('Setting updateEvent');
-  }
-
-  // метод вызывается из модалки при редактировании события. Или из таблицы.
-  const deleteEvent = (id: string):void => {
-    // api.deleteEvent(id);
-    console.log('Setting deleteEvent');
-  }
+  useEffect(() => {
+    storage(SCHEDULE_STORAGE_KEY, settings);
+  }, [settings]);
 
   const { appData, loading, error } = loadData;
 
+  const changeWorkSpace = (workSpace: string): void => {
+    setSettings((settings) => ({...settings, workSpace}));
+    console.log('Setting changeWorkSpace: ', workSpace);
+  }
+
+  const changeRole = (role: string): void => {
+    setSettings((settings) => ({...settings, role}));
+    console.log('Setting changeRole: ', role);
+  }
+
+  const changeAccessibility = (accessibility: boolean): void => {
+    setSettings((settings) => ({...settings, accessibility}));
+    console.log('Setting changeAccessibility: ', accessibility);
+  }
+
+  const changeTimeZone = (timeZone: string): void => {
+    setSettings((settings) => ({...settings, timeZone}));
+    console.log('Setting changeTimeZone: ', timeZone);
+  }
+
+  const changeStyles = (styles: object): void => {
+    setSettings((settings) => ({...settings, styles}));
+    console.log('Setting changeStyles: ', styles);
+  }
+
+  const changeVisibility = (visibility: string): void => {
+    setSettings((settings) => ({...settings, visibility}));
+    console.log('Setting changeVisibility: ', visibility);
+  }
+
+  const downloadSchedule = (format: string): void => {
+    // загрузка расписание в зависимости от формата
+    // TODO
+    console.log('Setting saveSchedule: ', format);
+  }
+
+  // метод вызывается при нажатии на кнопку в хедере AddEvent
+  // показываем пустую модалку для создания ивента
+  const showNewEventModal = (): void => {
+    setModalState({
+      isShow: true,
+      isViewEvent: false,
+      eventData: null
+    });
+    console.log('showAddEventModal');
+  }
+
+  // показать модалку с инфой о событии при клике по строке
+  const showViewEventModal = (id: string): void => {
+    const currentEvent = appData.find(el => el.id === id);
+    setModalState({
+      isShow: true,
+      isViewEvent: true,
+      eventData: currentEvent
+    });
+    console.log('showEventModal: ', id);
+  }
+
+  // метод вызывается при нажатии на кнопку Редактировать в таблицу
+  // показываем заполненную модалку для редактирования ивента
+  const showEditEventModal = (id: string): void => {
+    const currentEvent = appData.find(el => el.id === id);
+    setModalState({
+      isShow: true,
+      isViewEvent: false,
+      eventData: currentEvent
+    });
+    console.log('showAddEventModal');
+  }
+
+  // метод вызывается из таблицы при удалении события
+  const deleteEvent = (id: string): void => {
+    // api.deleteEvent(id);
+    // удалить из ивентов! при успешном запросе
+    // сообщение об успехе?
+    console.log('deleteEvent');
+  }
+
+  // метод вызывается из модалки при создании нового события
+  const createModalEvent = (newEvent: object): void => {
+    // api.createEvent(newEvent);
+    // добавить в ивенты! при успешном запросе
+    // сообщение об успехе?
+    setModalState(initialModalState);
+    console.log('createModalEvent');
+  }
+
+  // метод вызывается из модалки при редактировании события.
+  const updateModalEvent = (id: string, newEvent: object): void => {
+    // api.updateEvent(id, newEvent);
+    // обновить в инвентах! при успешном запросе
+    // сообщение об успехе?
+    setModalState(initialModalState);
+    console.log('updateModalEvent');
+  }
+
+  // метод вызывается из модалки при удалении события
+  const deleteModalEvent = (id: string): void => {
+    deleteEvent(id);
+    setModalState(initialModalState);
+    console.log('deleteModalEvent');
+  }
+
+  // закрытие модалки - по крестику или по области вне модалки
+  const closeModal = (): void => {
+    setModalState(initialModalState);
+    console.log('closeModal');
+  }
+
   // применяем настройки к данным. Сортировка, фильрация и т.д.
+  // сортировка по дате? Или другой параметр, в зависимости от настроек?
   // также передаем настройки в каждый компонент, для оформления внешнего вида
 
   const addWorkSpace = (currentWorkSpace: string) => {
     switch(currentWorkSpace) {
       case WORK_SPACE.table:
         return <TableComponent
+                /*
+                settings={settings}
+                showViewEventModal={showViewEventModal}
+                showEditEventModal={showEditEventModal}
+                deleteEvent={deleteEvent}
+                */
                 appData={appData} />
+
       case WORK_SPACE.list:
         return <SList
+                /*
+                settings={settings}
+                showViewEventModal={showViewEventModal}
+                */
                 appData={appData} />
+
       case WORK_SPACE.calendar:
         return <Calendar
+                /*
+                settings={settings}
+                showViewEventModal={showViewEventModal}
+                */
                 appData={appData} />
+
       default:
         return null;
     }
@@ -165,6 +225,18 @@ const App: React.FC = () => {
   const errorMessage = error ? <ErrorIndicator /> : null;
   const spinner = loading ? <Spinner /> : null;
   const content = appData.length ? addWorkSpace(settings.workSpace) : null;
+  const modal = modalState.isShow ?
+    <EditWindow
+      /*
+      settings={settings}
+      modalState={modalState}
+      createModalEvent={createModalEvent}
+      updateModalEvent={updateModalEvent}
+      deleteModalEvent={deleteModalEvent}
+      closeModal={closeModal}
+      */
+    /> :
+    null;
 
   console.log('Settings: ', settings);
   console.log('LoadData: ', loadData);
@@ -176,24 +248,24 @@ const App: React.FC = () => {
         settings={settings}
         */
 
-        onChangeWorkSpace={changeWorkSpace}
+        onChangeWorkSpace={changeWorkSpace} // убрать, аналог ниже
         /*
         changeWorkSpace={changeWorkSpace}
         changeRole={changeRole}
         changeAccessibility={changeAccessibility}
         changeTimeZone={changeTimeZone}
-        saveSchedule={saveSchedule}
+        downloadSchedule={downloadSchedule}
         changeStyles={changeStyles}
         changeVisibility={changeVisibility}
-        showAddEventModal={showAddEventModal}
+        showNewEventModal={showNewEventModal}
+
         */
       />
       {errorMessage}
       {spinner}
       {content}
+      {modal}
       <Footer />
-      {/* <InfoWindow />
-      <EditWindow /> */}
     </>
   );
 }

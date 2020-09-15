@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import ApiService from '../../services/api-service';
-
 import Header from '../header';
 import TableComponent from '../table';
 import SList from '../list';
@@ -11,38 +9,32 @@ import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 // import InfoWindow from '../info-window'
 // import EditWindow from '../edit-window'
+
+import ApiService from '../../services/api-service';
 import { storage } from '../../helpers/utils';
+import { LoadDataType, SettingsType, EventType } from '../../constants/interfaces';
+import {
+  ROLE,
+  TIME_ZONE,
+  WORK_SPACE,
+  SCHEDULE_STORAGE_KEY
+} from '../../constants/constants';
 
 import './app.scss';
 import 'antd/dist/antd.css'
 
-interface LoadDataType {
-  appData: string[]
-  loading: boolean
-  error: boolean
-}
-
-interface settingsType {
-  workSpace: string
-  role: string
-  accessibility: boolean
-  timeZone: string
-  styles: object
-  visibility: string
-};
-
 const api = new ApiService();
 
-const initialSettings: settingsType = {
-  workSpace: 'table',
-  role: 'student',
+const initialSettings: SettingsType = {
+  workSpace: WORK_SPACE.table,
+  role: ROLE.student,
   accessibility: false,
-  timeZone: 'Europe/Minsk', // уточнить
+  timeZone: TIME_ZONE.minsk.location,
   styles: {color: 'black'}, // уточнить
   visibility: '1111' // уточнить - видимость столбцов
 };
 
-const savedSettings = storage('scheduleSettings') || initialSettings;
+const savedSettings = storage(SCHEDULE_STORAGE_KEY) || initialSettings;
 
 // console.log('savedSettings', savedSettings);
 
@@ -52,7 +44,7 @@ const App: React.FC = () => {
     loading: true,
     error: false
   });
-  const [settings, setSettings] = useState<settingsType>(savedSettings);
+  const [settings, setSettings] = useState<SettingsType>(savedSettings);
 
   useEffect(() => {
     api.getAllEvents()
@@ -73,48 +65,48 @@ const App: React.FC = () => {
       });
   }, []);
 
-  const changeSettings = (newSettings: settingsType): void => {
-    storage('scheduleSettings', newSettings);
+  const changeSettings = (newSettings: SettingsType): void => {
+    storage(SCHEDULE_STORAGE_KEY, newSettings);
     setSettings(newSettings);
   }
 
   const changeWorkSpace = (workSpace: string): void => {
-    const newSettings: settingsType = {...settings, workSpace};
+    const newSettings: SettingsType = {...settings, workSpace};
     changeSettings(newSettings);
 
     console.log('Setting changeWorkSpace: ', workSpace);
   }
 
   const changeRole = (role: string):void => {
-    const newSettings: settingsType = {...settings, role};
+    const newSettings: SettingsType = {...settings, role};
     changeSettings(newSettings);
 
     console.log('Setting changeRole: ', role);
   }
 
   const changeAccessibility = (accessibility: boolean):void => {
-    const newSettings: settingsType = {...settings, accessibility};
+    const newSettings: SettingsType = {...settings, accessibility};
     changeSettings(newSettings);
 
     console.log('Setting changeAccessibility: ', accessibility);
   }
 
   const changeTimeZone= (timeZone: string):void => {
-    const newSettings: settingsType = {...settings, timeZone};
+    const newSettings: SettingsType = {...settings, timeZone};
     changeSettings(newSettings);
 
     console.log('Setting changeTimeZone: ', timeZone);
   }
 
   const changeStyles = (styles: object):void => {
-    const newSettings: settingsType = {...settings, styles};
+    const newSettings: SettingsType = {...settings, styles};
     changeSettings(newSettings);
 
     console.log('Setting changeStyles: ', styles);
   }
 
   const changeVisibility= (visibility: string):void => {
-    const newSettings: settingsType = {...settings, visibility};
+    const newSettings: SettingsType = {...settings, visibility};
     changeSettings(newSettings);
 
     console.log('Setting changchangeVisibilityeTimeZone: ', visibility);
@@ -123,6 +115,12 @@ const App: React.FC = () => {
   const saveSchedule = (format: string):void => {
     // созранение расписание в зависимости от формата
     console.log('Setting saveSchedule: ', format);
+  }
+
+  // метод вызывается из модалки при создании нового события
+  const showAddEventModal = ():void => {
+    // показываем подалку
+    console.log('showAddEventModal');
   }
 
   // метод вызывается из модалки при создании нового события
@@ -145,17 +143,18 @@ const App: React.FC = () => {
 
   const { appData, loading, error } = loadData;
 
-  const addWorkSpace = (currentWorkSpace: string) => {
-    console.log(appData);
+  // применяем настройки к данным. Сортировка, фильрация и т.д.
+  // также передаем настройки в каждый компонент, для оформления внешнего вида
 
+  const addWorkSpace = (currentWorkSpace: string) => {
     switch(currentWorkSpace) {
-      case 'table':
+      case WORK_SPACE.table:
         return <TableComponent
                 appData={appData} />
-      case 'list':
+      case WORK_SPACE.list:
         return <SList
                 appData={appData} />
-      case 'calendar':
+      case WORK_SPACE.calendar:
         return <Calendar
                 appData={appData} />
       default:
@@ -186,6 +185,7 @@ const App: React.FC = () => {
         saveSchedule={saveSchedule}
         changeStyles={changeStyles}
         changeVisibility={changeVisibility}
+        showAddEventModal={showAddEventModal}
         */
       />
       {errorMessage}

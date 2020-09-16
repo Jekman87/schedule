@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Popover, Checkbox } from 'antd';
-import { EyeInvisibleTwoTone, EyeTwoTone, EditTwoTone, DownSquareTwoTone } from '@ant-design/icons';
+import { EyeInvisibleTwoTone, EyeTwoTone, EditTwoTone, DownSquareTwoTone, DeleteTwoTone } from '@ant-design/icons';
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 import './table.scss';
@@ -105,6 +105,56 @@ const data = [
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
   },
+  {
+    key: '51',
+    name: 'SongBird51',
+    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
+    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
+    type: 'interview',
+    timeZone: 'Minsk / Europe 30.08.2020 23:59',
+    place: '-',
+    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
+  },
+  {
+    key: '9',
+    name: 'SongBird41',
+    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
+    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
+    type: 'meetup',
+    timeZone: 'Minsk / Europe 30.08.2020 23:59',
+    place: '-',
+    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
+  },
+  {
+    key: '7',
+    name: 'SongBird21',
+    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
+    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
+    type: 'js task',
+    timeZone: 'Minsk / Europe 30.08.2020 23:59',
+    place: '-',
+    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
+  },
+  {
+    key: '8',
+    name: 'SongBird31',
+    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
+    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
+    type: 'test',
+    timeZone: 'Minsk / Europe 30.08.2020 23:59',
+    place: '-',
+    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
+  },
+  {
+    key: '6',
+    name: 'SongBird11',
+    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
+    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
+    type: 'project task',
+    timeZone: 'Minsk / Europe 30.08.2020 23:59',
+    place: '-',
+    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
+  }
 ];
 
 interface Props {
@@ -151,6 +201,7 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
   useEffect(() => {
     console.log(activeRows.length)
     console.log(hideComponents)
+    console.warn(appData)
   });
 
   function hideSelectedRows() {
@@ -162,6 +213,24 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
   function showHiddenRows() {
     // setActiveRows(['']);
     setHideComponents(false);
+  }
+
+  function addColorToRow(eventType:string) {
+    switch(eventType) {
+      case 'project task':
+        return 'type__project-task'
+      case 'js task':
+        return 'type__js-task'
+      case 'test':
+        return 'type__test'
+      case 'meetup':
+        return 'type__meetup'
+      case 'interview':
+        return 'type__interview'
+      default:
+        throw new Error('13')
+    }
+
   }
 
 
@@ -198,10 +267,19 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
           twoToneColor="#1890ff"
           style={{ fontSize: '2rem' }}
           className={
-            activeRows.length 
+            activeRows.length !== 0 && activeRows.length < 2
             ? "table-header__icon"
             : "table-header__icon table-header__icon-hide none-visibility"}
         />
+
+        <DeleteTwoTone 
+          twoToneColor="#fd594d"
+          style={{ fontSize: '2rem' }}
+          className={
+            activeRows.length !== 0 && activeRows.length < 2
+            ? "table-header__icon"
+            : "table-header__icon table-header__icon-hide none-visibility"}
+          />
 
         <div>
           <Popover content={content} placement="right" trigger="click">
@@ -225,7 +303,7 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
         onRow = {record =>({
           onClick:() => console.warn(record.key)
         })}
-        // rowClassName={(record, index) => index % 2 === 0 ? record.type : 'table-row-dark'}
+        rowClassName={(record) => addColorToRow(record.type)}
         rowSelection={{
           type: selectionType,
           ...rowSelection,

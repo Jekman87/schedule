@@ -16,19 +16,41 @@
   display: none !important;
 }
 
+tr td {
+  transition: all 0.5s !important;
+}
+
 @media (hover:hover) {
   .table-header__icon:hover {
     cursor: pointer;
     transform: scale(1.1);
     transition: all 0.8s;
   }
+
+  tr:hover td {
+    background: unset !important;
+    opacity: 0.7;
+    transition: all 0.5s !important;
+    cursor: default;
+  }
 }
 
-
-.table-row-light {
-  background-color: red;
+.type__project-task {
+  background-color: rgba(255, 0, 0, 0.40);
 }
 
-.table-row-dark {
-  background-color: rgba(0, 0, 0, 0.281);
+.type__js-task {
+  background-color: rgba(0, 0, 0, 0.438);
+}
+
+.type__meetup {
+  background-color: rgba(0, 128, 0, 0.432);
+}
+
+.type__test {
+  background-color: rgba(0, 0, 255, 0.445);
+}
+
+.type__interview {
+  background-color: rgba(255, 255, 0, 0.384);
 }

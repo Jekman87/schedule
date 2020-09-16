@@ -1,14 +1,14 @@
 const API_BASE = 'https://rs-react-schedule.firebaseapp.com/api/team/team10';
 
 const WORK_SPACE = {
-  table: 'table',
-  list: 'list',
-  calendar: 'calendar'
+  table: 'Table',
+  list: 'List',
+  calendar: 'Calendar'
 };
 
 const ROLE = {
-  student: 'student',
-  mentor: 'mentor'
+  student: 'Student',
+  mentor: 'Mentor'
 };
 
 const TIME_ZONE = {

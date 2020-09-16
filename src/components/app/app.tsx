@@ -27,7 +27,7 @@ const api = new ApiService();
 
 const initialSettings: SettingsType = {
   workSpace: WORK_SPACE.table,
-  role: ROLE.student,
+  role: ROLE.mentor,
   accessibility: false,
   timeZone: TIME_ZONE.minsk.location,
   styles: {color: 'black'}, // уточнить стилизацию
@@ -244,11 +244,8 @@ const App: React.FC = () => {
   return (
     <>
       <Header
-        /*
         settings={settings}
-        */
-
-        onChangeWorkSpace={changeWorkSpace} // убрать, аналог ниже
+        changeWorkSpace={changeWorkSpace} // убрать, аналог ниже
         /*
         changeWorkSpace={changeWorkSpace}
         changeRole={changeRole}

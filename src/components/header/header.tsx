@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dropdown } from 'antd';
+import { Button, Dropdown, Switch } from 'antd';
 import menu from './components/menu';
 import Timezone from './components/timezone';
 import Editor from './components/editor';
@@ -9,6 +9,8 @@ import eye from './data/eye.png';
 import settingsImg from './data/settings.png';
 import arrow from './data/arrow.png';
 import { SettingsType } from '../../constants/interfaces';
+import onChange from './components/switcher';
+
 
 import './header.scss';
 
@@ -45,6 +47,7 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace }) =
           </div>
           <div className="user">
             <Button type="primary" className="event-btn">Add Event</Button>
+            <Switch defaultChecked onChange={onChange} />
             <div className="mentor">{settings.role}</div>
           </div>
         </div>

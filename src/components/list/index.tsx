@@ -1,3 +1,3 @@
-import List from './list';
+import SList from './list';
 
-export default List;
+export default SList;

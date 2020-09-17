@@ -21,7 +21,7 @@ const columns = [
     render: (text:any) => <a href={text} rel="noopener noreferrer" target="_blank">GitHub</a>,
   },
   { 
-    itle: 'Type', 
+    title: 'Type', 
     dataIndex: 'type', 
     key: 'type',
     align: 'center' as 'right',
@@ -90,7 +90,7 @@ const data = [
     name: 'SongBird4',
     description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'meetup',
+    type: 'crosscheck',
     timeZone: 'Minsk / Europe 30.08.2020 23:59',
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
@@ -100,7 +100,7 @@ const data = [
     name: 'SongBird5',
     description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'interview',
+    type: 'review',
     timeZone: 'Minsk / Europe 30.08.2020 23:59',
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
@@ -110,7 +110,7 @@ const data = [
     name: 'SongBird51',
     description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'interview',
+    type: 'broadcast live',
     timeZone: 'Minsk / Europe 30.08.2020 23:59',
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
@@ -120,7 +120,7 @@ const data = [
     name: 'SongBird41',
     description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'meetup',
+    type: 'self education',
     timeZone: 'Minsk / Europe 30.08.2020 23:59',
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
@@ -130,7 +130,7 @@ const data = [
     name: 'SongBird21',
     description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'js task',
+    type: 'meetup',
     timeZone: 'Minsk / Europe 30.08.2020 23:59',
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
@@ -140,7 +140,7 @@ const data = [
     name: 'SongBird31',
     description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'test',
+    type: 'interview',
     timeZone: 'Minsk / Europe 30.08.2020 23:59',
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
@@ -150,7 +150,17 @@ const data = [
     name: 'SongBird11',
     description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
     descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'project task',
+    type: 'presentation',
+    timeZone: 'Minsk / Europe 30.08.2020 23:59',
+    place: '-',
+    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
+  },
+  {
+    key: '14',
+    name: 'SongBird11',
+    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
+    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
+    type: 'other',
     timeZone: 'Minsk / Europe 30.08.2020 23:59',
     place: '-',
     comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
@@ -158,22 +168,34 @@ const data = [
 ];
 
 interface Props {
-  appData: any[]
+  appData: any[],
+  addColorToRow: (eventType:string) => string
 }
 
 
-const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
+const TableComponent: React.FunctionComponent<Props> = ({ appData, addColorToRow }) => {
   const selectionType = 'checkbox';
+  const plainOptions = ['Name', 'DescriptionUrl', 'Type', 'TimeZone', 'Place', 'Description', 'Comment'];
 
   const [dataWithoutHiddenComponents, setNewData] = useState<any[]>([])
+  const [dataWithoutHiddenColumns, setNewColumnsData] = useState<any[]>([])
   const [activeRows, setActiveRows] = useState<any[]>([])
-  const [hideComponents, setHideComponents] = useState<boolean>(false)
+  const [activeColumns, setActiveColumns] = useState<any[]>([])
+  const [hideRows, setHideRows] = useState<boolean>(false)
+  const [hideColumns, setHideColumns] = useState<boolean>(false)
+
+  function changeHideColumnStatus(activeColumns:any) {
+    if (activeColumns.length < plainOptions.length) {
+      getNewColumnData(activeColumns);
+      setHideColumns(true)
+    } else setHideColumns(false)
+  }
 
   function onChange(checkedValues:any) {
+    setActiveColumns(checkedValues)
+    changeHideColumnStatus(checkedValues)
     console.log('checked = ', checkedValues);
   }
-  
-  const plainOptions = ['Name', 'DescriptionUrl', 'Type', 'TimeZone', 'Description' , 'Comment'];
 
   const rowSelection = {
     onChange: (selectedRowKeys:any, selectedRows:any) => {
@@ -182,10 +204,10 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
     }
   };
 
-  function getNewData() {
+  function getNewRowData() {
     let currentData:any = []
 
-    if(hideComponents) {
+    if(hideRows) {
       currentData = dataWithoutHiddenComponents
     } else {
       currentData = [...data]
@@ -198,47 +220,41 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
     setNewData(currentData)
   }
 
-  useEffect(() => {
-    console.log(activeRows.length)
-    console.log(hideComponents)
-    console.warn(appData)
-  });
+  function getNewColumnData(activeColumn:any) {
+    let currentData:any = [...columns]
+
+    activeColumn.forEach((el:string) => {
+      console.log(currentData)
+      currentData = [...currentData, currentData.filter((element:any) => element.title !== el)]
+    })
+    console.warn(currentData)
+    setNewColumnsData(currentData)
+  }
+
+/*   useEffect(() => {
+    console.warn(columns)
+    console.warn(data)
+    console.warn(columns)
+  }); */
+
+
 
   function hideSelectedRows() {
-    getNewData();
-    setHideComponents(true);
+    getNewRowData();
+    setHideRows(true);
     // setActiveRows([]);
   }
 
   function showHiddenRows() {
     // setActiveRows(['']);
-    setHideComponents(false);
+    setHideRows(false);
   }
-
-  function addColorToRow(eventType:string) {
-    switch(eventType) {
-      case 'project task':
-        return 'type__project-task'
-      case 'js task':
-        return 'type__js-task'
-      case 'test':
-        return 'type__test'
-      case 'meetup':
-        return 'type__meetup'
-      case 'interview':
-        return 'type__interview'
-      default:
-        throw new Error('13')
-    }
-
-  }
-
 
   const content = (
     <div>
     <Checkbox.Group 
       options={plainOptions} 
-      defaultValue={['Name', 'DescriptionUrl', 'Type', 'TimeZone', 'Description' , 'Comment']} 
+      defaultValue={plainOptions} 
       onChange={onChange} />
     </div>
   );
@@ -258,7 +274,7 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
           twoToneColor="#00a80ed9"
           style={{ fontSize: '2rem' }}
           className={
-            hideComponents
+            hideRows
             ? "table-header__icon table-header__icon-show"
             : "table-header__icon table-header__icon-show none-visibility"}
           onClick={() => showHiddenRows()} />
@@ -309,9 +325,9 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
           ...rowSelection,
         }}
 
-        columns={columns}
+        columns={hideColumns ? dataWithoutHiddenColumns : columns}
 
-        dataSource={hideComponents ? dataWithoutHiddenComponents : data}
+        dataSource={hideRows ? dataWithoutHiddenComponents : data}
       />
     </div>
   );

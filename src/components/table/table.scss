@@ -35,22 +35,49 @@ tr td {
   }
 }
 
+
+// Add colors to events
+
 .type__project-task {
-  background-color: rgba(255, 0, 0, 0.40);
+  background-color: #ff000066;
 }
-
+  
 .type__js-task {
-  background-color: rgba(0, 0, 0, 0.438);
-}
-
-.type__meetup {
-  background-color: rgba(0, 128, 0, 0.432);
+  background-color: #00000070;
 }
 
 .type__test {
-  background-color: rgba(0, 0, 255, 0.445);
+  background-color: #0000ff71;
+}
+
+.type__crosscheck {
+  background-color: #0080006e;
+}
+
+.type__review {
+  background-color: #ff980070;
+}
+
+.type__broadcast-live {
+  background-color: #00968882;
+}
+
+.type__self-education {
+  background-color: #ff57229e;
+}
+
+.type__meetup {
+  background-color: #127d1285;
 }
 
 .type__interview {
-  background-color: rgba(255, 255, 0, 0.384);
+  background-color: #0926797a;
+}
+
+.type__presentation {
+  background-color: #0d606b9a;
+}
+
+.type__other {
+  background-color: #ecec5487;
 }

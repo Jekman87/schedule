@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Dropdown, Switch } from 'antd';
 import menu from './components/menu';
 import Timezone from './components/timezone';
@@ -9,8 +9,7 @@ import eye from './data/eye.png';
 import settingsImg from './data/settings.png';
 import arrow from './data/arrow.png';
 import { SettingsType } from '../../constants/interfaces';
-import onChange from './components/switcher';
-
+import { ROLE } from '../../constants/constants';
 
 import './header.scss';
 
@@ -20,7 +19,14 @@ interface Props {
 }
 
 const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace }) => {
-
+  const [role, setRole] = useState(ROLE.mentor)
+  const onChange = (checked: boolean) => {
+    if (checked) {
+      setRole(ROLE.mentor)
+    } else {
+      setRole(ROLE.student)
+    }
+}
   // const clickHandler = (event:any) => {
   //   const clickedSpace = event.target.dataset.space;
 
@@ -48,7 +54,7 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace }) =
           <div className="user">
             <Button type="primary" className="event-btn">Add Event</Button>
             <Switch defaultChecked onChange={onChange} />
-            <div className="mentor">{settings.role}</div>
+            <div className="mentor">{role}</div>
           </div>
         </div>
         <div className="bottom">

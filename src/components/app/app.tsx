@@ -225,15 +225,12 @@ const App: React.FC = () => {
     switch(currentWorkSpace) {
       case WORK_SPACE.table:
         return <TableComponent
-                addColorToRow={addColorToRow}
-                /*
+                appData={appData}
                 settings={settings}
+                addColorToRow={addColorToRow}
                 showViewEventModal={showViewEventModal}
                 showEditEventModal={showEditEventModal}
-                deleteEvent={deleteEvent}
-                */
-                appData={appData} />
-
+                deleteEvent={deleteEvent} />
       case WORK_SPACE.list:
         return <SList
                 /*
@@ -257,7 +254,8 @@ const App: React.FC = () => {
 
   const errorMessage = error ? <ErrorIndicator /> : null;
   const spinner = loading ? <Spinner /> : null;
-  const content = appData.length ? addWorkSpace(settings.workSpace) : addWorkSpace('table');
+  const content = appData.length ? addWorkSpace('table') : null;
+  // settings.workSpace
   const modal = modalState.isShow ?
     <EditWindow
       /*

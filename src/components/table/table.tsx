@@ -1,198 +1,160 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Popover, Checkbox } from 'antd';
 import { EyeInvisibleTwoTone, EyeTwoTone, EditTwoTone, DownSquareTwoTone, DeleteTwoTone } from '@ant-design/icons';
+import { SettingsType } from '../../constants/interfaces';
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 import './table.scss';
 
+function setDate(date:any) {
+  const currentDate = new Date(date);
+  let day:any = currentDate.getDate();
+  let month:any = currentDate.getMonth();
+
+  if (day < 10) {
+    day = '0' + day
+  }
+
+  if (month < 10) {
+    month = '0' + month
+  }
+  
+
+  const year = currentDate.getFullYear();
+  return `${day}-${month}-${year}`
+}
+
+function setTime(date:any) {
+  const currentDate = new Date(date);
+  let hours:any = currentDate.getHours();
+  let minutes:any = currentDate.getMinutes();
+  let seconds:any = currentDate.getSeconds();
+  
+  return `${hours}:${minutes}:${seconds}`
+}
 
 const columns = [
   { 
-    title: 'Name', 
-    dataIndex: 'name', 
-    key: 'name',
-    align: 'center' as 'right'
+    title: 'Start date', 
+    dataIndex: 'dateTime', 
+    key: 'dateTime',
+    align: 'center',
+    width: 90,
+    render: (time:any) => setDate(time),
   },
-  {
-    title: 'DescriptionUrl',
-    dataIndex: 'descriptionUrl',
-    key: 'descriptionUrl',
-    align: 'center' as 'right',
-    render: (text:any) => <a href={text} rel="noopener noreferrer" target="_blank">GitHub</a>,
+  { 
+    title: 'Deadline', 
+    dataIndex: 'deadlinedateTime', 
+    key: 'deadlinedateTime',
+    align: 'center',
+    width: 90,
+    render: (time:any, row:any) => {
+      if (row.deadlinedateTime) {
+        return (
+          <>
+            <p>{setTime(row.deadlinedateTime)}</p>
+            <p>{setDate(row.deadlinedateTime)}</p>
+          </>
+        )
+      } else return null
+    },
+    responsive: ['sm'] as Breakpoint[]
   },
   { 
     title: 'Type', 
     dataIndex: 'type', 
     key: 'type',
-    align: 'center' as 'right',
-    responsive: ['lg'] as Breakpoint[]
+    align: 'center',
+    responsive: ['sm'] as Breakpoint[],
   },
   { 
-    title: 'TimeZone', 
-    dataIndex: 'timeZone', 
-    key: 'timeZone',
-    align: 'center' as 'right',
-    responsive: ['lg'] as Breakpoint[]
-  },
-  { 
-    title: 'Place', 
-    dataIndex: 'place', 
-    key: 'place',
-    align: 'center' as 'right',
-    responsive: ['lg'] as Breakpoint[]
+    title: 'Name', 
+    dataIndex: 'name', 
+    key: 'name',
+    align: 'center',
+    render: (text:any, row:any) => <a href={row.descriptionUrl 
+      ? row.descriptionUrl 
+      : row.eventURL} 
+      rel="noopener noreferrer" 
+      target="_blank">{text}</a>,
   },
   { 
     title: 'Description', 
     dataIndex: 'description', 
     key: 'description',
+    responsive: ['md'] as Breakpoint[]
+  },
+  { 
+    title: 'Organizer', 
+    dataIndex: 'organizer', 
+    key: 'organizer',
+    align: 'center',
+    width: 200,
+    render: (text:any) => {
+      return text.map((el:any) => <p key={el}>{el}</p>)
+    },
+    responsive: ['lg'] as Breakpoint[]
   },
   { 
     title: 'Comment', 
     dataIndex: 'comment', 
     key: 'comment',
-    responsive: ['lg'] as Breakpoint[]
-  }
-];
-
-const data = [
-  {
-    key: '1',
-    name: 'SongBird1',
-    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'project task',
-    timeZone: 'Minsk / Europe 30.08.2020 23:59',
-    place: '-',
-    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
-  },
-  {
-    key: '2',
-    name: 'SongBird2',
-    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'js task',
-    timeZone: 'Minsk / Europe 30.08.2020 23:59',
-    place: '-',
-    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
-  },
-  {
-    key: '3',
-    name: 'SongBird3',
-    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'test',
-    timeZone: 'Minsk / Europe 30.08.2020 23:59',
-    place: '-',
-    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
-  },
-  {
-    key: '4',
-    name: 'SongBird4',
-    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'crosscheck',
-    timeZone: 'Minsk / Europe 30.08.2020 23:59',
-    place: '-',
-    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
-  },
-  {
-    key: '5',
-    name: 'SongBird5',
-    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'review',
-    timeZone: 'Minsk / Europe 30.08.2020 23:59',
-    place: '-',
-    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
-  },
-  {
-    key: '51',
-    name: 'SongBird51',
-    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'broadcast live',
-    timeZone: 'Minsk / Europe 30.08.2020 23:59',
-    place: '-',
-    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
-  },
-  {
-    key: '9',
-    name: 'SongBird41',
-    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'self education',
-    timeZone: 'Minsk / Europe 30.08.2020 23:59',
-    place: '-',
-    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
-  },
-  {
-    key: '7',
-    name: 'SongBird21',
-    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'meetup',
-    timeZone: 'Minsk / Europe 30.08.2020 23:59',
-    place: '-',
-    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
-  },
-  {
-    key: '8',
-    name: 'SongBird31',
-    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'interview',
-    timeZone: 'Minsk / Europe 30.08.2020 23:59',
-    place: '-',
-    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
-  },
-  {
-    key: '6',
-    name: 'SongBird11',
-    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'presentation',
-    timeZone: 'Minsk / Europe 30.08.2020 23:59',
-    place: '-',
-    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
-  },
-  {
-    key: '14',
-    name: 'SongBird11',
-    description: 'Songbird - одностраничное приложение, викторина для распознавания птиц по их голосам',
-    descriptionUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/songbird.md',
-    type: 'other',
-    timeZone: 'Minsk / Europe 30.08.2020 23:59',
-    place: '-',
-    comment: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere est esse fugit mollitia aut.',
+    align: 'center',
+    responsive: ['xl'] as Breakpoint[]
   }
 ];
 
 interface Props {
   appData: any[],
-  addColorToRow: (eventType:string) => string
+  settings: SettingsType,
+  addColorToRow: (eventType:string) => string,
+  showViewEventModal: (id:string) => void,
+  showEditEventModal: (id:string) => void,
+  deleteEvent: (id:string) => void,
 }
 
 
-const TableComponent: React.FunctionComponent<Props> = ({ appData, addColorToRow }) => {
+const TableComponent: React.FunctionComponent<Props> = ({ 
+  appData, settings, 
+  addColorToRow, showViewEventModal, showEditEventModal, deleteEvent }) => {
   const selectionType = 'checkbox';
-  const plainOptions = ['Name', 'DescriptionUrl', 'Type', 'TimeZone', 'Place', 'Description', 'Comment'];
+  const plainOptions = ['Start date', 'Deadline', 'Type', 'Name', 'Description', 'Organizer', 'Comment'];
+  const options = [
+    {label: 'Start date', value: 'Start date', disabled: true},
+    {label: 'Deadline', value: 'Deadline'},
+    {label: 'Type', value: 'Type'},
+    {label: 'Name', value: 'Name', disabled: true},
+    {label: 'Description', value: 'Description'},
+    {label: 'Organizer', value: 'Organizer'},
+    {label: 'Comment', value: 'Comment'},
+  ];
 
   const [dataWithoutHiddenComponents, setNewData] = useState<any[]>([])
   const [dataWithoutHiddenColumns, setNewColumnsData] = useState<any[]>([])
   const [activeRows, setActiveRows] = useState<any[]>([])
-  const [activeColumns, setActiveColumns] = useState<any[]>([])
   const [hideRows, setHideRows] = useState<boolean>(false)
   const [hideColumns, setHideColumns] = useState<boolean>(false)
 
-  function changeHideColumnStatus(activeColumns:any) {
-    if (activeColumns.length < plainOptions.length) {
-      getNewColumnData(activeColumns);
+  function getNewColumnData(activeColumn:any) {
+    let currentData:any = [...columns]
+    const newData:any = []
+
+    activeColumn.forEach((el:string) => {
+      let filterColumn = currentData.filter((element:any) => element.title === el)[0]
+      newData.push(filterColumn)
+    })
+
+    setNewColumnsData(newData)
+  }
+
+  function changeHideColumnStatus(arrayWithActiveColumns:any) {
+    if (arrayWithActiveColumns.length < plainOptions.length) {
+      getNewColumnData(arrayWithActiveColumns);
       setHideColumns(true)
     } else setHideColumns(false)
   }
 
   function onChange(checkedValues:any) {
-    setActiveColumns(checkedValues)
     changeHideColumnStatus(checkedValues)
     console.log('checked = ', checkedValues);
   }
@@ -210,7 +172,7 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData, addColorToRow
     if(hideRows) {
       currentData = dataWithoutHiddenComponents
     } else {
-      currentData = [...data]
+      currentData = [...appData]
     }
 
     activeRows.forEach((el) => {
@@ -220,22 +182,10 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData, addColorToRow
     setNewData(currentData)
   }
 
-  function getNewColumnData(activeColumn:any) {
-    let currentData:any = [...columns]
+  useEffect(() => {
 
-    activeColumn.forEach((el:string) => {
-      console.log(currentData)
-      currentData = [...currentData, currentData.filter((element:any) => element.title !== el)]
-    })
-    console.warn(currentData)
-    setNewColumnsData(currentData)
-  }
-
-/*   useEffect(() => {
-    console.warn(columns)
-    console.warn(data)
-    console.warn(columns)
-  }); */
+    console.warn(appData)
+  });
 
 
 
@@ -253,7 +203,7 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData, addColorToRow
   const content = (
     <div>
     <Checkbox.Group 
-      options={plainOptions} 
+      options={options} 
       defaultValue={plainOptions} 
       onChange={onChange} />
     </div>
@@ -280,6 +230,7 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData, addColorToRow
           onClick={() => showHiddenRows()} />
 
         <EditTwoTone 
+          onClick={() => showEditEventModal(activeRows[0].id)}
           twoToneColor="#1890ff"
           style={{ fontSize: '2rem' }}
           className={
@@ -289,6 +240,7 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData, addColorToRow
         />
 
         <DeleteTwoTone 
+          onClick={() => deleteEvent(activeRows[0].id)}
           twoToneColor="#fd594d"
           style={{ fontSize: '2rem' }}
           className={
@@ -310,14 +262,21 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData, addColorToRow
       </div>
 
       <Table
+        className={'table-block'}
+        size="middle"
+        rowKey={record => record.id}
         pagination={{ 
           pageSize: 13,
           position: ['bottomCenter']
          }}
 
-        size="middle"
+
         onRow = {record =>({
-          onClick:() => console.warn(record.key)
+          onClick:(event) => {
+            if((event.target as HTMLElement).tagName !== "A") {
+              showViewEventModal(record.id)
+            }
+          } 
         })}
         rowClassName={(record) => addColorToRow(record.type)}
         rowSelection={{
@@ -327,7 +286,7 @@ const TableComponent: React.FunctionComponent<Props> = ({ appData, addColorToRow
 
         columns={hideColumns ? dataWithoutHiddenColumns : columns}
 
-        dataSource={hideRows ? dataWithoutHiddenComponents : data}
+        dataSource={hideRows ? dataWithoutHiddenComponents : appData}
       />
     </div>
   );

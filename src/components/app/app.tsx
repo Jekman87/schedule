@@ -4,17 +4,11 @@ import Header from '../header';
 import TableComponent from '../table';
 import SList from '../list';
 import Calendar from '../calendar';
-<<<<<<< HEAD
-import Footer from '../footer';
-import EditWindow from '../editWindow'
-
-import './app.scss';
-=======
 import Footer from '../footer'
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 // import InfoWindow from '../info-window'
-import EditWindow from '../edit-window'
+import EditWindow from '../editWindow'
 
 import ApiService from '../../services/api-service';
 import { storage } from '../../helpers/utils';
@@ -41,7 +35,7 @@ const initialSettings: SettingsType = {
 };
 
 const initialModalState: ModalStateType = {
-  isShow: false,
+  isShow: true,
   isViewEvent: false,
   eventData: null
 };
@@ -117,7 +111,6 @@ const App: React.FC = () => {
     // TODO
     console.log('Setting saveSchedule: ', format);
   }
->>>>>>> develop
 
   // метод вызывается при нажатии на кнопку в хедере AddEvent
   // показываем пустую модалку для создания ивента
@@ -234,14 +227,12 @@ const App: React.FC = () => {
   const content = appData.length ? addWorkSpace(settings.workSpace) : null;
   const modal = modalState.isShow ?
     <EditWindow
-      /*
       settings={settings}
       modalState={modalState}
-      createModalEvent={createModalEvent}
-      updateModalEvent={updateModalEvent}
-      deleteModalEvent={deleteModalEvent}
-      closeModal={closeModal}
-      */
+      createModalEvent={()=>createModalEvent}
+      updateModalEvent={()=>updateModalEvent}
+      deleteModalEvent={()=>deleteModalEvent}
+      closeModal={()=>closeModal}
     /> :
     null;
 
@@ -265,7 +256,6 @@ const App: React.FC = () => {
         changeStyles={changeStyles}
         changeVisibility={changeVisibility}
         showNewEventModal={showNewEventModal}
-
         */
       />
       {errorMessage}
@@ -273,12 +263,7 @@ const App: React.FC = () => {
       {content}
       {modal}
       <Footer />
-<<<<<<< HEAD
-      <EditWindow />
-    </div>
-=======
     </>
->>>>>>> develop
   );
 }
 

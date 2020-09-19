@@ -1,14 +1,14 @@
 const API_BASE = 'https://rs-react-schedule.firebaseapp.com/api/team/team10';
 
 const WORK_SPACE = {
-  table: 'table',
-  list: 'list',
-  calendar: 'calendar'
+  table: 'Table',
+  list: 'List',
+  calendar: 'Calendar'
 };
 
 const ROLE = {
-  student: 'student',
-  mentor: 'mentor'
+  student: 'Student',
+  mentor: 'Mentor'
 };
 
 const TIME_ZONE = {
@@ -24,4 +24,14 @@ const TIME_ZONE = {
 
 const SCHEDULE_STORAGE_KEY = 'scheduleSettings';
 
-export { API_BASE, WORK_SPACE, ROLE, TIME_ZONE, SCHEDULE_STORAGE_KEY };
+const EVENT_CONFIG = {
+  type: ['project task', 'js task', 'codewars', 'test', 'crosscheck', 'review', 'broadcast live', 'self education', 'meetup', 'interview', 'presentation', 'other',],
+  form: ['online', 'offline',],
+  kind: ['basic', 'optional',],
+  tags: ['html', 'css', 'js', 'markdown', 'git', 'github', 'other', 'web',],
+  organizer: [''],
+  stage: ['1', '2', '3', '4', '5',],
+  course: ['2020Q3',],
+};
+
+export { API_BASE, WORK_SPACE, ROLE, TIME_ZONE, SCHEDULE_STORAGE_KEY, EVENT_CONFIG };

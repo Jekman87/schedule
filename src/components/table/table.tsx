@@ -72,10 +72,11 @@ const data = [
 ];
 
 interface Props {
-  appData: any[]
+  appData: any[],
+  addColorToRow: (eventType:string) => string
 }
 
-const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
+const TableComponent: React.FunctionComponent<Props> = ({ appData, addColorToRow }) => {
   return (
     <Table
 

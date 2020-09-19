@@ -203,10 +203,10 @@ const App: React.FC = () => {
                 deleteEvent={deleteEvent} />
       case WORK_SPACE.list:
         return <SList
-                /*
+                
                 settings={settings}
-                showViewEventModal={showViewEventModal}
-                */
+                // showViewEventModal={showViewEventModal}
+                
                 appData={appData} />
 
       case WORK_SPACE.calendar:

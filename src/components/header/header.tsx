@@ -6,23 +6,25 @@ import Editor from './components/editor';
 import view from './data/view.png';
 import download from './data/download.png';
 import eye from './data/eye.png';
-import settings from './data/settings.png';
+import settingsImg from './data/settings.png';
 import arrow from './data/arrow.png';
+import { SettingsType } from '../../constants/interfaces';
 
 import './header.scss';
 
 interface Props {
-  onChangeWorkSpace: (event:any) => void
+  settings: SettingsType
+  changeWorkSpace: (event: any) => void
 }
 
-const Header: React.FunctionComponent<Props> = ({ onChangeWorkSpace }) => {
+const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace }) => {
 
-  const clickHandler = (event:any) => {
-    const clickedSpace = event.target.dataset.space;
+  // const clickHandler = (event:any) => {
+  //   const clickedSpace = event.target.dataset.space;
 
-    event.preventDefault();
-    onChangeWorkSpace(clickedSpace);
-  }
+  //   event.preventDefault();
+  //   onChangeWorkSpace(clickedSpace);
+  // }
 
   return (
     <div className="header">
@@ -34,7 +36,7 @@ const Header: React.FunctionComponent<Props> = ({ onChangeWorkSpace }) => {
       <div className="nav">
         <div className="center">
           <div className="view">
-            <Dropdown overlay={menu(clickHandler)}>
+            <Dropdown overlay={menu(changeWorkSpace)}>
               <a className="ant-dropdown-link" href="#s">
                 <img src={view} alt="view" />
               </a>
@@ -43,7 +45,7 @@ const Header: React.FunctionComponent<Props> = ({ onChangeWorkSpace }) => {
           </div>
           <div className="user">
             <Button type="primary" className="event-btn">Add Event</Button>
-            <div className="mentor">Mentor</div>
+            <div className="mentor">{settings.role}</div>
           </div>
         </div>
         <div className="bottom">
@@ -61,9 +63,9 @@ const Header: React.FunctionComponent<Props> = ({ onChangeWorkSpace }) => {
             </Dropdown>
           </div>
           <div className="settings">
-            <img src={eye} alt="For the visually impaired"/>
+            <img src={eye} alt="For the visually impaired" />
             <span></span>
-            <img src={settings} alt=""/>
+            <img src={settingsImg} alt="" />
           </div>
         </div>
       </div>

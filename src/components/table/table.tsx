@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
+
 import { Table, Popover, Checkbox } from 'antd';
 import { EyeInvisibleTwoTone, EyeTwoTone, EditTwoTone, DownSquareTwoTone, DeleteTwoTone } from '@ant-design/icons';
-import { SettingsType } from '../../constants/interfaces';
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+
+import { SettingsType } from '../../constants/interfaces';
+import { addColorToRow } from '../../helpers/utils';
 
 import './table.scss';
 
+
 function setDate(date:any) {
   const currentDate = new Date(date);
+
+  const year = currentDate.getFullYear();
+
   let day:any = currentDate.getDate();
   let month:any = currentDate.getMonth();
 
@@ -19,13 +26,12 @@ function setDate(date:any) {
     month = '0' + month
   }
   
-
-  const year = currentDate.getFullYear();
   return `${day}-${month}-${year}`
 }
 
 function setTime(date:any) {
   const currentDate = new Date(date);
+  
   let hours:any = currentDate.getHours();
   let minutes:any = currentDate.getMinutes();
   let seconds:any = currentDate.getSeconds();
@@ -35,43 +41,35 @@ function setTime(date:any) {
 
 const columns = [
   { 
-    title: 'Start date', 
+    title: 'Date', 
     dataIndex: 'dateTime', 
     key: 'dateTime',
     align: 'center',
     width: 90,
-    render: (time:any) => setDate(time),
-  },
-  { 
-    title: 'Deadline', 
-    dataIndex: 'deadlinedateTime', 
-    key: 'deadlinedateTime',
-    align: 'center',
-    width: 90,
     render: (time:any, row:any) => {
-      if (row.deadlinedateTime) {
+      if (row.isDeadline) {
         return (
           <>
             <p>{setTime(row.deadlinedateTime)}</p>
             <p>{setDate(row.deadlinedateTime)}</p>
           </>
         )
-      } else return null
+      } else return setDate(time)
     },
-    responsive: ['sm'] as Breakpoint[]
   },
   { 
     title: 'Type', 
     dataIndex: 'type', 
     key: 'type',
     align: 'center',
+    width: 80,
     responsive: ['sm'] as Breakpoint[],
   },
   { 
     title: 'Name', 
     dataIndex: 'name', 
     key: 'name',
-    align: 'center',
+    width: 200,
     render: (text:any, row:any) => <a href={row.descriptionUrl 
       ? row.descriptionUrl 
       : row.eventURL} 
@@ -82,6 +80,12 @@ const columns = [
     title: 'Description', 
     dataIndex: 'description', 
     key: 'description',
+    responsive: ['md'] as Breakpoint[]
+  },
+  { 
+    title: 'Deadline information', 
+    dataIndex: 'deadlineDescription', 
+    key: 'deadlineDescription',
     responsive: ['md'] as Breakpoint[]
   },
   { 
@@ -105,9 +109,8 @@ const columns = [
 ];
 
 interface Props {
-  appData: any[],
+  appData: any,
   settings: SettingsType,
-  addColorToRow: (eventType:string) => string,
   showViewEventModal: (id:string) => void,
   showEditEventModal: (id:string) => void,
   deleteEvent: (id:string) => void,
@@ -116,15 +119,15 @@ interface Props {
 
 const TableComponent: React.FunctionComponent<Props> = ({ 
   appData, settings, 
-  addColorToRow, showViewEventModal, showEditEventModal, deleteEvent }) => {
+  showViewEventModal, showEditEventModal, deleteEvent }) => {
   const selectionType = 'checkbox';
-  const plainOptions = ['Start date', 'Deadline', 'Type', 'Name', 'Description', 'Organizer', 'Comment'];
+  const plainOptions = ['Date', 'Type', 'Name', 'Description', 'Deadline information', 'Organizer', 'Comment'];
   const options = [
-    {label: 'Start date', value: 'Start date', disabled: true},
-    {label: 'Deadline', value: 'Deadline'},
+    {label: 'Date', value: 'Date', disabled: true},
     {label: 'Type', value: 'Type'},
     {label: 'Name', value: 'Name', disabled: true},
     {label: 'Description', value: 'Description'},
+    {label: 'Deadline information', value: 'Deadline information'},
     {label: 'Organizer', value: 'Organizer'},
     {label: 'Comment', value: 'Comment'},
   ];
@@ -172,7 +175,11 @@ const TableComponent: React.FunctionComponent<Props> = ({
     if(hideRows) {
       currentData = dataWithoutHiddenComponents
     } else {
-      currentData = [...appData]
+      currentData = [...appData.map((el:any) => {
+        return {
+          'isDeadline': el.isDeadline,
+          ...el.event
+      }})]
     }
 
     activeRows.forEach((el) => {
@@ -182,10 +189,10 @@ const TableComponent: React.FunctionComponent<Props> = ({
     setNewData(currentData)
   }
 
-  useEffect(() => {
+/*   useEffect(() => {
 
-    console.warn(appData)
-  });
+
+  }); */
 
 
 
@@ -208,7 +215,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
       onChange={onChange} />
     </div>
   );
-
+  
   return (
     <div>
       <div className="table-header">
@@ -264,20 +271,21 @@ const TableComponent: React.FunctionComponent<Props> = ({
       <Table
         className={'table-block'}
         size="middle"
-        rowKey={record => record.id}
+        rowKey={(record) => record.id + record.isDeadline}
         pagination={{ 
-          pageSize: 13,
+          pageSize: 50,
           position: ['bottomCenter']
          }}
 
-
         onRow = {record =>({
           onClick:(event) => {
+            console.warn(record)
             if((event.target as HTMLElement).tagName !== "A") {
               showViewEventModal(record.id)
             }
           } 
         })}
+        
         rowClassName={(record) => addColorToRow(record.type)}
         rowSelection={{
           type: selectionType,
@@ -286,7 +294,14 @@ const TableComponent: React.FunctionComponent<Props> = ({
 
         columns={hideColumns ? dataWithoutHiddenColumns : columns}
 
-        dataSource={hideRows ? dataWithoutHiddenComponents : appData}
+        dataSource={hideRows 
+          ? dataWithoutHiddenComponents 
+          : appData.map((el:any) => {
+            return {
+              'isDeadline': el.isDeadline,
+              ...el.event
+          }})
+        }
       />
     </div>
   );

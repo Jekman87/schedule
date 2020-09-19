@@ -11,8 +11,8 @@ import ErrorIndicator from '../error-indicator';
 import EditWindow from '../edit-window'
 
 import ApiService from '../../services/api-service';
-import { storage } from '../../helpers/utils';
-import { LoadDataType, SettingsType, EventType, ModalStateType } from '../../constants/interfaces';
+import { storage, createAppData } from '../../helpers/utils';
+import { LoadDataType, SettingsType, ModalStateType } from '../../constants/interfaces';
 import {
   ROLE,
   TIME_ZONE,
@@ -27,7 +27,7 @@ const api = new ApiService();
 
 const initialSettings: SettingsType = {
   workSpace: WORK_SPACE.table,
-  role: ROLE.student,
+  role: ROLE.mentor,
   accessibility: false,
   timeZone: TIME_ZONE.minsk.location,
   styles: {color: 'black'}, // уточнить стилизацию
@@ -44,7 +44,7 @@ const savedSettings = storage(SCHEDULE_STORAGE_KEY) || initialSettings;
 
 const App: React.FC = () => {
   const [loadData, setLoadData] = useState<LoadDataType>({
-    appData: [],
+    data: [],
     loading: true,
     error: false
   });
@@ -57,7 +57,7 @@ const App: React.FC = () => {
         setLoadData((state) => ({
           ...state,
           loading: false,
-          appData: data.data
+          data: data.data
         }));
       })
       .catch((err) => {
@@ -74,7 +74,8 @@ const App: React.FC = () => {
     storage(SCHEDULE_STORAGE_KEY, settings);
   }, [settings]);
 
-  const { appData, loading, error } = loadData;
+  const { data, loading, error } = loadData;
+  const appData = createAppData(data);
 
   const changeWorkSpace = (workSpace: string): void => {
     setSettings((settings) => ({...settings, workSpace}));
@@ -125,11 +126,11 @@ const App: React.FC = () => {
 
   // показать модалку с инфой о событии при клике по строке
   const showViewEventModal = (id: string): void => {
-    const currentEvent = appData.find(el => el.id === id);
+    const currentEvent = appData.find(el => el.event.id === id);
     setModalState({
       isShow: true,
       isViewEvent: true,
-      eventData: currentEvent
+      eventData: currentEvent?.event
     });
     console.log('showEventModal: ', id);
   }
@@ -137,11 +138,11 @@ const App: React.FC = () => {
   // метод вызывается при нажатии на кнопку Редактировать в таблицу
   // показываем заполненную модалку для редактирования ивента
   const showEditEventModal = (id: string): void => {
-    const currentEvent = appData.find(el => el.id === id);
+    const currentEvent = appData.find(el => el.event.id === id);
     setModalState({
       isShow: true,
       isViewEvent: false,
-      eventData: currentEvent
+      eventData: currentEvent?.event
     });
     console.log('showAddEventModal');
   }
@@ -188,38 +189,8 @@ const App: React.FC = () => {
   // добавить цвет фона к вашему компоненту, который содержит евент
   // работает по принципу присвоения класса
   // классы прописаны в app.scss
-  const addColorToRow = (eventType:string) => {
-    switch(eventType) {
-      case 'project task':
-        return 'type__project-task';
-      case 'js task':
-        return 'type__js-task';
-      case 'test':
-        return 'type__test';
-      case 'crosscheck':
-        return 'type__crosscheck';
-      case 'review':
-        return 'type__review';
-      case 'broadcast live':
-        return 'type__broadcast-live';
-      case 'self education':
-        return 'type__self-education';
-      case 'meetup':
-        return 'type__meetup';
-      case 'interview':
-        return 'type__interview';
-      case 'presentation':
-        return 'type__presentation';
-      case 'other':
-        return 'type__other';
-      default:
-        return 'type__test';
-    }
-  }
 
   // применяем настройки к данным. Сортировка, фильрация и т.д.
-  // сортировка по дате? Или другой параметр, в зависимости от настроек?
-  // также передаем настройки в каждый компонент, для оформления внешнего вида
 
   const addWorkSpace = (currentWorkSpace: string) => {
     switch(currentWorkSpace) {
@@ -227,7 +198,6 @@ const App: React.FC = () => {
         return <TableComponent
                 appData={appData}
                 settings={settings}
-                addColorToRow={addColorToRow}
                 showViewEventModal={showViewEventModal}
                 showEditEventModal={showEditEventModal}
                 deleteEvent={deleteEvent} />
@@ -254,7 +224,7 @@ const App: React.FC = () => {
 
   const errorMessage = error ? <ErrorIndicator /> : null;
   const spinner = loading ? <Spinner /> : null;
-  const content = appData.length ? addWorkSpace('table') : null;
+  const content = appData.length ? addWorkSpace(settings.workSpace) : null;
   // settings.workSpace
   const modal = modalState.isShow ?
     <EditWindow
@@ -270,16 +240,13 @@ const App: React.FC = () => {
     null;
 
   console.log('Settings: ', settings);
-  console.log('LoadData: ', loadData);
+  console.log('appData: ', appData);
 
   return (
     <>
       <Header
-        /*
         settings={settings}
-        */
-
-        onChangeWorkSpace={changeWorkSpace} // убрать, аналог ниже
+        changeWorkSpace={changeWorkSpace} // убрать, аналог ниже
         /*
         changeWorkSpace={changeWorkSpace}
         changeRole={changeRole}

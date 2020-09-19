@@ -1,4 +1,6 @@
-import { EventType, AppEventType } from "../constants/interfaces";
+import { EventType, AppEventType } from '../constants/interfaces';
+import moment from 'moment';
+import 'moment-timezone';
 
 function storage(key: string, data?: object) {
   if (arguments.length === 1) {
@@ -23,7 +25,7 @@ function createAppData(data: EventType[]): AppEventType[] {
 
   const appData: AppEventType[] = [];
 
-  data.forEach((eventObj) =>{
+  data.forEach((eventObj) => {
     appData.push({
       event: eventObj,
       isDeadline: false,
@@ -38,9 +40,7 @@ function createAppData(data: EventType[]): AppEventType[] {
   });
 
   function getStartOrDeadlineTime(eventObj: AppEventType) {
-    return eventObj.isDeadline ?
-      eventObj.event.deadlinedateTime :
-      eventObj.event.dateTime;
+    return eventObj.isDeadline ? eventObj.event.deadlinedateTime : eventObj.event.dateTime;
   }
 
   appData.sort((a, b) => getStartOrDeadlineTime(a) - getStartOrDeadlineTime(b));
@@ -52,4 +52,18 @@ function addColorToRow(eventType: string): string {
   return 'type__' + eventType.split(' ').join('-');
 }
 
-export { storage, createAppData, addColorToRow };
+function convertDateTime(timestamp: number, toTime?: boolean, timezone?: string): string {
+  let time = moment(timestamp);
+
+  if (timezone) {
+    time.tz(timezone);
+  }
+
+  if (toTime) {
+    return time.format('HH:mm');
+  }
+
+  return time.format('dd, D MMM YYYY');
+}
+
+export { storage, createAppData, addColorToRow, convertDateTime };

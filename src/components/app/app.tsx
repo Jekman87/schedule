@@ -207,10 +207,10 @@ const App: React.FC = () => {
 
       case WORK_SPACE.list:
         return <SList
-                /*
+                
                 settings={settings}
-                showViewEventModal={showViewEventModal}
-                */
+                // showViewEventModal={showViewEventModal}
+                
                 appData={appData} />
 
       case WORK_SPACE.calendar:

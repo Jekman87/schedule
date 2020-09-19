@@ -31,6 +31,7 @@ $red-8: #a8071a;
 .li-title-time {
   margin-left: 2%;
   font-size: 0.9em;
+  width: 50%;
 
   .li-title-date {
     color: $lime-8;
@@ -54,6 +55,7 @@ $red-8: #a8071a;
     .li-title-time {
       margin-left: 0;
       margin-top: 0.5%;
+      width: 100%;
 
       span {
         margin-left: 0;

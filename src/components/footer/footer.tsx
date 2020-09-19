@@ -3,7 +3,7 @@ import React from 'react';
 import './footer.scss';
 
 
-function Footer() {
+const Footer: React.FunctionComponent = () => {
   return (
     <div className="footer">Footer</div>
   );

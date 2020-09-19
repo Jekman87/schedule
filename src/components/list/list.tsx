@@ -1,65 +1,33 @@
 import React from 'react';
-// import { VariableSizeList } from 'react-window';
 import { List, Avatar, Badge } from 'antd';
-import { YoutubeOutlined, LaptopOutlined, TeamOutlined, QuestionOutlined } from '@ant-design/icons';
+import {
+  YoutubeOutlined,
+  LaptopOutlined,
+  TeamOutlined,
+  QuestionOutlined,
+  AudioOutlined,
+  SearchOutlined,
+  UserOutlined,
+  NotificationOutlined,
+} from '@ant-design/icons';
 import { grey } from '@ant-design/colors';
+import { convertDateTime } from '../../helpers/utils';
 
 import './list.scss';
 
-const data = [
-  {
-    title: 'Self HTML Basics',
-    date: '09.09.2020',
-    time: '22:10',
-    deadline: '20.09.2020',
-    type: 'Task',
-    description:
-      'Это первое задание курса RS School JavaScript Front-end. Вам необходимо пройти интерактивные курсы. Выполните все задания каждого курса. Старайтесь выполнять задания самостоятельно, не пользуясь готовыми решениями.',
-  },
-  {
-    title: 'Flexbox and Grid',
-    date: '09.09.2020',
-    type: 'Lecture',
-    deadline: '20.09.2020',
-    time: '22:10',
-    description:
-      'Это первое задание курса RS School JavaScript Front-end. Вам необходимо пройти интерактивные курсы',
-  },
-  {
-    title: 'Photoshop & Figma For Developers',
-    date: '09.09.2020',
-    type: 'Event',
-    time: '22:10',
-    deadline: '20.09.2020',
-    description:
-      'Это первое задание курса RS School JavaScript Front-end. Вам необходимо пройти интерактивные курсы',
-    place: 'Имагуру, ул. Фабрициуса',
-  },
-  {
-    title: 'JS Advanced',
-    date: '09.09.2020',
-    time: '22:10',
-    deadline: '20.09.2020',
-    type: 'Test',
-    description:
-      'Это первое задание курса RS School JavaScript Front-end. Вам необходимо пройти интерактивные курсы',
-  },
-];
-
-// Сделать виртуализацию!
-
 interface Props {
-  appData: any[]
+  appData: any[];
+  settings: any;
 }
 
-const SList: React.FunctionComponent<Props> = ({ appData }) => {
+const SList: React.FunctionComponent<Props> = ({ appData, settings }) => {
   return (
     <div className='list'>
       <List
         itemLayout='horizontal'
-        dataSource={data}
-        renderItem={(item) => (
-          <Badge.Ribbon text={item.type} color={grey[4]}>
+        dataSource={appData}
+        renderItem={({ event }, index) => (
+          <Badge.Ribbon text={event.type} color={grey[4]}>
             <List.Item>
               <List.Item.Meta
                 avatar={
@@ -71,14 +39,22 @@ const SList: React.FunctionComponent<Props> = ({ appData }) => {
                       backgroundColor: 'transparent',
                       fontWeight: 'bold',
                     }}>
-                    {item.type === 'Lecture' ? (
-                      <YoutubeOutlined />
-                    ) : item.type === 'Task' ? (
-                      <LaptopOutlined />
-                    ) : item.type === 'Test' ? (
+                    {event.type === 'test' ? (
                       <QuestionOutlined />
-                    ) : (
+                    ) : event.type === 'crosscheck' || event.type === 'review' ? (
+                      <SearchOutlined />
+                    ) : event.type === 'broadcast live' ? (
+                      <YoutubeOutlined />
+                    ) : event.type === 'self education' ? (
+                      <UserOutlined />
+                    ) : event.type === 'meetup' ? (
                       <TeamOutlined />
+                    ) : event.type === 'interview' ? (
+                      <AudioOutlined />
+                    ) : event.type === 'presentation' ? (
+                      <NotificationOutlined />
+                    ) : (
+                      <LaptopOutlined />
                     )}
                   </Avatar>
                 }
@@ -88,37 +64,20 @@ const SList: React.FunctionComponent<Props> = ({ appData }) => {
                       href='https://github.com/rolling-scopes-school/tasks/blob/master/tasks/code-basics.md'
                       className='li-title'
                       style={{ color: `${grey[7]}` }}>
-                      {item.title}
+                      {event.name}
                     </a>
                     <p className='li-title-time'>
-                      <span className='li-title-date'>{item.date}</span>/
-                      <span className='li-title-deadline'>{item.deadline}</span>
+                      <span className='li-title-date'>
+                        {convertDateTime(event.dateTime, false, settings.timeZone)}
+                      </span>
+                      /
+                      <span className='li-title-deadline'>
+                        {convertDateTime(event.deadlinedateTime, false, settings.timeZone)}
+                      </span>
                     </p>
                   </div>
                 }
-                description={
-                  <p className='li-description'>
-                    {item.description}
-                    <span className='optional'>
-                      {item.place ? (
-                        <span>
-                          <br />
-                          <span
-                            style={{
-                              display: 'inline-block',
-                              fontWeight: 'bolder',
-                              marginTop: '1%',
-                            }}>
-                            Место:
-                          </span>{' '}
-                          {item.place}
-                        </span>
-                      ) : (
-                        ''
-                      )}
-                    </span>
-                  </p>
-                }
+                description={<p className='li-description'>{event.description}</p>}
               />
             </List.Item>
           </Badge.Ribbon>
@@ -126,6 +85,6 @@ const SList: React.FunctionComponent<Props> = ({ appData }) => {
       />
     </div>
   );
-}
+};
 
 export default SList;

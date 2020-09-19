@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Table } from 'antd';
+// import { addColorToRow } from '../../helpers/utils';
 
 import './table.scss';
 
@@ -72,11 +73,10 @@ const data = [
 ];
 
 interface Props {
-  appData: any[],
-  addColorToRow: (eventType:string) => string
+  appData: any[]
 }
 
-const TableComponent: React.FunctionComponent<Props> = ({ appData, addColorToRow }) => {
+const TableComponent: React.FunctionComponent<Props> = ({ appData }) => {
   return (
     <Table
 

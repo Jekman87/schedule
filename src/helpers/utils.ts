@@ -16,7 +16,7 @@ function storage(key: string, data?: object) {
   return true;
 }
 
-function createAppData(data: EventType[]) {
+function createAppData(data: EventType[]): AppEventType[] {
   if (!data.length) {
     return [];
   }
@@ -48,4 +48,8 @@ function createAppData(data: EventType[]) {
   return appData;
 }
 
-export { storage, createAppData };
+function addColorToRow(eventType: string): string {
+  return 'type__' + eventType.split(' ').join('-');
+}
+
+export { storage, createAppData, addColorToRow };

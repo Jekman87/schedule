@@ -189,44 +189,14 @@ const App: React.FC = () => {
   // добавить цвет фона к вашему компоненту, который содержит евент
   // работает по принципу присвоения класса
   // классы прописаны в app.scss
-  const addColorToRow = (eventType:string) => {
-    switch(eventType) {
-      case 'project task':
-        return 'type__project-task';
-      case 'js task':
-        return 'type__js-task';
-      case 'test':
-        return 'type__test';
-      case 'crosscheck':
-        return 'type__crosscheck';
-      case 'review':
-        return 'type__review';
-      case 'broadcast live':
-        return 'type__broadcast-live';
-      case 'self education':
-        return 'type__self-education';
-      case 'meetup':
-        return 'type__meetup';
-      case 'interview':
-        return 'type__interview';
-      case 'presentation':
-        return 'type__presentation';
-      case 'other':
-        return 'type__other';
-      default:
-        return 'type__test';
-    }
-  }
+
 
   // применяем настройки к данным. Сортировка, фильрация и т.д.
-  // сортировка по дате? Или другой параметр, в зависимости от настроек?
-  // также передаем настройки в каждый компонент, для оформления внешнего вида
 
   const addWorkSpace = (currentWorkSpace: string) => {
     switch(currentWorkSpace) {
       case WORK_SPACE.table:
         return <TableComponent
-                addColorToRow={addColorToRow}
                 /*
                 settings={settings}
                 showViewEventModal={showViewEventModal}

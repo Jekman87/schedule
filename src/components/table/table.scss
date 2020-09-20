@@ -24,6 +24,7 @@
 .table-block th {
   font-weight: bold !important;
   text-align: center !important;
+  transition: all 0.5s !important;
 }
 
 .table-block tr td {
@@ -39,9 +40,13 @@
 
   .table-block tr:hover td {
     background: unset !important;
-    opacity: 0.7;
     transition: all 0.5s !important;
     cursor: default;
+  }
+
+  .table-block tr:hover {
+    transition: all 0.5s !important;
+    box-shadow: 0 0 0 0 white inset;
   }
 
   .table-block a:hover {

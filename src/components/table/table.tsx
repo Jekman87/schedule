@@ -4,7 +4,7 @@ import { Table, Popover, Checkbox } from 'antd';
 import { EyeInvisibleTwoTone, EyeTwoTone, EditTwoTone, DownSquareTwoTone, DeleteTwoTone } from '@ant-design/icons';
 
 import { SettingsType } from '../../constants/interfaces';
-import { addColorToRow } from '../../helpers/utils';
+import { addEventColors } from '../../helpers/utils';
 
 import moment from 'moment';
 import 'moment-timezone';
@@ -63,7 +63,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
               <p>{convertDateToTime(row.deadlinedateTime, false, settings.timeZone)}</p>
             </>
           )
-        } else return convertDateToTime(time.deadlinedateTime, false, settings.timeZone)
+        } else return convertDateToTime(row.dateTime, false, settings.timeZone)
       },
     },
     { 
@@ -89,12 +89,11 @@ const TableComponent: React.FunctionComponent<Props> = ({
       dataIndex: 'description', 
       key: 'description',
       width: 200,
-    },
-    { 
-      title: 'Deadline information', 
-      dataIndex: 'deadlineDescription', 
-      key: 'deadlineDescription',
-      width: 200,
+      render: (text:any, row:any) => {
+        if(row.isDeadline) {
+          return row.deadlineDescription
+        } else return text
+      },
     },
     { 
       title: 'Organizer', 
@@ -159,12 +158,13 @@ const TableComponent: React.FunctionComponent<Props> = ({
       currentData = [...appData.map((el:any) => {
         return {
           'isDeadline': el.isDeadline,
+          'key': el.isDeadline + el.event.id,
           ...el.event
       }})]
     }
 
     activeRows.forEach((el) => {
-      currentData = currentData.filter((element:any) => element.name !== el.name)
+      currentData = currentData.filter((element:any) => element.key !== el.key)
     })
 
     setNewData(currentData)
@@ -245,11 +245,11 @@ const TableComponent: React.FunctionComponent<Props> = ({
         size="middle"
 
         scroll={{ x: 1080, y: 'calc(100vh - 300px)' }}
-        rowClassName={(record) => addColorToRow(record.type)}
+        rowClassName={(record) => addEventColors(record)}
         rowKey={(record) => record.id + record.isDeadline}
 
         pagination={{ 
-          pageSize: 50,
+          pageSize: 100,
           position: ['bottomCenter']
          }}
         rowSelection={{
@@ -272,6 +272,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
           : appData.map((el:any) => {
             return {
               'isDeadline': el.isDeadline,
+              'key': el.isDeadline + el.event.id,
               ...el.event
           }})
         }

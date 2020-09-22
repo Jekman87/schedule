@@ -8,7 +8,7 @@ import Footer from '../footer'
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 // import InfoWindow from '../info-window'
-import EditWindow from '../editWindow'
+import EditWindow from '../edit-window'
 
 import ApiService from '../../services/api-service';
 import { storage } from '../../helpers/utils';

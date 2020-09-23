@@ -7,7 +7,7 @@ import Calendar from '../calendar';
 import Footer from '../footer'
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
-// import InfoWindow from '../info-window'
+import InfoWindow from '../info-window'
 import EditWindow from '../edit-window'
 
 import ApiService from '../../services/api-service';
@@ -267,6 +267,7 @@ const App: React.FC = () => {
       {content}
       {modal}
       <Footer />
+      <InfoWindow appData={appData}/>
     </>
   );
 }

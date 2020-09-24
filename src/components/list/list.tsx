@@ -21,6 +21,7 @@ interface Props {
 }
 
 const SList: React.FunctionComponent<Props> = ({ appData, settings }) => {
+  console.log(appData[0])
   return (
     <div className='list'>
       <List
@@ -61,7 +62,7 @@ const SList: React.FunctionComponent<Props> = ({ appData, settings }) => {
                 title={
                   <div className='li-title-wrapper'>
                     <a
-                      href='https://github.com/rolling-scopes-school/tasks/blob/master/tasks/code-basics.md'
+                      href={event.descriptionUrl}
                       className='li-title'
                       style={{ color: `${grey[7]}` }}>
                       {event.name}

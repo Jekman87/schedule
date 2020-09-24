@@ -17,7 +17,7 @@ const TIME_ZONE = {
   kiev: {location: 'Europe/Kiev', time: '+3'},
   minsk: {location: 'Europe/Minsk', time: '+3'},
   volgograd: {location: 'Europe/Volgograd', time: '+4'},
-  yekaterinburg: {location: 'Europe/Yekaterinburg', time: '+5'},
+  yekaterinburg: {location: 'Asia/Yekaterinburg', time: '+5'},
   tbilisi: {location: 'Asia/Tbilisi', time: '+4'},
   tashkent: {location: 'Asia/Tashkent', time: '+5'}
 }

@@ -1,74 +1,107 @@
 import React from 'react';
-import { Button, Dropdown } from 'antd';
-import menu from './components/menu';
-import Timezone from './components/timezone';
-import Editor from './components/editor';
-import view from './data/view.png';
-import download from './data/download.png';
-import eye from './data/eye.png';
-import settingsImg from './data/settings.png';
-import arrow from './data/arrow.png';
+import { Menu, Button, Dropdown, Switch } from 'antd';
+
 import { SettingsType } from '../../constants/interfaces';
+import { ROLE, TIME_ZONE, WORK_SPACE } from '../../constants/constants';
+
+import { AppstoreTwoTone, ProfileTwoTone, CalendarTwoTone } from '@ant-design/icons';
 
 import './header.scss';
 
 interface Props {
   settings: SettingsType
-  changeWorkSpace: (event: any) => void
+  changeWorkSpace: (space: string) => void
+  changeRole: (role: string) => void
+  changeTimeZone: (timezone: string) => void
+  showNewEventModal: () => void
 }
 
-const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace }) => {
+const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, changeRole, changeTimeZone, showNewEventModal }) => {
+  
+  const onChange = (checked: boolean) => {
+    console.log(`switch to ${checked}`);
+    if (checked) {
+      changeRole(ROLE.mentor)
+    } else {
+      changeRole(ROLE.student)
+    }
+  }
 
-  // const clickHandler = (event:any) => {
-  //   const clickedSpace = event.target.dataset.space;
-
-  //   event.preventDefault();
-  //   onChangeWorkSpace(clickedSpace);
-  // }
+  const menu = (
+    <Menu>
+      {Object.values(TIME_ZONE).map((el) => {
+        return (
+          <Menu.Item key={el.location}>
+          <a 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            href="null"
+            onClick={(event) => {
+              event?.preventDefault();
+              changeTimeZone(el.location);
+            }}
+          >
+            {el.location}
+          </a>
+        </Menu.Item>
+        )
+      })}
+    </Menu>
+  );
 
   return (
     <div className="header">
-      <div className="top">
-        <img src="https://rs.school/images/rs_school.svg" alt="" className="logo" />
-        <div className="title">Schedule</div>
-        <Button type="dashed" className="logIn">My Profile</Button>
+
+      <div className="header__static">
+        <img src="https://rs.school/images/rs_school.svg" alt="" />
+        <div>Schedule</div>
+        <Button type="dashed">My Profile</Button>
       </div>
-      <div className="nav">
-        <div className="center">
-          <div className="view">
-            <Dropdown overlay={menu(changeWorkSpace)}>
-              <a className="ant-dropdown-link" href="#s">
-                <img src={view} alt="view" />
-              </a>
-            </Dropdown>
-            <Button type="link" className="download-btn"><img src={download} alt="download" /></Button>
-          </div>
-          <div className="user">
-            <Button type="primary" className="event-btn">Add Event</Button>
-            <div className="mentor">{settings.role}</div>
-          </div>
+    
+    <div className="header__status">
+
+      <div className="header__navigation">
+
+        <div className="header__button-block">
+          <AppstoreTwoTone
+            twoToneColor={settings.workSpace === 'Table' ? '#fd594d' : '#1890ff'} 
+            style={{ fontSize: '2rem' }} 
+            className="table-header__icon"
+            onClick={() => changeWorkSpace(WORK_SPACE.table)} />
+          <ProfileTwoTone 
+            twoToneColor={settings.workSpace === 'List' ? '#fd594d' : '#1890ff'} 
+            style={{ fontSize: '2rem' }} 
+            className="table-header__icon"
+            onClick={() => changeWorkSpace(WORK_SPACE.list)} />
+          <CalendarTwoTone
+            twoToneColor={settings.workSpace === 'Calendar' ? '#fd594d' : '#1890ff'} 
+            style={{ fontSize: '2rem' }} 
+            className="table-header__icon"
+            onClick={() => changeWorkSpace(WORK_SPACE.calendar)} />
         </div>
-        <div className="bottom">
-          <div className="vision">
-            <Dropdown overlay={Editor}>
-              <a className="ant-dropdown-link" onClick={e => e.preventDefault()} href="#s">
-                <img src={arrow} alt="Edit" />
-              </a>
-            </Dropdown>
-            <span></span>
-            <Dropdown overlay={Timezone}>
-              <a className="ant-dropdown-link" onClick={e => e.preventDefault()} href="#s">
-                Time zone
-              </a>
-            </Dropdown>
-          </div>
-          <div className="settings">
-            <img src={eye} alt="For the visually impaired" />
-            <span></span>
-            <img src={settingsImg} alt="" />
-          </div>
-        </div>
+
+        <Dropdown overlay={menu} placement="bottomCenter" arrow>
+          <Button>{settings.timeZone}</Button>
+        </Dropdown>
       </div>
+
+      <div className="header__role-block">
+        <div className="header__role">
+          <span>{settings.role}</span>
+          <Switch 
+            defaultChecked={settings.role === 'Student' ? false : true}
+            className="header__switcher"
+            onChange={onChange} />
+        </div>
+        <Button 
+          disabled={settings.role === 'Student' ? true : false}
+          type="primary" 
+          className="header__button"
+          onClick={() => showNewEventModal()}>Add Event</Button>
+      </div>
+
+    </div>
+
     </div>
   );
 }

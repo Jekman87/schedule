@@ -246,17 +246,16 @@ const App: React.FC = () => {
     <>
       <Header
         settings={settings}
-        changeWorkSpace={changeWorkSpace} // убрать, аналог ниже
-        /*
         changeWorkSpace={changeWorkSpace}
         changeRole={changeRole}
-        changeAccessibility={changeAccessibility}
         changeTimeZone={changeTimeZone}
+        showNewEventModal={showNewEventModal}
+        /*
+        от этого функционала временно отказываемся
+        changeAccessibility={changeAccessibility}
         downloadSchedule={downloadSchedule}
         changeStyles={changeStyles}
         changeVisibility={changeVisibility}
-        showNewEventModal={showNewEventModal}
-
         */
       />
       {errorMessage}

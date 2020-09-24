@@ -1,91 +1,63 @@
 .header {
   display: flex;
   flex-direction: column;
-  width: 100vw;
   font-size: 1rem;
   background-color: #fff;
 }
 
-.top {
+.header__static {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
+  padding: 1rem;
 }
 
-.logo {
-  margin: 20px 0 0 20px;
+.header__static img {
   height: 40px;
 }
 
-.center {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.center img {
-  height: 15px;
-  width: 40px;
-}
-
-.ant-dropdown-link{
-  margin-left: 20px;
-}
-
-.user {
-  display: flex;
-  align-items: center;
-  margin-right: 20px;
-}
-
-.user button {
-  margin-right: 20px;
-}
-
-.title {
+.header__static div {
   font-size: 1.2rem;
   font-weight: bold;
-  padding-top: 20px;
 }
 
-.logIn {
-  margin: 20px 20px 0 0;
-}
-
-.view img,
-.view button {
-  height: 25px;
-  width: 25px;
-}
-
-.bottom {
+.header__status {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.header__navigation {
+  display: flex;
+  flex-direction: column;
+}
+
+.header__button-block {
+  margin: 0.5rem;
+}
+
+.header__role {
+  display: flex;
   align-items: center;
-  margin-top: 20px;
+  margin-bottom: 1rem;
 }
 
-.bottom img,
-.bottom button {
-  height: 25px;
-  width: 25px;
+.header__button {
+  margin: 0.5rem;
 }
 
-.bottom span {
-  border: 1px solid black;
-  height: 40px;
-  background-color: #000;
-  margin: 0 10px 0 10px;
+.header__switcher {
+  margin: 0.5rem !important;
 }
 
-.settings {
-  margin-right: 20px;
+.header__icon {
+  padding: 0.5rem;
+  transition: all 0.8s;
 }
 
-.settings img {
-  cursor: pointer;
-  height: 25px;
-  width: 25px;
+@media (hover:hover) {
+  .header__icon:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: all 0.8s;
+  }
 }

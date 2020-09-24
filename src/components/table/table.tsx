@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Table } from 'antd';
+// import { addColorToRow } from '../../helpers/utils';
 
 import './table.scss';
 

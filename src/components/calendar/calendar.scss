@@ -6,10 +6,11 @@
 .demo-app {
   display: flex;
   min-height: 100%;
-  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  // padding: 3rem 1rem;
+  // font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 14px;
-  width:100%;
-  background-color: whitesmoke;
+  width: 100%;
+  background-color: #ffffff;
 }
 
 html,
@@ -62,3 +63,26 @@ b {
   max-width: 1100px;
   margin: 0 auto;
 }
+
+.fc .fc-button-primary {
+  outline: none;
+  color: #fff;
+  background: #1890ff;
+  border-color: #1890ff;
+  text-shadow: 0 -1px 0 #0000001f;
+  -webkit-box-shadow: 0 2px 0 #0000000b;
+  box-shadow: 0 2px 0 #0000000b;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)
+}
+
+.fc .fc-button-primary:hover {
+  color: #fff;
+  background: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.fc .fc-button-primary:focus {
+  outline: 0;
+  box-shadow: none;
+}
+

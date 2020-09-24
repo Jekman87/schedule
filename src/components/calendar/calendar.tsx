@@ -36,21 +36,29 @@ const Calendar: React.FunctionComponent<Props> = ({ appData }) => {
       const event: EventInput = {};
       event.id = el.event.id;
       event.title = el.event.name;
-      event.start = new Date(el.event.dateTime).toISOString();
+      event.start = new Date(el.event.dateTime);
       // event.backgroundColor = 'black';
       // event.borderColor= 'green';
       // event.textColor= 'red';
       event.display = 'block';
       if (el.event.deadlinedateTime !== 0) {
-        event.end = new Date(el.event.deadlinedateTime).toISOString();
+        event.end = new Date(el.event.deadlinedateTime);
+        
       }
       // event.color = 'black';
       // event.textColor= 'red';
+      myEvents.push(event);
+    }else {
+      const event: EventInput = {};
+      event.start = new Date(el.event.deadlinedateTime).toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+      event.backgroundColor = 'red';
+      event.display = 'background';
       myEvents.push(event);
     }
   })
 
   console.log('Appdata: ', appData);
+  console.log('myEvents: ', myEvents);
   const [weekendsVisible, setWeekendsVidible] = useState<boolean>(true);
   const [currentEvents, setcurrentEvents] = useState<EventApi[]>([]);
 
@@ -138,10 +146,10 @@ const Calendar: React.FunctionComponent<Props> = ({ appData }) => {
           selectable={true}
           selectMirror={true}
           // dayMaxEventRows={true}
-          dayMaxEvents={4}
+          dayMaxEvents={6}
           weekends={weekendsVisible}
           initialEvents={myEvents} // alternatively, use the `events` setting to fetch from a feed
-          select={handleDateSelect}
+          // select={handleDateSelect}
           eventContent={renderEventContent} // custom render function
           // eventClick={handleEventClick}
           eventsSet={handleEvents} // called after events are initialized/added/changed/removed
@@ -151,6 +159,7 @@ const Calendar: React.FunctionComponent<Props> = ({ appData }) => {
           eventRemove={function(){}}
           */
           eventTimeFormat={{ hour: '2-digit', minute: '2-digit', hour12: false }}
+          displayEventEnd={true}
         />
       </div>
     </div>

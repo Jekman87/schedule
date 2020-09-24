@@ -1,7 +1,22 @@
 // Add colors to events
 
+.type__project-task,
+.type__js-task,
+.type__test,
+.type__crosscheck,
+.type__review,
+.type__broadcast-live,
+.type__self-education,
+.type__meetup,
+.type__interview,
+.type__presentation,
+.type__other,
+.type__codewars {
+  box-shadow: 3px 0px 10px 5px #4534348a inset;
+}
+
 .type__project-task {
-  background-color: #ff000066;
+  background-color: #8bc34a63;
 }
   
 .type__js-task {
@@ -9,11 +24,11 @@
 }
 
 .type__test {
-  background-color: #0000ff71;
+  background-color: #0000ff26;
 }
 
 .type__crosscheck {
-  background-color: #0080006e;
+  background-color: #00800057;
 }
 
 .type__review {
@@ -21,11 +36,11 @@
 }
 
 .type__broadcast-live {
-  background-color: #00968882;
+  background-color: #00968863;
 }
 
 .type__self-education {
-  background-color: #ff57229e;
+  background-color: #ff572269;
 }
 
 .type__meetup {
@@ -42,4 +57,17 @@
 
 .type__other {
   background-color: #ecec5487;
+}
+
+.type__codewars {
+  background-color: #03a9f42b;
+}
+
+.type__deadline {
+  box-shadow: 3px 0px 6px 5px #ff000070 inset;
+}
+
+.type__inactive {
+  background-color: #afafaf24;
+  opacity: 0.4;
 }

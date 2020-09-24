@@ -190,21 +190,17 @@ const App: React.FC = () => {
   // работает по принципу присвоения класса
   // классы прописаны в app.scss
 
-
   // применяем настройки к данным. Сортировка, фильрация и т.д.
 
   const addWorkSpace = (currentWorkSpace: string) => {
     switch(currentWorkSpace) {
       case WORK_SPACE.table:
         return <TableComponent
-                /*
+                appData={appData}
                 settings={settings}
                 showViewEventModal={showViewEventModal}
                 showEditEventModal={showEditEventModal}
-                deleteEvent={deleteEvent}
-                */
-                appData={appData} />
-
+                deleteEvent={deleteEvent} />
       case WORK_SPACE.list:
         return <SList
                 
@@ -229,6 +225,7 @@ const App: React.FC = () => {
   const errorMessage = error ? <ErrorIndicator /> : null;
   const spinner = loading ? <Spinner /> : null;
   const content = appData.length ? addWorkSpace(settings.workSpace) : null;
+  // settings.workSpace
   const modal = modalState.isShow ?
     <EditWindow
       /*

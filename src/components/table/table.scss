@@ -22,9 +22,14 @@
 }
 
 .table-block th {
+  background: #8bc34a5e !important;
   font-weight: bold !important;
   text-align: center !important;
   transition: all 0.5s !important;
+}
+
+.table-block tr {
+  transition: all 0.7s !important;
 }
 
 .table-block tr td {

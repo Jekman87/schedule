@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import { saveAs } from 'file-saver';
 
 import { Table, Popover, Checkbox } from 'antd';
 import { EyeInvisibleTwoTone, EyeTwoTone, EditTwoTone, DownSquareTwoTone, DeleteTwoTone } from '@ant-design/icons';
@@ -19,6 +21,7 @@ interface Props {
   deleteEvent: (id:string) => void,
 }
 
+
 function convertDateToTime(timestamp: number, toTime?: boolean, timezone?: string): string {
   let time = moment(timestamp);
 
@@ -30,31 +33,69 @@ function convertDateToTime(timestamp: number, toTime?: boolean, timezone?: strin
     return time.format('HH:mm:ss');
   }
 
-  return time.format('D-MM-YYYY');
+  return time.format('DD-MM-YYYY');
 }
 
 const TableComponent: React.FunctionComponent<Props> = ({ 
   appData, settings, 
   showViewEventModal, showEditEventModal, deleteEvent }) => {
+  const plainOptions = ['Date', 'Type', 'Name', 'Description', 'Organizer', 'Comment'];
+
+  let string13 = ''
+
+  convertationDataFromApi().forEach((el:any, index:any) => {
+    string13 += index + ' | ';
+    string13 += convertDateToTime(el.dateTime, false, settings.timeZone) + ' | ';
+    string13 += el.name + ' | ';
+    string13 += el.type + ' | ';
+    string13 += el.description + ' | ';
+    string13 += el.deadlineDescription  + '\n';
+  })
+
+  var FileSaver = require('file-saver');
+  var file = new File([string13], "hello world.txt", {type: "text/plain;charset=utf-8"});
+
+
   const selectionType = 'checkbox';
-  const plainOptions = ['Date', 'Type', 'Name', 'Description', 'Deadline information', 'Organizer', 'Comment'];
+
+
+
+
   const options = [
+    {label: 'Course', value: 'Course'},
+    {label: 'Stage', value: 'Stage'},
     {label: 'Date', value: 'Date', disabled: true},
-    {label: 'Type', value: 'Type'},
+    {label: 'Type', value: 'Type', disabled: true},
+    {label: 'Form', value: 'Form'},
     {label: 'Name', value: 'Name', disabled: true},
-    {label: 'Description', value: 'Description'},
-    {label: 'Deadline information', value: 'Deadline information'},
+    {label: 'Description', value: 'Description', disabled: true},
+    {label: 'Duration', value: 'Duration'},
     {label: 'Organizer', value: 'Organizer'},
+    {label: 'Place', value: 'Place'},
     {label: 'Comment', value: 'Comment'},
   ];
 
   const columns = [
     { 
+      title: 'Course', 
+      dataIndex: 'course', 
+      key: 'course',
+      align: 'center',
+      width: 70,
+    },
+    { 
+      title: 'Stage', 
+      dataIndex: 'stage', 
+      key: 'stage',
+      align: 'center',
+      width: 70,
+    },
+    { 
       title: 'Date', 
       dataIndex: 'dateTime', 
       key: 'dateTime',
       align: 'center',
-      width: 60,
+      width: 100,
       render: (time:any, row:any) => {
         if (row.isDeadline) {
           return (
@@ -71,13 +112,20 @@ const TableComponent: React.FunctionComponent<Props> = ({
       dataIndex: 'type', 
       key: 'type',
       align: 'center',
-      width: 60,
+      width: 100,
+    },
+    { 
+      title: 'Form', 
+      dataIndex: 'form', 
+      key: 'form',
+      align: 'center',
+      width: 100,
     },
     { 
       title: 'Name', 
       dataIndex: 'name', 
       key: 'name',
-      width: 150,
+      width: 200,
       render: (text:any, row:any) => <a href={row.descriptionUrl 
         ? row.descriptionUrl 
         : row.eventURL} 
@@ -88,12 +136,19 @@ const TableComponent: React.FunctionComponent<Props> = ({
       title: 'Description', 
       dataIndex: 'description', 
       key: 'description',
-      width: 200,
+      width: 300,
       render: (text:any, row:any) => {
         if(row.isDeadline) {
           return row.deadlineDescription
         } else return text
       },
+    },
+    { 
+      title: 'Duration', 
+      dataIndex: 'duration', 
+      key: 'duration',
+      align: 'center',
+      width: 100,
     },
     { 
       title: 'Organizer', 
@@ -106,10 +161,16 @@ const TableComponent: React.FunctionComponent<Props> = ({
       },
     },
     { 
+      title: 'Place', 
+      dataIndex: 'place', 
+      key: 'place',
+      align: 'center',
+      width: 150,
+    },
+    { 
       title: 'Comment', 
       dataIndex: 'comment', 
       key: 'comment',
-      align: 'center',
       width: 200,
     }
   ];
@@ -118,9 +179,8 @@ const TableComponent: React.FunctionComponent<Props> = ({
   const [dataWithoutHiddenColumns, setNewColumnsData] = useState<any[]>([])
   const [activeRows, setActiveRows] = useState<any[]>([])
   const [hideRows, setHideRows] = useState<boolean>(false)
-  const [hideColumns, setHideColumns] = useState<boolean>(false)
 
-  function getNewColumnData(activeColumn:any) {
+  function getNewColumnData(activeColumn:any = plainOptions) {
     let currentData:any = [...columns]
     const newData:any = []
 
@@ -132,20 +192,14 @@ const TableComponent: React.FunctionComponent<Props> = ({
     setNewColumnsData(newData)
   }
 
-  function changeHideColumnStatus(arrayWithActiveColumns:any) {
-    if (arrayWithActiveColumns.length < plainOptions.length) {
-      getNewColumnData(arrayWithActiveColumns);
-      setHideColumns(true)
-    } else setHideColumns(false)
-  }
-
   function onChange(checkedValues:any) {
-    changeHideColumnStatus(checkedValues)
+    getNewColumnData(checkedValues)
   }
 
   const rowSelection = {
     onChange: (selectedRowKeys:any, selectedRows:any) => {
-      setActiveRows(selectedRows)
+      setActiveRows(selectedRowKeys)
+      // console.log(selectedRowKeys)
     }
   };
 
@@ -155,18 +209,14 @@ const TableComponent: React.FunctionComponent<Props> = ({
     if(hideRows) {
       currentData = dataWithoutHiddenComponents
     } else {
-      currentData = [...appData.map((el:any) => {
-        return {
-          'isDeadline': el.isDeadline,
-          'key': el.isDeadline + el.event.id,
-          ...el.event
-      }})]
+      currentData = convertationDataFromApi()
     }
 
-    activeRows.forEach((el) => {
-      currentData = currentData.filter((element:any) => element.key !== el.key)
-    })
 
+    activeRows.forEach((el) => {
+      currentData = currentData.filter((element:any) => element.key !== el)
+    })
+    // console.log(currentData)
     setNewData(currentData)
   }
 
@@ -187,7 +237,19 @@ const TableComponent: React.FunctionComponent<Props> = ({
       onChange={onChange} />
     </div>
   );
-  
+
+  function convertationDataFromApi() {
+    const tableData = appData.map((el:any) => {
+      return {
+        'isDeadline': el.isDeadline,
+        'key': el.event.id + el.isDeadline,
+        ...el.event
+    }})
+    return tableData;
+  }
+
+  useEffect(getNewColumnData, [])
+
   return (
     <div>
       <div className="table-header">
@@ -243,8 +305,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
       <Table
         className={'table-block'}
         size="middle"
-
-        scroll={{ x: 1080, y: 'calc(100vh - 300px)' }}
+        scroll={{ x: 'max-content', y: 'calc(100vh - 300px)' }}
         rowClassName={(record) => addEventColors(record)}
         rowKey={(record) => record.id + record.isDeadline}
 
@@ -259,22 +320,18 @@ const TableComponent: React.FunctionComponent<Props> = ({
 
         onRow = {record =>({
           onClick:(event) => {
+            // FileSaver.saveAs(file);
             if((event.target as HTMLElement).tagName !== "A") {
               showViewEventModal(record.id)
             }
           } 
         })}
         
-        columns={hideColumns ? dataWithoutHiddenColumns : columns}
+        columns={dataWithoutHiddenColumns}
 
         dataSource={hideRows 
           ? dataWithoutHiddenComponents 
-          : appData.map((el:any) => {
-            return {
-              'isDeadline': el.isDeadline,
-              'key': el.isDeadline + el.event.id,
-              ...el.event
-          }})
+          : convertationDataFromApi()
         }
       />
     </div>

@@ -18,9 +18,10 @@ import './list.scss';
 interface Props {
   appData: any[];
   settings: any;
+  showInfoWindow: (id:string) => void;
 }
 
-const SList: React.FunctionComponent<Props> = ({ appData, settings }) => {
+const SList: React.FunctionComponent<Props> = ({ appData, settings, showInfoWindow }) => {
   console.log(appData[0])
   return (
     <div className='list'>

@@ -20,8 +20,7 @@ export interface SettingsType {
 
 export interface ModalStateType {
   isShow: boolean
-  isViewEvent: boolean
-  eventData: EventType | undefined | null
+  eventData: EventType | null
 }
 
 export interface EventType {

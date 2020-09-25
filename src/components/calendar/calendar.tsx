@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg, formatDate } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -9,8 +9,11 @@ import './calendar.scss';
 
 
 interface Props {
-  appData: any[]
+  appData: any[];
+  settings: any;
+  showInfoWindow: (id:string) => void;
 }
+
 
 interface CalendarState {
   weekendsVisible: boolean
@@ -23,39 +26,50 @@ interface CalendarState {
 let eventGuid = 0
 let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
-function createEventId() {
+function createEventId() {  
   return String(eventGuid++)
 }
 
-const Calendar: React.FunctionComponent<Props> = ({ appData }) => {
+const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoWindow }) => {
 
-  const myEvents: EventInput[] = [];
+  // let myEvents: EventInput[] = [];
+  const [myEvents, setMyEvents] = useState<EventInput[]>([]);
 
-  appData.forEach((el) => {
-    if (!el.isDeadline) {
-      const event: EventInput = {};
-      event.id = el.event.id;
-      event.title = el.event.name;
-      event.start = new Date(el.event.dateTime);
-      // event.backgroundColor = 'black';
-      // event.borderColor= 'green';
-      // event.textColor= 'red';
-      event.display = 'block';
-      if (el.event.deadlinedateTime !== 0) {
-        event.end = new Date(el.event.deadlinedateTime);
-        
+  useEffect(() => {
+
+    // console.log('settings', settings, appData );
+    console.log('settings\r\n\r\n');
+    const eventsArray:EventInput[] = [];
+    appData.forEach((el) => {
+      if (!el.isDeadline) {
+        const event: EventInput = {};
+        event.id = el.event.id;
+        event.title = el.event.name;
+        event.start = new Date(el.event.dateTime);
+        // event.backgroundColor = 'black';
+        // event.borderColor= 'green';
+        // event.textColor= 'red';
+        event.display = 'block';
+        if (el.event.deadlinedateTime !== 0) {
+          event.end = new Date(el.event.deadlinedateTime);
+          
+        }
+        // event.color = 'black';
+        // event.textColor= 'red';
+        eventsArray.push(event);
+      }else {
+        const event: EventInput = {};
+        event.start = new Date(el.event.deadlinedateTime).toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+        event.backgroundColor = 'red';
+        event.display = 'background';
+        eventsArray.push(event);
       }
-      // event.color = 'black';
-      // event.textColor= 'red';
-      myEvents.push(event);
-    }else {
-      const event: EventInput = {};
-      event.start = new Date(el.event.deadlinedateTime).toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
-      event.backgroundColor = 'red';
-      event.display = 'background';
-      myEvents.push(event);
-    }
-  })
+    })
+    console.log('settings :',myEvents );
+    setMyEvents(eventsArray);
+  }, [settings, appData]);
+
+
 
   console.log('Appdata: ', appData);
   console.log('myEvents: ', myEvents);
@@ -148,7 +162,8 @@ const Calendar: React.FunctionComponent<Props> = ({ appData }) => {
           // dayMaxEventRows={true}
           dayMaxEvents={6}
           weekends={weekendsVisible}
-          initialEvents={myEvents} // alternatively, use the `events` setting to fetch from a feed
+          events={myEvents} // alternatively, use the `events` setting to fetch from a feed
+          // initialEvents={myEvents} // alternatively, use the `events` setting to fetch from a feed
           // select={handleDateSelect}
           eventContent={renderEventContent} // custom render function
           // eventClick={handleEventClick}

@@ -16,8 +16,8 @@ import './table.scss';
 interface Props {
   appData: any,
   settings: SettingsType,
-  showViewEventModal: (id:string) => void,
-  showEditEventModal: (id:string) => void,
+  showInfoWindow: (id:string) => void,
+  showEditWindow: (id:string) => void,
   deleteEvent: (id:string) => void,
 }
 
@@ -36,9 +36,9 @@ function convertDateToTime(timestamp: number, toTime?: boolean, timezone?: strin
   return time.format('DD-MM-YYYY');
 }
 
-const TableComponent: React.FunctionComponent<Props> = ({ 
-  appData, settings, 
-  showViewEventModal, showEditEventModal, deleteEvent }) => {
+const TableComponent: React.FunctionComponent<Props> = ({
+  appData, settings,
+  showInfoWindow, showEditWindow, deleteEvent }) => {
   const plainOptions = ['Date', 'Type', 'Name', 'Description', 'Organizer', 'Comment'];
 
   let string13 = ''
@@ -76,23 +76,23 @@ const TableComponent: React.FunctionComponent<Props> = ({
   ];
 
   const columns = [
-    { 
-      title: 'Course', 
-      dataIndex: 'course', 
+    {
+      title: 'Course',
+      dataIndex: 'course',
       key: 'course',
       align: 'center',
       width: 70,
     },
-    { 
-      title: 'Stage', 
-      dataIndex: 'stage', 
+    {
+      title: 'Stage',
+      dataIndex: 'stage',
       key: 'stage',
       align: 'center',
       width: 70,
     },
-    { 
-      title: 'Date', 
-      dataIndex: 'dateTime', 
+    {
+      title: 'Date',
+      dataIndex: 'dateTime',
       key: 'dateTime',
       align: 'center',
       width: 100,
@@ -107,34 +107,34 @@ const TableComponent: React.FunctionComponent<Props> = ({
         } else return convertDateToTime(row.dateTime, false, settings.timeZone)
       },
     },
-    { 
-      title: 'Type', 
-      dataIndex: 'type', 
+    {
+      title: 'Type',
+      dataIndex: 'type',
       key: 'type',
       align: 'center',
       width: 100,
     },
-    { 
-      title: 'Form', 
-      dataIndex: 'form', 
+    {
+      title: 'Form',
+      dataIndex: 'form',
       key: 'form',
       align: 'center',
       width: 100,
     },
-    { 
-      title: 'Name', 
-      dataIndex: 'name', 
+    {
+      title: 'Name',
+      dataIndex: 'name',
       key: 'name',
       width: 200,
-      render: (text:any, row:any) => <a href={row.descriptionUrl 
-        ? row.descriptionUrl 
-        : row.eventURL} 
-        rel="noopener noreferrer" 
+      render: (text:any, row:any) => <a href={row.descriptionUrl
+        ? row.descriptionUrl
+        : row.eventURL}
+        rel="noopener noreferrer"
         target="_blank">{text}</a>,
     },
-    { 
-      title: 'Description', 
-      dataIndex: 'description', 
+    {
+      title: 'Description',
+      dataIndex: 'description',
       key: 'description',
       width: 300,
       render: (text:any, row:any) => {
@@ -143,16 +143,16 @@ const TableComponent: React.FunctionComponent<Props> = ({
         } else return text
       },
     },
-    { 
-      title: 'Duration', 
-      dataIndex: 'duration', 
+    {
+      title: 'Duration',
+      dataIndex: 'duration',
       key: 'duration',
       align: 'center',
       width: 100,
     },
-    { 
-      title: 'Organizer', 
-      dataIndex: 'organizer', 
+    {
+      title: 'Organizer',
+      dataIndex: 'organizer',
       key: 'organizer',
       align: 'center',
       width: 150,
@@ -160,16 +160,16 @@ const TableComponent: React.FunctionComponent<Props> = ({
         return text.map((el:any) => <p key={el}>{el}</p>)
       },
     },
-    { 
-      title: 'Place', 
-      dataIndex: 'place', 
+    {
+      title: 'Place',
+      dataIndex: 'place',
       key: 'place',
       align: 'center',
       width: 150,
     },
-    { 
-      title: 'Comment', 
-      dataIndex: 'comment', 
+    {
+      title: 'Comment',
+      dataIndex: 'comment',
       key: 'comment',
       width: 200,
     }
@@ -231,9 +231,9 @@ const TableComponent: React.FunctionComponent<Props> = ({
 
   const content = (
     <div>
-    <Checkbox.Group 
-      options={options} 
-      defaultValue={plainOptions} 
+    <Checkbox.Group
+      options={options}
+      defaultValue={plainOptions}
       onChange={onChange} />
     </div>
   );
@@ -254,16 +254,16 @@ const TableComponent: React.FunctionComponent<Props> = ({
     <div>
       <div className="table-header">
 
-        <EyeInvisibleTwoTone 
-          twoToneColor="#fd594d" 
-          style={{ fontSize: '2rem' }} 
+        <EyeInvisibleTwoTone
+          twoToneColor="#fd594d"
+          style={{ fontSize: '2rem' }}
           className={
-            activeRows.length 
+            activeRows.length
             ? "table-header__icon table-header__icon-hide"
             : "table-header__icon table-header__icon-hide none-visibility"}
           onClick={() => hideSelectedRows()} />
 
-        <EyeTwoTone 
+        <EyeTwoTone
           twoToneColor="#00a80ed9"
           style={{ fontSize: '2rem' }}
           className={
@@ -272,8 +272,8 @@ const TableComponent: React.FunctionComponent<Props> = ({
             : "table-header__icon table-header__icon-show none-visibility"}
           onClick={() => showHiddenRows()} />
 
-        <EditTwoTone 
-          onClick={() => showEditEventModal(activeRows[0].id)}
+        <EditTwoTone
+          onClick={() => showEditWindow(activeRows[0].id)}
           twoToneColor="#1890ff"
           style={{ fontSize: '2rem' }}
           className={
@@ -281,7 +281,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
             ? "table-header__icon"
             : "table-header__icon table-header__icon-hide none-visibility"} />
 
-        <DeleteTwoTone 
+        <DeleteTwoTone
           onClick={() => deleteEvent(activeRows[0].id)}
           twoToneColor="#fd594d"
           style={{ fontSize: '2rem' }}
@@ -292,7 +292,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
 
         <div>
           <Popover content={content} placement="right" trigger="click">
-            <DownSquareTwoTone 
+            <DownSquareTwoTone
               twoToneColor="#1890ff"
               style={{ fontSize: '2rem' }}
               className="table-header__icon"
@@ -309,7 +309,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
         rowClassName={(record) => addEventColors(record)}
         rowKey={(record) => record.id + record.isDeadline}
 
-        pagination={{ 
+        pagination={{
           pageSize: 100,
           position: ['bottomCenter']
          }}
@@ -322,15 +322,15 @@ const TableComponent: React.FunctionComponent<Props> = ({
           onClick:(event) => {
             // FileSaver.saveAs(file);
             if((event.target as HTMLElement).tagName !== "A") {
-              showViewEventModal(record.id)
+              showInfoWindow(record.id)
             }
-          } 
+          }
         })}
-        
+
         columns={dataWithoutHiddenColumns}
 
-        dataSource={hideRows 
-          ? dataWithoutHiddenComponents 
+        dataSource={hideRows
+          ? dataWithoutHiddenComponents
           : convertationDataFromApi()
         }
       />

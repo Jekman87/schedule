@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Layout } from 'antd';
 
 import Header from '../header';
 import TableComponent from '../table';
@@ -12,7 +13,7 @@ import EditWindow from '../edit-window'
 
 import ApiService from '../../services/api-service';
 import { storage, createAppData } from '../../helpers/utils';
-import { LoadDataType, SettingsType, ModalStateType } from '../../constants/interfaces';
+import { LoadDataType, SettingsType, ModalStateType, EventType } from '../../constants/interfaces';
 import {
   ROLE,
   TIME_ZONE,
@@ -36,7 +37,6 @@ const initialSettings: SettingsType = {
 
 const initialModalState: ModalStateType = {
   isShow: false,
-  isViewEvent: false,
   eventData: null
 };
 
@@ -49,7 +49,8 @@ const App: React.FC = () => {
     error: false
   });
   const [settings, setSettings] = useState<SettingsType>(savedSettings);
-  const [modalState, setModalState] = useState<ModalStateType>(initialModalState);
+  const [infoWindowState, setInfoWindowState] = useState<ModalStateType>(initialModalState);
+  const [editWindowState, setEditWindowState] = useState<ModalStateType>(initialModalState);
 
   useEffect(() => {
     api.getAllEvents()
@@ -102,7 +103,7 @@ const App: React.FC = () => {
     console.log('Setting changeStyles: ', styles);
   }
 
-  const changeVisibility = (visibility: string): void => {
+  const changeVisibilityColumns = (visibility: string): void => {
     setSettings((settings) => ({...settings, visibility}));
     console.log('Setting changeVisibility: ', visibility);
   }
@@ -114,82 +115,103 @@ const App: React.FC = () => {
   }
 
   // метод вызывается при нажатии на кнопку в хедере AddEvent
-  // показываем пустую модалку для создания ивента
-  const showNewEventModal = (): void => {
-    setModalState({
+  // Или на кнопку редактирования события
+  const showEditWindow = (id: string | null = null): void => {
+    let currentEvent: EventType | null = null;
+
+    if (id) {
+      currentEvent = appData.find(el => el.event.id === id)?.event || null;
+    }
+
+    setEditWindowState({
       isShow: true,
-      isViewEvent: false,
-      eventData: null
+      eventData: currentEvent,
     });
-    console.log('showAddEventModal');
+    setInfoWindowState({
+      isShow: false,
+      eventData: null,
+    });
+    console.log('showEditWindow: ', id);
   }
 
   // показать модалку с инфой о событии при клике по строке
-  const showViewEventModal = (id: string): void => {
-    const currentEvent = appData.find(el => el.event.id === id);
-    setModalState({
-      isShow: true,
-      isViewEvent: true,
-      eventData: currentEvent?.event
-    });
-    console.log('showEventModal: ', id);
-  }
+  const showInfoWindow = (id: string): void => {
+    const currentEvent: EventType | null = appData.find(el => el.event.id === id)?.event || null;
 
-  // метод вызывается при нажатии на кнопку Редактировать в таблицу
-  // показываем заполненную модалку для редактирования ивента
-  const showEditEventModal = (id: string): void => {
-    const currentEvent = appData.find(el => el.event.id === id);
-    setModalState({
+    setInfoWindowState({
       isShow: true,
-      isViewEvent: false,
-      eventData: currentEvent?.event
+      eventData: currentEvent,
     });
-    console.log('showAddEventModal');
+    setEditWindowState({
+      isShow: false,
+      eventData: null,
+    });
+    console.log('showInfoWindow: ', id);
   }
 
   // метод вызывается из таблицы при удалении события
-  const deleteEvent = (id: string): void => {
-    // api.deleteEvent(id);
-    // удалить из ивентов! при успешном запросе
-    // сообщение об успехе?
-    console.log('deleteEvent');
+  const deleteEvent = (id: string): boolean => {
+    const isConfirm = window.confirm('Delete the event?');
+
+    if (isConfirm) {
+      // api.deleteEvent(id)
+      window.alert('Event deleted!');
+      console.log('deleteEvent');
+      return true;
+    }
+    return false;
   }
 
   // метод вызывается из модалки при создании нового события
-  const createModalEvent = (newEvent: object): void => {
+  const createEvent = (newEvent: object): void => {
     // api.createEvent(newEvent);
     // добавить в ивенты! при успешном запросе
-    // сообщение об успехе?
-    setModalState(initialModalState);
-    console.log('createModalEvent');
+    window.alert('Event created!');
+    setEditWindowState({
+      isShow: false,
+      eventData: null,
+    });
+    console.log('createEvent');
   }
 
   // метод вызывается из модалки при редактировании события.
-  const updateModalEvent = (id: string, newEvent: object): void => {
+  const updateEvent = (id: string, newEvent: object): void => {
     // api.updateEvent(id, newEvent);
     // обновить в инвентах! при успешном запросе
-    // сообщение об успехе?
-    setModalState(initialModalState);
-    console.log('updateModalEvent');
+    window.alert('Event updated!');
+    setEditWindowState({
+      isShow: false,
+      eventData: null,
+    });
+    console.log('updateEvent');
   }
 
   // метод вызывается из модалки при удалении события
   const deleteModalEvent = (id: string): void => {
-    deleteEvent(id);
-    setModalState(initialModalState);
-    console.log('deleteModalEvent');
+    const isDelete = deleteEvent(id);
+
+    if (isDelete) {
+      closeModal();
+      console.log('deleteModalEvent');
+    }
   }
 
   // закрытие модалки - по крестику или по области вне модалки
   const closeModal = (): void => {
-    setModalState(initialModalState);
+    setEditWindowState({
+      isShow: false,
+      eventData: null,
+    });
+    setInfoWindowState({
+      isShow: false,
+      eventData: null,
+    });
     console.log('closeModal');
   }
 
   // добавить цвет фона к вашему компоненту, который содержит евент
   // работает по принципу присвоения класса
   // классы прописаны в app.scss
-
   // применяем настройки к данным. Сортировка, фильрация и т.д.
 
   const addWorkSpace = (currentWorkSpace: string) => {
@@ -198,22 +220,20 @@ const App: React.FC = () => {
         return <TableComponent
                 appData={appData}
                 settings={settings}
-                showViewEventModal={showViewEventModal}
-                showEditEventModal={showEditEventModal}
+                showInfoWindow={showInfoWindow}
+                showEditWindow={showEditWindow}
                 deleteEvent={deleteEvent} />
       case WORK_SPACE.list:
         return <SList
-                
                 settings={settings}
-                // showViewEventModal={showViewEventModal}
-                
+                showInfoWindow={showInfoWindow}
                 appData={appData} />
 
       case WORK_SPACE.calendar:
         return <Calendar
                 /*
                 settings={settings}
-                showViewEventModal={showViewEventModal}
+                showInfoWindow={showInfoWindow}
                 */
                 appData={appData} />
 
@@ -225,46 +245,56 @@ const App: React.FC = () => {
   const errorMessage = error ? <ErrorIndicator /> : null;
   const spinner = loading ? <Spinner /> : null;
   const content = appData.length ? addWorkSpace(settings.workSpace) : null;
-  // settings.workSpace
-  const modal = modalState.isShow ?
+  const editWindow = editWindowState.isShow ?
     <EditWindow
       /*
       settings={settings}
-      modalState={modalState}
-      createModalEvent={createModalEvent}
-      updateModalEvent={updateModalEvent}
+      event={editWindowState.eventData}
+      createEvent={createEvent}
+      updateEvent={updateEvent}
       deleteModalEvent={deleteModalEvent}
       closeModal={closeModal}
       */
-    /> :
-    null;
+    /> : null;
+  const infoWindow = infoWindowState.isShow ?
+    <InfoWindow
+      event={editWindowState.eventData}
+      /*
+      settings={settings}
+      showEditWindow={showEditWindow}
+      deleteModalEvent={deleteModalEvent}
+      closeModal={closeModal}
+      */
+    /> : null;
 
   console.log('Settings: ', settings);
   console.log('appData: ', appData);
 
   return (
-    <>
+    <Layout>
       <Header
         settings={settings}
         changeWorkSpace={changeWorkSpace}
         changeRole={changeRole}
         changeTimeZone={changeTimeZone}
-        showNewEventModal={showNewEventModal}
+        showEditWindow={showEditWindow}
         /*
         от этого функционала временно отказываемся
         changeAccessibility={changeAccessibility}
         downloadSchedule={downloadSchedule}
         changeStyles={changeStyles}
-        changeVisibility={changeVisibility}
+        changeVisibilityColumns={changeVisibilityColumns}
         */
       />
-      {errorMessage}
-      {spinner}
-      {content}
-      {modal}
+      <Layout.Content>
+        {errorMessage}
+        {spinner}
+        {content}
+        {editWindow}
+        {infoWindow}
+      </Layout.Content>
       <Footer />
-      <InfoWindow appData={appData}/>
-    </>
+    </Layout>
   );
 }
 

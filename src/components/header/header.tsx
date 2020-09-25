@@ -13,11 +13,11 @@ interface Props {
   changeWorkSpace: (space: string) => void
   changeRole: (role: string) => void
   changeTimeZone: (timezone: string) => void
-  showNewEventModal: () => void
+  showEditWindow: () => void
 }
 
-const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, changeRole, changeTimeZone, showNewEventModal }) => {
-  
+const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, changeRole, changeTimeZone, showEditWindow }) => {
+
   const onChange = (checked: boolean) => {
     console.log(`switch to ${checked}`);
     if (checked) {
@@ -32,9 +32,9 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, cha
       {Object.values(TIME_ZONE).map((el) => {
         return (
           <Menu.Item key={el.location}>
-          <a 
-            target="_blank" 
-            rel="noopener noreferrer" 
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
             href="null"
             onClick={(event) => {
               event?.preventDefault();
@@ -57,25 +57,25 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, cha
         <div>Schedule</div>
         <Button type="dashed">My Profile</Button>
       </div>
-    
+
     <div className="header__status">
 
       <div className="header__navigation">
 
         <div className="header__button-block">
           <AppstoreTwoTone
-            twoToneColor={settings.workSpace === 'Table' ? '#fd594d' : '#1890ff'} 
-            style={{ fontSize: '2rem' }} 
+            twoToneColor={settings.workSpace === 'Table' ? '#fd594d' : '#1890ff'}
+            style={{ fontSize: '2rem' }}
             className="table-header__icon"
             onClick={() => changeWorkSpace(WORK_SPACE.table)} />
-          <ProfileTwoTone 
-            twoToneColor={settings.workSpace === 'List' ? '#fd594d' : '#1890ff'} 
-            style={{ fontSize: '2rem' }} 
+          <ProfileTwoTone
+            twoToneColor={settings.workSpace === 'List' ? '#fd594d' : '#1890ff'}
+            style={{ fontSize: '2rem' }}
             className="table-header__icon"
             onClick={() => changeWorkSpace(WORK_SPACE.list)} />
           <CalendarTwoTone
-            twoToneColor={settings.workSpace === 'Calendar' ? '#fd594d' : '#1890ff'} 
-            style={{ fontSize: '2rem' }} 
+            twoToneColor={settings.workSpace === 'Calendar' ? '#fd594d' : '#1890ff'}
+            style={{ fontSize: '2rem' }}
             className="table-header__icon"
             onClick={() => changeWorkSpace(WORK_SPACE.calendar)} />
         </div>
@@ -88,16 +88,16 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, cha
       <div className="header__role-block">
         <div className="header__role">
           <span>{settings.role}</span>
-          <Switch 
+          <Switch
             defaultChecked={settings.role === 'Student' ? false : true}
             className="header__switcher"
             onChange={onChange} />
         </div>
-        <Button 
+        <Button
           disabled={settings.role === 'Student' ? true : false}
-          type="primary" 
+          type="primary"
           className="header__button"
-          onClick={() => showNewEventModal()}>Add Event</Button>
+          onClick={() => showEditWindow()}>Add Event</Button>
       </div>
 
     </div>

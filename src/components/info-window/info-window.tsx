@@ -8,13 +8,13 @@ import './info-window.scss';
 const { Title } = Typography;
 
 interface Props {
-  appData: any[];
+  event: any;
 }
 
 // ДОЛЖЕН ПРИХОДИТЬ ИВЕНТ В ПРОПСАХ
 
 const InfoWindow: React.FunctionComponent<Props> = (props: Props) => {
-  const { appData } = props;
+  const { event } = props;
   const [visible, setVisible] = useState(true);
 
   return (

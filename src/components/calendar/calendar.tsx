@@ -3,15 +3,17 @@ import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg, 
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import momentTimezonePlugin from '@fullcalendar/moment-timezone'
 import { EventInput } from '@fullcalendar/react';
 import { red } from '@ant-design/colors';
+
 import './calendar.scss';
 
 
 interface Props {
   appData: any[];
   settings: any;
-  showInfoWindow: (id:string) => void;
+  showInfoWindow: (id: string) => void;
 }
 
 
@@ -26,7 +28,7 @@ interface CalendarState {
 let eventGuid = 0
 let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
-function createEventId() {  
+function createEventId() {
   return String(eventGuid++)
 }
 
@@ -39,7 +41,7 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
 
     // console.log('settings', settings, appData );
     console.log('settings\r\n\r\n');
-    const eventsArray:EventInput[] = [];
+    const eventsArray: EventInput[] = [];
     appData.forEach((el) => {
       if (!el.isDeadline) {
         const event: EventInput = {};
@@ -52,20 +54,23 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
         event.display = 'block';
         if (el.event.deadlinedateTime !== 0) {
           event.end = new Date(el.event.deadlinedateTime);
-          
+
         }
         // event.color = 'black';
         // event.textColor= 'red';
         eventsArray.push(event);
-      }else {
+      } else {
         const event: EventInput = {};
-        event.start = new Date(el.event.deadlinedateTime).toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+        // event.start = new Date(el.event.deadlinedateTime - 23600000 );//.toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+        event.start = new Date(el.event.deadlinedateTime);//.toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+        console.log('background' , event.start)
+        event.allDay = true;
         event.backgroundColor = 'red';
         event.display = 'background';
         eventsArray.push(event);
       }
     })
-    console.log('settings :',myEvents );
+    console.log('settings :', myEvents);
     setMyEvents(eventsArray);
   }, [settings, appData]);
 
@@ -147,13 +152,14 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
       {/* {renderSidebar()} */}
       <div className='demo-app-main'>
         <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, momentTimezonePlugin]}
           headerToolbar={{
             left: '',
             center: 'title',
             right: 'prev,next'
           }}
           eventColor={'green'}
+          timeZone={settings.timeZone}
           firstDay={1}
           initialView='dayGridMonth'
           editable={false}

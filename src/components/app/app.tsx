@@ -116,7 +116,6 @@ const App: React.FC = () => {
 
   // метод вызывается при нажатии на кнопку в хедере AddEvent
   // Или на кнопку редактирования события
-
   const showEditWindow = (id: string | null = null): void => {
     let currentEvent: EventType | null = null;
 
@@ -219,27 +218,22 @@ const App: React.FC = () => {
     switch(currentWorkSpace) {
       case WORK_SPACE.table:
         return <TableComponent
-                /*
+                appData={appData}
                 settings={settings}
-                showViewEventModal={showViewEventModal}
-                showEditEventModal={showEditEventModal}
-                deleteEvent={deleteEvent}
-                */
-                appData={appData} />
-
+                showInfoWindow={showInfoWindow}
+                showEditWindow={showEditWindow}
+                deleteEvent={deleteEvent} />
       case WORK_SPACE.list:
         return <SList
-                /*
                 settings={settings}
-                showViewEventModal={showViewEventModal}
-                */
+                showInfoWindow={showInfoWindow}
                 appData={appData} />
 
       case WORK_SPACE.calendar:
         return <Calendar
                 /*
                 settings={settings}
-                showViewEventModal={showViewEventModal}
+                showInfoWindow={showInfoWindow}
                 */
                 appData={appData} />
 
@@ -264,9 +258,9 @@ const App: React.FC = () => {
     /> : null;
   const infoWindow = infoWindowState.isShow ?
     <InfoWindow
+      event={editWindowState.eventData}
       /*
       settings={settings}
-      event={editWindowState.eventData}
       showEditWindow={showEditWindow}
       deleteModalEvent={deleteModalEvent}
       closeModal={closeModal}
@@ -280,16 +274,16 @@ const App: React.FC = () => {
     <Layout>
       <Header
         settings={settings}
-        changeWorkSpace={changeWorkSpace} // убрать, аналог ниже
-        /*
         changeWorkSpace={changeWorkSpace}
         changeRole={changeRole}
-        changeAccessibility={changeAccessibility}
         changeTimeZone={changeTimeZone}
+        showEditWindow={showEditWindow}
+        /*
+        от этого функционала временно отказываемся
+        changeAccessibility={changeAccessibility}
         downloadSchedule={downloadSchedule}
         changeStyles={changeStyles}
         changeVisibilityColumns={changeVisibilityColumns}
-        showEditWindow={showEditWindow}
         */
       />
       <Layout.Content>

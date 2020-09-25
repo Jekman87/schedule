@@ -7,7 +7,7 @@ import Calendar from '../calendar';
 import Footer from '../footer'
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
-// import InfoWindow from '../info-window'
+import InfoWindow from '../info-window'
 import EditWindow from '../edit-window'
 
 import ApiService from '../../services/api-service';
@@ -190,21 +190,17 @@ const App: React.FC = () => {
   // работает по принципу присвоения класса
   // классы прописаны в app.scss
 
-
   // применяем настройки к данным. Сортировка, фильрация и т.д.
 
   const addWorkSpace = (currentWorkSpace: string) => {
     switch(currentWorkSpace) {
       case WORK_SPACE.table:
         return <TableComponent
-                /*
+                appData={appData}
                 settings={settings}
                 showViewEventModal={showViewEventModal}
                 showEditEventModal={showEditEventModal}
-                deleteEvent={deleteEvent}
-                */
-                appData={appData} />
-
+                deleteEvent={deleteEvent} />
       case WORK_SPACE.list:
         return <SList
                 
@@ -229,6 +225,7 @@ const App: React.FC = () => {
   const errorMessage = error ? <ErrorIndicator /> : null;
   const spinner = loading ? <Spinner /> : null;
   const content = appData.length ? addWorkSpace(settings.workSpace) : null;
+  // settings.workSpace
   const modal = modalState.isShow ?
     <EditWindow
       /*
@@ -249,17 +246,16 @@ const App: React.FC = () => {
     <>
       <Header
         settings={settings}
-        changeWorkSpace={changeWorkSpace} // убрать, аналог ниже
-        /*
         changeWorkSpace={changeWorkSpace}
         changeRole={changeRole}
-        changeAccessibility={changeAccessibility}
         changeTimeZone={changeTimeZone}
+        showNewEventModal={showNewEventModal}
+        /*
+        от этого функционала временно отказываемся
+        changeAccessibility={changeAccessibility}
         downloadSchedule={downloadSchedule}
         changeStyles={changeStyles}
         changeVisibility={changeVisibility}
-        showNewEventModal={showNewEventModal}
-
         */
       />
       {errorMessage}
@@ -267,6 +263,7 @@ const App: React.FC = () => {
       {content}
       {modal}
       <Footer />
+      <InfoWindow appData={appData}/>
     </>
   );
 }

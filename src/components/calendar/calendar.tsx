@@ -48,9 +48,9 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
         event.id = el.event.id;
         event.title = el.event.name;
         event.start = new Date(el.event.dateTime);
-        // event.backgroundColor = 'black';
-        // event.borderColor= 'green';
-        // event.textColor= 'red';
+        event.textColor = '#000000';
+        event.classNames = [`type__${el.event.type.split(' ').join('-')}`]
+        event.borderColor = 'transparent';
         event.display = 'block';
         if (el.event.deadlinedateTime !== 0) {
           event.end = new Date(el.event.deadlinedateTime);
@@ -148,7 +148,7 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
 
 
   return (
-    <div className='demo-app'>
+    <div className='calendar'>
       {/* {renderSidebar()} */}
       <div className='demo-app-main'>
         <FullCalendar
@@ -158,7 +158,7 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
             center: 'title',
             right: 'prev,next'
           }}
-          eventColor={'green'}
+          // eventColor={'green'}
           timeZone={settings.timeZone}
           firstDay={1}
           initialView='dayGridMonth'

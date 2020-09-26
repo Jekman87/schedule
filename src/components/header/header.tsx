@@ -2,9 +2,9 @@ import React from 'react';
 import { Menu, Button, Dropdown, Switch } from 'antd';
 
 import { SettingsType } from '../../constants/interfaces';
-import { ROLE, TIME_ZONE, WORK_SPACE } from '../../constants/constants';
+import { ROLE, TIME_ZONE, WORK_SPACE, EVENT_CONFIG } from '../../constants/constants';
 
-import { AppstoreTwoTone, ProfileTwoTone, CalendarTwoTone } from '@ant-design/icons';
+import { AppstoreTwoTone, ProfileTwoTone, CalendarTwoTone, FileWordTwoTone, FireTwoTone } from '@ant-design/icons';
 
 import './header.scss';
 
@@ -27,7 +27,36 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, cha
     }
   }
 
-  const menu = (
+  const eventTypes = (
+    <Menu>
+      <Menu.Item key='All'>
+        <a 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          href="null"
+          onClick={(event) => {
+            event.preventDefault();
+            console.log('')
+        }}>all</a>
+      </Menu.Item>
+      {EVENT_CONFIG.type.map((el, index) => {
+        return (
+          <Menu.Item key={el}>
+            <a 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              href="null"
+              onClick={(event) => {
+                event.preventDefault();
+                console.log(el)
+            }}>{el}</a>
+          </Menu.Item>
+        )
+      })}
+    </Menu>
+  );
+
+  const timezones = (
     <Menu>
       {Object.values(TIME_ZONE).map((el) => {
         return (
@@ -37,7 +66,7 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, cha
             rel="noopener noreferrer" 
             href="null"
             onClick={(event) => {
-              event?.preventDefault();
+              event.preventDefault();
               changeTimeZone(el.location);
             }}
           >
@@ -60,29 +89,54 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, cha
     
     <div className="header__status">
 
-      <div className="header__navigation">
+    <div className="header__navigation-block">
 
-        <div className="header__button-block">
-          <AppstoreTwoTone
-            twoToneColor={settings.workSpace === 'Table' ? '#fd594d' : '#1890ff'} 
-            style={{ fontSize: '2rem' }} 
-            className="table-header__icon"
-            onClick={() => changeWorkSpace(WORK_SPACE.table)} />
-          <ProfileTwoTone 
-            twoToneColor={settings.workSpace === 'List' ? '#fd594d' : '#1890ff'} 
-            style={{ fontSize: '2rem' }} 
-            className="table-header__icon"
-            onClick={() => changeWorkSpace(WORK_SPACE.list)} />
-          <CalendarTwoTone
-            twoToneColor={settings.workSpace === 'Calendar' ? '#fd594d' : '#1890ff'} 
-            style={{ fontSize: '2rem' }} 
-            className="table-header__icon"
-            onClick={() => changeWorkSpace(WORK_SPACE.calendar)} />
-        </div>
+      <div className="header__button-block">
+        <AppstoreTwoTone
+          twoToneColor={settings.workSpace === 'Table' ? '#fd594d' : '#1890ff'} 
+          style={{ fontSize: '2rem' }} 
+          className="table-header__icon"
+          onClick={() => changeWorkSpace(WORK_SPACE.table)} />
+        <ProfileTwoTone 
+          twoToneColor={settings.workSpace === 'List' ? '#fd594d' : '#1890ff'} 
+          style={{ fontSize: '2rem' }} 
+          className="table-header__icon"
+          onClick={() => changeWorkSpace(WORK_SPACE.list)} />
+        <CalendarTwoTone
+          twoToneColor={settings.workSpace === 'Calendar' ? '#fd594d' : '#1890ff'} 
+          style={{ fontSize: '2rem' }} 
+          className="table-header__icon"
+          onClick={() => changeWorkSpace(WORK_SPACE.calendar)} />
+        <FileWordTwoTone
+          twoToneColor='#4caf50'
+          style={{ fontSize: '2rem' }} 
+          className="table-header__icon table-header__icon-file"
+          onClick={() => console.log('Сохраняем файл')} />
+        <FireTwoTone
+          twoToneColor='#ff9800'
+          style={{ fontSize: '2rem' }} 
+          className="table-header__icon table-header__icon-fire"
+          onClick={() => console.log('Прячем неактуальные события')} />
+      </div>
 
-        <Dropdown overlay={menu} placement="bottomCenter" arrow>
-          <Button>{settings.timeZone}</Button>
+      <div>
+        <Dropdown 
+          arrow
+          overlay={timezones} 
+          placement="bottomCenter"
+          className="header__drop-down">
+            <Button>{settings.timeZone}</Button>
         </Dropdown>
+
+        <Dropdown 
+          arrow
+          overlay={eventTypes} 
+          placement="bottomCenter"
+          className="header__drop-down">
+            <Button>Filter by type</Button>
+        </Dropdown>
+      </div>
+
       </div>
 
       <div className="header__role-block">
@@ -93,13 +147,13 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, cha
             className="header__switcher"
             onChange={onChange} />
         </div>
-        <Button 
-          disabled={settings.role === 'Student' ? true : false}
-          type="primary" 
-          className="header__button"
-          onClick={() => showNewEventModal()}>Add Event</Button>
+        {settings.role === 'Mentor'
+          ? <Button 
+            type="primary" 
+            className="header__button"
+            onClick={() => showNewEventModal()}>Add Event</Button>
+          : null}
       </div>
-
     </div>
 
     </div>

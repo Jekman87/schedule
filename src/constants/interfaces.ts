@@ -1,7 +1,12 @@
 export interface LoadDataType {
-  appData: Array<EventType> | []
+  data: [] | EventType[]
   loading: boolean
   error: boolean
+}
+
+export interface AppEventType {
+  event: EventType
+  isDeadline: boolean
 }
 
 export interface SettingsType {
@@ -15,31 +20,45 @@ export interface SettingsType {
 
 export interface ModalStateType {
   isShow: boolean
-  isViewEvent: boolean
-  eventData: EventType | undefined | null
+  eventData: EventType | null
 }
 
 export interface EventType {
   id?: string
   name: string
-  subheading: string
-  step: string
   type: string
   form: string
-  eventURL: string
   place: string
   kind: string
-  tags: string
+  tags: [] | string[]
+  dateTime: number
+  description: string
   descriptionUrl: string
-  timeZone: string
-  dateTime: number,
-  organizer: string
-  term: string
+  eventURL: string
+  deadlinedateTime: number
+  deadlineDescription: string
+  organizer: [] | string[]
+  duration: string
   comment: string
   isFeedback: boolean
-  feedback: object
-  description: string
-  materials: []
+  feedback: [] | FeedbackType[]
+  materials: [] | MaterialsType[]
   stage: string
   course: string
+}
+
+export interface FeedbackType {
+  author: string
+  text: string
+}
+
+export interface MaterialsType {
+  links: [] | MaterialsElementType[]
+  video: [] | MaterialsElementType[]
+  images: [] | MaterialsElementType[]
+}
+
+export interface MaterialsElementType {
+  link: string
+  discription: string
 }

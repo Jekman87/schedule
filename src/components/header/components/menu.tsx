@@ -1,19 +1,23 @@
 import React from 'react';
 import { Menu } from 'antd';
+import { WORK_SPACE } from '../../../constants/constants';
 
+const keys = Object.values(WORK_SPACE);
 
-const menu = (changeWorkSpace:any) => (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="1" data-space="table" onClick={changeWorkSpace}>Table</a>
-    </Menu.Item>
-    <Menu.Item>
-        <a target="_blank" rel="noopener noreferrer" href="1" data-space="list" onClick={changeWorkSpace}>List</a>
-    </Menu.Item>
-    <Menu.Item>
-        <a target="_blank" rel="noopener noreferrer" href="1" data-space="calendar" onClick={changeWorkSpace}>Calendar</a>
-    </Menu.Item>
-  </Menu>
-);
+const menu = (changeWorkSpace: any) => {
+  const menuItems = keys.map((key) => {
+    return (
+      <Menu.Item onClick={() => changeWorkSpace(key)} key={key}>
+        {key}
+      </Menu.Item>
+    );
+  })
+
+  return (
+    <Menu>
+      {menuItems}
+    </Menu>
+  );
+}
 
 export default menu;

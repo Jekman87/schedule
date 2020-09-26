@@ -10,6 +10,7 @@ import {
   Modal,
 } from 'antd';
 import OptionsObject from './options';
+import {EventType} from '../../constants/interfaces';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 // import ApiService from '../../services/api-service';
 import { templateModalWindow } from './template';
@@ -22,14 +23,14 @@ const { TextArea } = Input;
 
 type Props = {
   settings: object,
-  modalState: object,
-  createModalEvent: (newEvent: object) => void,
-  updateModalEvent: (newEvent: object) => void,
-  deleteModalEvent: (newEvent: object) => void,
+  event: EventType | null,
+  createEvent: (newEvent: object) => void,
+  updateEvent: (id: string, newEvent: object) => void,
+  deleteModalEvent: (id: string) => void,
   closeModal: (newEvent: object) => void,
 }
 
-const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, deleteModalEvent, closeModal }: Props) => {
+const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEvent, closeModal }: Props) => {
   // const api = new ApiService();
   // const getAllEvents = () => api.getAllEvents().then((data) => console.log(data));
   // const createEvent = (newEvent: object) => api.createEvent(newEvent).then((data) => console.log(data));

@@ -1,5 +1,9 @@
 .info-window {
   font-size: 2rem;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background-color: #00000073;
 
   .ant-modal-title {
     text-align: center;

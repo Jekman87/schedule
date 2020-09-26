@@ -2,13 +2,13 @@ export const templateModalWindow = [
     {
         key: "project task",
         template: {
-            name: true, 
+            name: true,
             form: false,
             place: false,
             kind: true,
-            tags: true, 
+            tags: true,
             dateTime: true,
-            description: true, 
+            description: true,
             descriptionUrl: true,
             eventURL: true,
             deadlinedateTime: true,
@@ -19,10 +19,10 @@ export const templateModalWindow = [
             isFeedback: true,
             feedback: true,
             materials: true,
-            stage: true,    
+            stage: true,
         }
     },
-    
+
     {
         key: "js task",
         template: {
@@ -43,10 +43,10 @@ export const templateModalWindow = [
             isFeedback: true,
             feedback: true,
             materials: true,
-            stage: true,    
+            stage: true,
         }
     },
-    
+
     {
         key: "codewars",
         template: {
@@ -67,7 +67,7 @@ export const templateModalWindow = [
             isFeedback: false,
             feedback: false,
             materials: false,
-            stage: true,    
+            stage: true,
         }
     },
 
@@ -91,7 +91,7 @@ export const templateModalWindow = [
             isFeedback: false,
             feedback: false,
             materials: false,
-            stage: true,   
+            stage: true,
         }
     },
 
@@ -115,7 +115,7 @@ export const templateModalWindow = [
             isFeedback: false,
             feedback: false,
             materials: false,
-            stage: true,   
+            stage: true,
         }
     },
 
@@ -139,7 +139,7 @@ export const templateModalWindow = [
             isFeedback: false,
             feedback: false,
             materials: false,
-            stage: true,          
+            stage: true,
         }
     },
 
@@ -163,7 +163,7 @@ export const templateModalWindow = [
             isFeedback: false,
             feedback: false,
             materials: true,
-            stage: true,         
+            stage: true,
         }
     },
 
@@ -187,7 +187,7 @@ export const templateModalWindow = [
             isFeedback: false,
             feedback: false,
             materials: true,
-            stage: true,        
+            stage: true,
         }
     },
 
@@ -211,7 +211,7 @@ export const templateModalWindow = [
             isFeedback: true,
             feedback: false,
             materials: false,
-            stage: false,        
+            stage: false,
         }
     },
 
@@ -235,10 +235,10 @@ export const templateModalWindow = [
             isFeedback: true,
             feedback: true,
             materials: true,
-            stage: true,          
+            stage: true,
         }
     },
-    
+
     {
         key: "presentation",
         template: {
@@ -259,7 +259,7 @@ export const templateModalWindow = [
             isFeedback: false,
             feedback: false,
             materials: true,
-            stage: true,      
+            stage: true,
         }
     },
     {
@@ -282,8 +282,7 @@ export const templateModalWindow = [
             isFeedback: true,
             feedback: true,
             materials: true,
-            stage: true,        
+            stage: true,
         }
     }
 ]
-  

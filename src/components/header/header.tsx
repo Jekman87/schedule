@@ -1,8 +1,7 @@
 import React from 'react';
-import { Menu, Button, Dropdown, Switch } from 'antd';
+import { Menu, Button, Dropdown, Switch, Tooltip } from 'antd';
 
 import { SettingsType } from '../../constants/interfaces';
-import { saveSchedule } from '../../helpers/utils';
 import { ROLE, TIME_ZONE, WORK_SPACE, EVENT_CONFIG } from '../../constants/constants';
 
 import { AppstoreTwoTone, ProfileTwoTone, CalendarTwoTone, FileWordTwoTone, FireTwoTone } from '@ant-design/icons';
@@ -11,15 +10,26 @@ import { AppstoreTwoTone, ProfileTwoTone, CalendarTwoTone, FileWordTwoTone, Fire
 import './header.scss';
 
 interface Props {
-  appData: any,
   settings: SettingsType
   changeWorkSpace: (space: string) => void
   changeRole: (role: string) => void
   changeTimeZone: (timezone: string) => void
   showEditWindow: () => void
+  changeTaskFilter: (taskFilter: string) => void
+  changeVisibilityOldEvengs: (visibilityOldEvents: boolean) => void
+  downloadSchedule: () => void
 }
 
-const Header: React.FunctionComponent<Props> = ({ appData, settings, changeWorkSpace, changeRole, changeTimeZone, showEditWindow }) => {
+const Header: React.FunctionComponent<Props> = ({
+  settings,
+  changeWorkSpace,
+  changeRole,
+  changeTimeZone,
+  showEditWindow,
+  changeTaskFilter,
+  changeVisibilityOldEvengs,
+  downloadSchedule,
+}) => {
 
   const onChange = (checked: boolean) => {
     console.log(`switch to ${checked}`);
@@ -32,14 +42,14 @@ const Header: React.FunctionComponent<Props> = ({ appData, settings, changeWorkS
 
   const eventTypes = (
     <Menu>
-      <Menu.Item key='All'>
+      <Menu.Item key='all'>
         <a
           target="_blank"
           rel="noopener noreferrer"
           href="null"
           onClick={(event) => {
             event.preventDefault();
-            console.log('')
+            changeTaskFilter('')
         }}>all</a>
       </Menu.Item>
       {EVENT_CONFIG.type.map((el, index) => {
@@ -51,7 +61,7 @@ const Header: React.FunctionComponent<Props> = ({ appData, settings, changeWorkS
               href="null"
               onClick={(event) => {
                 event.preventDefault();
-                console.log(el)
+                changeTaskFilter(el)
             }}>{el}</a>
           </Menu.Item>
         )
@@ -95,31 +105,41 @@ const Header: React.FunctionComponent<Props> = ({ appData, settings, changeWorkS
     <div className="header__navigation-block">
 
       <div className="header__button-block">
-        <AppstoreTwoTone
-          twoToneColor={settings.workSpace === 'Table' ? '#fd594d' : '#1890ff'}
-          style={{ fontSize: '2rem' }}
-          className="table-header__icon"
-          onClick={() => changeWorkSpace(WORK_SPACE.table)} />
-        <ProfileTwoTone
-          twoToneColor={settings.workSpace === 'List' ? '#fd594d' : '#1890ff'}
-          style={{ fontSize: '2rem' }}
-          className="table-header__icon"
-          onClick={() => changeWorkSpace(WORK_SPACE.list)} />
-        <CalendarTwoTone
-          twoToneColor={settings.workSpace === 'Calendar' ? '#fd594d' : '#1890ff'}
-          style={{ fontSize: '2rem' }}
-          className="table-header__icon"
-          onClick={() => changeWorkSpace(WORK_SPACE.calendar)} />
-        <FileWordTwoTone
-          twoToneColor='#4caf50'
-          style={{ fontSize: '2rem' }}
-          className="table-header__icon table-header__icon-file"
-          onClick={() => saveSchedule(appData, settings)} />
-        <FireTwoTone
-          twoToneColor='#ff9800'
-          style={{ fontSize: '2rem' }}
-          className="table-header__icon table-header__icon-fire"
-          onClick={() => console.log('Прячем неактуальные события')} />
+        <Tooltip placement="top" title={'Table view'}>
+          <AppstoreTwoTone
+            twoToneColor={settings.workSpace === 'Table' ? '#fd594d' : '#1890ff'}
+            style={{ fontSize: '2rem' }}
+            className="table-header__icon"
+            onClick={() => changeWorkSpace(WORK_SPACE.table)} />
+        </Tooltip>
+        <Tooltip placement="top" title={'List view'}>
+          <ProfileTwoTone
+            twoToneColor={settings.workSpace === 'List' ? '#fd594d' : '#1890ff'}
+            style={{ fontSize: '2rem' }}
+            className="table-header__icon"
+            onClick={() => changeWorkSpace(WORK_SPACE.list)} />
+        </Tooltip>
+        <Tooltip placement="top" title={'Сalendar view'}>
+          <CalendarTwoTone
+            twoToneColor={settings.workSpace === 'Calendar' ? '#fd594d' : '#1890ff'}
+            style={{ fontSize: '2rem' }}
+            className="table-header__icon"
+            onClick={() => changeWorkSpace(WORK_SPACE.calendar)} />
+        </Tooltip>
+        <Tooltip placement="top" title={'Download schedule'}>
+          <FileWordTwoTone
+            twoToneColor='#4caf50'
+            style={{ fontSize: '2rem' }}
+            className="table-header__icon table-header__icon-file"
+            onClick={() => downloadSchedule()} />
+        </Tooltip>
+        <Tooltip placement="top" title={'Visibility of old events'}>
+          <FireTwoTone
+            twoToneColor={settings.visibilityOldEvents ? '#aaa' : '#ff9800'}
+            style={{ fontSize: '2rem' }}
+            className="table-header__icon table-header__icon-fire"
+            onClick={() => changeVisibilityOldEvengs(!settings.visibilityOldEvents)} />
+        </Tooltip>
       </div>
 
       <div>
@@ -128,7 +148,9 @@ const Header: React.FunctionComponent<Props> = ({ appData, settings, changeWorkS
           overlay={timezones}
           placement="bottomCenter"
           className="header__drop-down">
-            <Button>{settings.timeZone}</Button>
+            <Tooltip placement="top" title={'Change timezone'}>
+              <Button>{settings.timeZone}</Button>
+            </Tooltip>
         </Dropdown>
 
         <Dropdown
@@ -136,7 +158,9 @@ const Header: React.FunctionComponent<Props> = ({ appData, settings, changeWorkS
           overlay={eventTypes}
           placement="bottomCenter"
           className="header__drop-down">
-            <Button>Filter by type</Button>
+            <Tooltip placement="top" title={'Filter by type'}>
+              <Button>{settings.taskFilter ? settings.taskFilter : 'all'}</Button>
+            </Tooltip>
         </Dropdown>
       </div>
 

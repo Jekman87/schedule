@@ -5,14 +5,13 @@ import Header from '../header';
 import TableComponent from '../table';
 import SList from '../list';
 import Calendar from '../calendar';
-import Footer from '../footer'
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 import InfoWindow from '../info-window'
 import EditWindow from '../edit-window'
 
 import ApiService from '../../services/api-service';
-import { storage, createAppData } from '../../helpers/utils';
+import { storage, createAppData, saveSchedule } from '../../helpers/utils';
 import { LoadDataType, SettingsType, ModalStateType, EventType, AppEventType } from '../../constants/interfaces';
 import {
   ROLE,
@@ -92,7 +91,7 @@ const App: React.FC = () => {
     }
 
     setAppData(createAppData(filteredData));
-  }, [loadData.data, settings.visibilityOldEvents, settings.taskFilter]);
+  }, [loadData.data, settings]);
 
   useEffect(() => {
     storage(SCHEDULE_STORAGE_KEY, settings);
@@ -123,10 +122,9 @@ const App: React.FC = () => {
     console.log('Setting changeVisibilityOldEvengs: ', visibilityOldEvents);
   }
 
-  const downloadSchedule = (format: string): void => {
-    // загрузка расписание в зависимости от формата
-    // TODO
-    console.log('Setting saveSchedule: ', format);
+  const downloadSchedule = (): void => {
+    saveSchedule(appData, settings);
+    console.log('Setting downloadSchedule');
   }
 
   // метод вызывается при нажатии на кнопку в хедере AddEvent
@@ -288,17 +286,14 @@ const App: React.FC = () => {
   return (
     <Layout>
       <Header
-        appData={appData}
         settings={settings}
         changeWorkSpace={changeWorkSpace}
         changeRole={changeRole}
         changeTimeZone={changeTimeZone}
         showEditWindow={showEditWindow}
-        /*
         changeTaskFilter={changeTaskFilter}
         changeVisibilityOldEvengs={changeVisibilityOldEvengs}
         downloadSchedule={downloadSchedule}
-        */
       />
       <Layout.Content>
         {errorMessage}
@@ -307,7 +302,6 @@ const App: React.FC = () => {
         {editWindow}
         {infoWindow}
       </Layout.Content>
-      <Footer />
     </Layout>
   );
 }

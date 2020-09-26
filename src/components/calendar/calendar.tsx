@@ -34,45 +34,80 @@ interface Props {
 const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoWindow }) => {
 
   // let myEvents: EventInput[] = [];
-  const [myEvents, setMyEvents] = useState<EventInput[]>([]);
+  // const [myEvents, setMyEvents] = useState<EventInput[]>([]);
 
-  useEffect(() => {
+  console.log('settings\r\n\r\n');
+  const eventsArray: EventInput[] = [];
 
-    // console.log('settings', settings, appData );
-    console.log('settings\r\n\r\n');
-    const eventsArray: EventInput[] = [];
-    appData.forEach((el) => {
-      if (!el.isDeadline) {
-        const event: EventInput = {};
-        event.id = el.event.id;
-        event.title = el.event.name;
-        event.start = new Date(el.event.dateTime);
-        event.textColor = '#000000';
-        event.classNames = [`type__${el.event.type.split(' ').join('-')}`]
-        event.borderColor = 'transparent';
-        event.display = 'block';
-        if (el.event.deadlinedateTime !== 0) {
-          event.end = new Date(el.event.deadlinedateTime);
+  appData.forEach((el) => {
+    if (!el.isDeadline) {
+      const event: EventInput = {};
+      event.id = el.event.id;
+      event.title = el.event.name;
+      event.start = new Date(el.event.dateTime);
+      event.textColor = '#000000';
+      event.classNames = [`type__${el.event.type.split(' ').join('-')}`]
+      event.borderColor = 'transparent';
+      event.display = 'block';
+      if (el.event.deadlinedateTime !== 0) {
+        event.end = new Date(el.event.deadlinedateTime);
 
-        }
-        // event.color = 'black';
-        // event.textColor= 'red';
-        eventsArray.push(event);
-      } else {
-        const event: EventInput = {};
-        // event.start = new Date(el.event.deadlinedateTime - 23600000 );//.toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
-        event.start = new Date(el.event.deadlinedateTime);//.toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
-        console.log('background' , event.start)
-        event.allDay = true;
-        event.backgroundColor = 'red';
-        event.display = 'background';
-        eventsArray.push(event);
       }
-    })
-    console.log('settings :', myEvents);
-    setMyEvents(eventsArray);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings, appData]);
+      // event.color = 'black';
+      // event.textColor= 'red';
+      eventsArray.push(event);
+    } else {
+      const event: EventInput = {};
+      // event.start = new Date(el.event.deadlinedateTime - 23600000 );//.toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+      event.start = new Date(el.event.deadlinedateTime);//.toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+      console.log('background' , event.start)
+      event.allDay = true;
+      event.backgroundColor = 'red';
+      event.display = 'background';
+      eventsArray.push(event);
+    }
+  })
+  // console.log('settings :', myEvents);
+  // setMyEvents(eventsArray);
+
+
+  // useEffect(() => {
+
+  //   // console.log('settings', settings, appData );
+  //   console.log('settings\r\n\r\n');
+  //   const eventsArray: EventInput[] = [];
+  //   appData.forEach((el) => {
+  //     if (!el.isDeadline) {
+  //       const event: EventInput = {};
+  //       event.id = el.event.id;
+  //       event.title = el.event.name;
+  //       event.start = new Date(el.event.dateTime);
+  //       event.textColor = '#000000';
+  //       event.classNames = [`type__${el.event.type.split(' ').join('-')}`]
+  //       event.borderColor = 'transparent';
+  //       event.display = 'block';
+  //       if (el.event.deadlinedateTime !== 0) {
+  //         event.end = new Date(el.event.deadlinedateTime);
+
+  //       }
+  //       // event.color = 'black';
+  //       // event.textColor= 'red';
+  //       eventsArray.push(event);
+  //     } else {
+  //       const event: EventInput = {};
+  //       // event.start = new Date(el.event.deadlinedateTime - 23600000 );//.toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+  //       event.start = new Date(el.event.deadlinedateTime);//.toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+  //       console.log('background' , event.start)
+  //       event.allDay = true;
+  //       event.backgroundColor = 'red';
+  //       event.display = 'background';
+  //       eventsArray.push(event);
+  //     }
+  //   })
+  //   console.log('settings :', myEvents);
+  //   setMyEvents(eventsArray);
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [settings, appData]);
 
 
   // console.log('Appdata: ', appData);
@@ -126,7 +161,7 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
           // dayMaxEventRows={true}
           dayMaxEvents={6}
           weekends={true}
-          events={myEvents} // alternatively, use the `events` setting to fetch from a feed
+          events={eventsArray} // alternatively, use the `events` setting to fetch from a feed
           // initialEvents={myEvents} // alternatively, use the `events` setting to fetch from a feed
           // select={handleDateSelect}
           eventContent={renderEventContent} // custom render function

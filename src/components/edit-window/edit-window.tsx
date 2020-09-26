@@ -29,9 +29,6 @@ type Props = {
   closeModal: (newEvent: object) => void,
 }
 
-
-
-
 const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, deleteModalEvent, closeModal }: Props) => {
   // const api = new ApiService();
   // const getAllEvents = () => api.getAllEvents().then((data) => console.log(data));
@@ -43,102 +40,157 @@ const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, 
   //   return arrayEvents;
   // }
 
-  const [newName, setNewName] = useState('');
-  const [newType, setNewType] = useState('');
-  const [newForm, setNewForm] = useState('');
-  const [newPlace, setNewPlace] = useState('');
-  const [newKind, setNewKind] = useState('');
-  const [newTags, setNewTags] = useState('');
-  const [newDateTime, setDateTime] = useState({});
-  const [newDescription, setNewDescription] = useState('');
-  const [newDescriptionUrl, setNewDescriptionURl] = useState('');
-  const [newEventUrl, setNewEventUrl] = useState('');
-  const [newDedlineDateTime, setNewDedlineTask] = useState({});
-  const [newDeadlineDescription, setNewDeadlineDescription] = useState('');
-  const [newOrganizer, setNewOrganizer] = useState('');
-  const [newDuration, setNewDuration] = useState('');
-  const [newComment, setNewComment] = useState('');
-  const [newIsFeedback, setIsNewFeedback] = useState(false);
-  const [newFeedback, setNewFeedback] = useState('');
-  const [newMaterials, setNewMaterials] = useState('');
-  const [newStage, setNewstage] = useState('');
-  const [newCourse, setNewCourse] = useState('');
+
+  const materialLinks: string = '';
+  const materialImage: string = '';
+  const materialVideo: string = '';
+
+  const defaultState = {
+    newName: '',
+    newType: '',
+    newForm: '',
+    newPlace: '',
+    newKind: '',
+    newTags: [],
+    newDateTime: {},
+    newDescription: '',
+    newDescriptionUrl: '',
+    newEventUrl: '',
+    newDedlineDateTime: {},
+    newDeadlineDescription: '',
+    newOrganizer: '',
+    newDuration: '',
+    newComment: '',
+    newIsFeedback: false,
+    newFeedback: false,
+    newMaterials: {
+      video: materialVideo,
+      image: materialImage,
+      links: materialLinks,
+    },
+    newStage: '',
+  }
 
 
+  const [globalStateModalWindow, setGlobalStateModalWindow] = useState(defaultState);
 
-  const [loading, setLoadint] = useState(false);
+  const [isDisabled, setDisabled] = useState(false);
+  const [isNewType, setIsNewType] = useState(false);
+
+  // const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(true);
 
-
   const [currentType, setCurrentType] = useState({
-    name: true, // *; mentor enters text in input
-    type: true, // *; select
+    name: true,
+    type: true,
     form: true,
     place: true,
-    kind: true, // *; select
-    tags: true, // select | input | textarea
+    kind: true,
+    tags: true,
     dateTime: true,
-    description: true, // mentor enters text in textarea
-    descriptionUrl: true, // mentor enters text in input
+    description: true,
+    descriptionUrl: true,
     eventURL: true,
     deadlinedateTime: true,
     deadlineDescription: true,
-    organizer: true, // *; mentor enters text in input; array strings
-    duration: true, //? or number
+    organizer: true,
+    duration: true,
     comment: true,
-    isFeedback: true, // *; switcher
+    isFeedback: true,
     feedback: true,
-    materials: true, // {links: string | null, video: string | null, images: string | null}
-    stage: true, // *; select
-    course: true, // *; mentor enters text in input     
+    materials: true,
+    stage: true,
   }
   );
 
   const objEvent: any = {
-    key: newName + new Date(),
-    name: newName,
-    type: newType,
-    form: newForm,
-    place: newPlace,
-    kind: newKind,
-    tags: newTags,
-    dateTime: newDateTime,
-    description: newDescription,
-    descriptionUrl: newDescriptionUrl,
-    eventURL: newEventUrl,
-    deadlinedateTime: newDedlineDateTime,
-    deadlineDescription: newDeadlineDescription,
-    organizer: newOrganizer,
-    duration: newDuration,
-    comment: newComment,
-    isFeedback: newIsFeedback,
-    feedback: newFeedback,
-    materials: newMaterials,
-    stage: newStage,
-    course: newCourse,
+    // key: newName + new Date(),
+    name: globalStateModalWindow.newName,
+    type: globalStateModalWindow.newType,
+    form: globalStateModalWindow.newForm,
+    place: globalStateModalWindow.newPlace,
+    kind: globalStateModalWindow.newKind,
+    tags: globalStateModalWindow.newTags,
+    dateTime: globalStateModalWindow.newDateTime,
+    description: globalStateModalWindow.newDescription,
+    descriptionUrl: globalStateModalWindow.newDescriptionUrl,
+    eventURL: globalStateModalWindow.newEventUrl,
+    deadlinedateTime: globalStateModalWindow.newDedlineDateTime,
+    deadlineDescription: globalStateModalWindow.newDeadlineDescription,
+    organizer: globalStateModalWindow.newOrganizer,
+    duration: globalStateModalWindow.newDuration,
+    comment: globalStateModalWindow.newComment,
+    isFeedback: globalStateModalWindow.newIsFeedback,
+    feedback: globalStateModalWindow.newFeedback,
+    materials: globalStateModalWindow.newMaterials,
+    stage: globalStateModalWindow.newStage,
   }
-
+  
   const handleOk: any = () => {
     console.log(objEvent);
-    setLoadint(true);
   };
 
   const handleCancel: any = () => {
     setVisible(false);
   };
 
+  const handleAdd: any = () => {
+    setGlobalStateModalWindow({ ...globalStateModalWindow, newType: 'other' });
+    for (let i: number = 0; i < templateModalWindow.length; i += 1) {
+      if (templateModalWindow[i].key === "other") {
+        const currentType = JSON.parse(JSON.stringify(templateModalWindow[i].template));
+        currentType.type = true;
+        setCurrentType(currentType);
+      }
+    }
+    setDisabled(true);
+    setIsNewType(true);
+  }
+
   function getTaskStartDate(range: any) {
     const valueOfInput1 = new Date(range);
 
-    setDateTime(valueOfInput1.getTime());
+    setGlobalStateModalWindow({ ...globalStateModalWindow, newDateTime: valueOfInput1.getTime() })
     console.log(valueOfInput1.getTime());
   }
 
   function getTaskDedlineDate(range: any) {
     const valueOfInput1 = new Date(range);
 
-    setNewDedlineTask(valueOfInput1.getTime());
+    setGlobalStateModalWindow({ ...globalStateModalWindow, newDedlineDateTime: valueOfInput1.getTime() })
+
     console.log(valueOfInput1.getTime());
+  }
+  const typeBlock = () => {
+    let form;
+    if (isNewType === true) {
+      form = (
+        <>
+          <Input onChange={(el) => {
+            setGlobalStateModalWindow({ ...globalStateModalWindow, newType: (el.target as HTMLInputElement).value })
+          }} />
+        </>
+      )
+    }
+    if (isNewType === false || globalStateModalWindow.newType === '') {
+      form = (
+        <>
+          <Select onChange={(e) => {
+           
+            console.log(globalStateModalWindow.newIsFeedback);
+            for (let i: number = 0; i < templateModalWindow.length; i += 1) {
+              if (e === templateModalWindow[i].key) {
+                const currentType = JSON.parse(JSON.stringify(templateModalWindow[i].template));
+                setCurrentType(currentType);
+              }
+            }
+            setGlobalStateModalWindow({ ...defaultState, newType: e as HTMLSelectElement["value"]});
+          }
+          }>{OptionsObject()}</Select>
+        </>
+      )
+    }
+    return form;
   }
 
   const FIELD_FORMS = (
@@ -146,22 +198,14 @@ const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, 
       {
         currentType.name && <Form.Item label="Title new task">
           <Input
-            value={newName}
-            onChange={(el) => setNewName((el.target as HTMLInputElement).value)}
-          />
-        </Form.Item>
-      }
-      {
-        currentType.type && <Form.Item label="Type task">
-          <Input
-            value={newType}
-            onChange={(el) => setNewType((el.target as HTMLInputElement).value)}
+            value={globalStateModalWindow.newName}
+            onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newName: (el.target as HTMLInputElement).value})}
           />
         </Form.Item>
       }
       {
         currentType.form && <Form.Item label="Form">
-          <Select onChange={(e) => setNewForm(e as HTMLSelectElement["value"])}>
+          <Select onChange={(e) => setGlobalStateModalWindow({ ...globalStateModalWindow, newForm: e as HTMLSelectElement["value"] })}>
             <Select.Option value={"online"}>online</Select.Option>
             <Select.Option value={"offline"}>offline</Select.Option>
           </Select>
@@ -169,12 +213,12 @@ const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, 
       }
       {
         currentType.place && <Form.Item label="Place">
-          <Input onChange={(el) => setNewPlace((el.target as HTMLInputElement).value)} />
+          <Input onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newPlace: (el.target as HTMLInputElement).value })} />
         </Form.Item>
       }
       {
         currentType.kind && <Form.Item label="Kind">
-          <Select onChange={(e) => setNewKind(e as HTMLSelectElement["value"])}>
+          <Select onChange={(e) => setGlobalStateModalWindow({ ...globalStateModalWindow, newKind: e as HTMLSelectElement["value"] })}>
             <Select.Option value={"basic"}>basic</Select.Option>
             <Select.Option value={"optional"}>optional</Select.Option>
           </Select>
@@ -182,7 +226,10 @@ const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, 
       }
       {
         currentType.tags && <Form.Item label="Tags">
-          <Select mode="tags" onChange={(e) => setNewTags(e as HTMLSelectElement["value"])}>
+          <Select 
+          mode="tags" 
+          value={globalStateModalWindow.newTags}
+          onChange={(e) => setGlobalStateModalWindow({ ...globalStateModalWindow, newTags: e })}>
             {OptionsObject()}
           </Select>
         </Form.Item>
@@ -194,17 +241,17 @@ const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, 
       }
       {
         currentType.description && <Form.Item label="Description">
-          <TextArea onChange={(el) => setNewDescription((el.target as HTMLTextAreaElement).value)} />
+          <TextArea onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newDescription: (el.target as HTMLTextAreaElement).value })} />
         </Form.Item>
       }
       {
         currentType.descriptionUrl && <Form.Item label="Description Url">
-          <Input onChange={(el) => setNewDescriptionURl((el.target as HTMLInputElement).value)} />
+          <Input onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newDescriptionUrl: (el.target as HTMLInputElement).value })} />
         </Form.Item>
       }
       {
         currentType.eventURL && <Form.Item label="Event URL">
-          <Input onChange={(el) => setNewEventUrl((el.target as HTMLInputElement).value)} />
+          <Input onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newEventUrl: (el.target as HTMLInputElement).value })} />
         </Form.Item>
       }
       {
@@ -214,22 +261,22 @@ const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, 
       }
       {
         currentType.deadlineDescription && <Form.Item label="DeadlineDescription">
-          <TextArea onChange={(el) => setNewDeadlineDescription((el.target as HTMLTextAreaElement).value)} />
+          <TextArea onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newDeadlineDescription: (el.target as HTMLTextAreaElement).value })} />
         </Form.Item>
       }
       {
         currentType.organizer && <Form.Item label="Organizer">
-          <Input onChange={(el) => setNewOrganizer((el.target as HTMLInputElement).value)} />
+          <Input onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newOrganizer: (el.target as HTMLInputElement).value })} />
         </Form.Item>
       }
       {
         currentType.duration && <Form.Item label="Duration">
-          <Input onChange={(el) => setNewDuration((el.target as HTMLInputElement).value)} />
+          <Input onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newDuration: (el.target as HTMLInputElement).value })} />
         </Form.Item>
       }
       {
         currentType.comment && <Form.Item label="Comment">
-          <TextArea onChange={(el) => setNewComment((el.target as HTMLTextAreaElement).value)} />
+          <TextArea onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newComment: (el.target as HTMLTextAreaElement).value })} />
         </Form.Item>
       }
       {
@@ -239,7 +286,8 @@ const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, 
             unCheckedChildren={<CloseOutlined />}
 
             onChange={(checked) => {
-              setIsNewFeedback(checked);
+              setGlobalStateModalWindow({ ...globalStateModalWindow, newIsFeedback: checked })
+              setGlobalStateModalWindow({ ...globalStateModalWindow, newFeedback: checked })
               console.log(checked);
               return;
             }
@@ -248,7 +296,7 @@ const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, 
         </Form.Item>
       }
       {
-        newIsFeedback && currentType.isFeedback && <Form.Item label="Feedback">
+        globalStateModalWindow.newIsFeedback && currentType.isFeedback && <Form.Item label="Feedback">
           <Form.Item label="User name:">
             <Input />
           </Form.Item>
@@ -261,30 +309,46 @@ const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, 
         currentType.materials &&
         <Form.Item label="Materials:">
           <Form.Item label="Add image">
-            <Input />
+            <Input onChange={(el) => {
+              setGlobalStateModalWindow({
+                ...globalStateModalWindow, newMaterials: {
+                  ...globalStateModalWindow.newMaterials,
+                  image: (el.target as HTMLInputElement).value
+                }
+              })
+            }} />
           </Form.Item>
           <Form.Item label="Add Video">
-            <Input />
+            <Input onChange={(el) => {
+              setGlobalStateModalWindow({
+                ...globalStateModalWindow, newMaterials: {
+                  ...globalStateModalWindow.newMaterials,
+                  video: (el.target as HTMLInputElement).value
+                }
+              })
+            }} />
           </Form.Item>
           <Form.Item label="Add link">
-            <Input />
+            <Input onChange={(el) => {
+              setGlobalStateModalWindow({
+                ...globalStateModalWindow, newMaterials: {
+                  ...globalStateModalWindow.newMaterials,
+                  links: (el.target as HTMLInputElement).value
+                }
+              })
+            }} />
           </Form.Item>
         </Form.Item>
       }
       {
         currentType.stage && <Form.Item label="Stage">
-          <Select onChange={(e) => setNewstage(e as HTMLSelectElement["value"])}>
+          <Select onChange={(e) => setGlobalStateModalWindow({ ...globalStateModalWindow, newStage: e as HTMLSelectElement["value"] })}>
             <Select.Option key={"stage" + 1} value="1">1</Select.Option>
             <Select.Option key={"stage" + 2} value="2">2</Select.Option>
             <Select.Option key={"stage" + 3} value="3">3</Select.Option>
             <Select.Option key={"stage" + 4} value="4">4</Select.Option>
             <Select.Option key={"stage" + 5} value="4">5</Select.Option>
           </Select>
-        </Form.Item>
-      }
-      {
-        currentType.course && <Form.Item label="Courese">
-          <Input onChange={(el) => setNewCourse((el.target as HTMLInputElement).value)} />
         </Form.Item>
       }
     </>
@@ -296,18 +360,22 @@ const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, 
       visible={visible}
       onOk={handleOk}
       onCancel={handleCancel}
-      width={"90vw"}
+      width={"60vw"}
       footer={[
-        <Button key="new type task" onClick={handleCancel}>
+        <Button
+          key="new type task"
+          onClick={handleAdd}
+          disabled={isDisabled}>
           Add new type task
   </Button>,
-        <Button key="back" onClick={handleCancel}>
+        <Button
+          key="back"
+          onClick={handleCancel}>
           Return
       </Button>,
         <Button
           key="submit"
           type="primary"
-          loading={loading}
           onClick={handleOk}>
           Submit
       </Button>,
@@ -320,41 +388,8 @@ const EditWindow = ({ settings, modalState, createModalEvent, updateModalEvent, 
 
         className='editWindow-form'>
         <Form.Item label="Type task">
-          <Select onChange={(e) => {
-            console.log(newIsFeedback);
-            setNewType('');
-            setNewType(e as HTMLSelectElement["value"]);
-            for (let i: number = 0; i < templateModalWindow.length; i += 1) {
-              if (e === templateModalWindow[i].key) {
-                setCurrentType({
-                  name: templateModalWindow[i].template.name,
-                  type: templateModalWindow[i].template.type,
-                  form: templateModalWindow[i].template.form,
-                  place: templateModalWindow[i].template.place,
-                  kind: templateModalWindow[i].template.kind,
-                  tags: templateModalWindow[i].template.tags,
-                  dateTime: templateModalWindow[i].template.dateTime,
-                  description: templateModalWindow[i].template.description,
-                  descriptionUrl: templateModalWindow[i].template.descriptionUrl,
-                  eventURL: templateModalWindow[i].template.eventURL,
-                  deadlinedateTime: templateModalWindow[i].template.deadlinedateTime,
-                  deadlineDescription: templateModalWindow[i].template.deadlineDescription,
-                  organizer: templateModalWindow[i].template.organizer,
-                  duration: templateModalWindow[i].template.duration,
-                  comment: templateModalWindow[i].template.comment,
-                  isFeedback: templateModalWindow[i].template.isFeedback,
-                  feedback: templateModalWindow[i].template.feedback,
-                  materials: templateModalWindow[i].template.materials,
-                  stage: templateModalWindow[i].template.stage,
-                  course: templateModalWindow[i].template.course,
-                });
-              }
-            }
-          }
-          }>
-            {OptionsObject()}
-          </Select>
-          {newType !== '' && FIELD_FORMS}
+          {typeBlock()}
+          {globalStateModalWindow.newType !== '' && FIELD_FORMS}
         </Form.Item>
       </Form>
     </Modal >

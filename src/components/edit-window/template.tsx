@@ -2,315 +2,288 @@ export const templateModalWindow = [
     {
         key: "project task",
         template: {
-            name: true, // *; mentor enters text in input
-            type: true, // *; select
+            name: true, 
             form: false,
             place: false,
-            kind: true, // *; select
-            tags: true, // select
+            kind: true,
+            tags: true, 
             dateTime: true,
-            description: true, // mentor enters text in textarea
-            descriptionUrl: true, // mentor enters text in input
+            description: true, 
+            descriptionUrl: true,
             eventURL: true,
             deadlinedateTime: true,
             deadlineDescription: true,
-            organizer: true, // *; mentor enters text in input; array strings
-            duration: true, //? or number
+            organizer: true,
+            duration: true,
             comment: true,
-            isFeedback: true, // *; switcher
+            isFeedback: true,
             feedback: true,
-            materials: true, // {links: string | null, video: string | null, images: string | null}
-            stage: true, // *; select
-            course: true, // *; mentor enters text in input    
+            materials: true,
+            stage: true,    
         }
     },
     
     {
         key: "js task",
         template: {
-            name: true, // *; mentor enters text in input
-            type: true, // *; select
+            name: true,
             form: false,
             place: false,
-            kind: true, // *; select
-            tags: true, // select
+            kind: true,
+            tags: true,
             dateTime: true,
-            description: true, // mentor enters text in textarea
-            descriptionUrl: true, // mentor enters text in input
+            description: true,
+            descriptionUrl: true,
             eventURL: true,
             deadlinedateTime: true,
             deadlineDescription: true,
-            organizer: true, // *; mentor enters text in input; array strings
-            duration: true, //? or number
+            organizer: true,
+            duration: true,
             comment: true,
-            isFeedback: true, // *; switcher
+            isFeedback: true,
             feedback: true,
-            materials: true, // {links: string | null, video: string | null, images: string | null}
-            stage: true, // *; select
-            course: true, // *; mentor enters text in input    
+            materials: true,
+            stage: true,    
         }
     },
     
     {
         key: "codewars",
         template: {
-            name: true, // *; mentor enters text in input
-            type: true, // *; select
+            name: true,
             form: false,
             place: false,
-            kind: false, // *; select
-            tags: true, // select
+            kind: false,
+            tags: true,
             dateTime: true,
-            description: true, // mentor enters text in textarea
-            descriptionUrl: true, // mentor enters text in input
+            description: true,
+            descriptionUrl: true,
             eventURL: false,
             deadlinedateTime: true,
             deadlineDescription: true,
-            organizer: true, // *; mentor enters text in input; array strings
-            duration: false, //? or number
+            organizer: true,
+            duration: false,
             comment: true,
-            isFeedback: false, // *; switcher
+            isFeedback: false,
             feedback: false,
-            materials: false, // {links: string | null, video: string | null, images: string | null}
-            stage: true, // *; select
-            course: true, // *; mentor enters text in input    
+            materials: false,
+            stage: true,    
         }
     },
 
     {
         key: "test",
         template: {
-            name: true, // *; mentor enters text in input
-            type: true, // *; select
+            name: true,
             form: false,
             place: false,
-            kind: false, // *; select
-            tags: true, // select
+            kind: false,
+            tags: true,
             dateTime: true,
-            description: true, // mentor enters text in textarea
-            descriptionUrl: false, // mentor enters text in input
+            description: true,
+            descriptionUrl: false,
             eventURL: false,
             deadlinedateTime: true,
             deadlineDescription: false,
-            organizer: true, // *; mentor enters text in input; array strings
-            duration: false, //? or number
+            organizer: true,
+            duration: false,
             comment: true,
-            isFeedback: false, // *; switcher
+            isFeedback: false,
             feedback: false,
-            materials: false, // {links: string | null, video: string | null, images: string | null}
-            stage: true, // *; select
-            course: true, // *; mentor enters text in input    
+            materials: false,
+            stage: true,   
         }
     },
 
     {
         key: "crosscheck",
         template: {
-            name: true, // *; mentor enters text in input
-            type: true, // *; select
+            name: true,
             form: false,
             place: false,
-            kind: false, // *; select
-            tags: true, // select | input | textarea
+            kind: false,
+            tags: true,
             dateTime: true,
-            description: true, // mentor enters text in textarea
-            descriptionUrl: false, // mentor enters text in input
+            description: true,
+            descriptionUrl: false,
             eventURL: true,
             deadlinedateTime: true,
             deadlineDescription: false,
-            organizer: true, // *; mentor enters text in input; array strings
-            duration: false, //? or number
+            organizer: true,
+            duration: false,
             comment: true,
-            isFeedback: false, // *; switcher
+            isFeedback: false,
             feedback: false,
-            materials: false, // {links: string | null, video: string | null, images: string | null}
-            stage: true, // *; select
-            course: true, // *; mentor enters text in input    
+            materials: false,
+            stage: true,   
         }
     },
 
     {
         key: "review",
         template: {
-            name: true, // *; mentor enters text in input
-            type: true, // *; select
+            name: true,
             form: true,
             place: false,
-            kind: false, // *; select
-            tags: true, // select | input | textarea
+            kind: false,
+            tags: true,
             dateTime: true,
-            description: true, // mentor enters text in textarea
-            descriptionUrl: false, // mentor enters text in input
+            description: true,
+            descriptionUrl: false,
             eventURL: true,
             deadlinedateTime: false,
             deadlineDescription: false,
-            organizer: true, // *; mentor enters text in input; array strings
-            duration: true, //? or number
+            organizer: true,
+            duration: true,
             comment: true,
-            isFeedback: false, // *; switcher
+            isFeedback: false,
             feedback: false,
-            materials: false, // {links: string | null, video: string | null, images: string | null}
-            stage: true, // *; select
-            course: true, // *; mentor enters text in input           
+            materials: false,
+            stage: true,          
         }
     },
 
     {
-        key:"broadcast live",
-        template:{
-            name: true, // *; mentor enters text in input
-            type: true, // *; select
+        key: "broadcast live",
+        template: {
+            name: true,
             form: true,
             place: false,
-            kind: false, // *; select
-            tags: true, // select | input | textarea
+            kind: false,
+            tags: true,
             dateTime: true,
-            description: true, // mentor enters text in textarea
-            descriptionUrl: false, // mentor enters text in input
+            description: true,
+            descriptionUrl: false,
             eventURL: true,
             deadlinedateTime: false,
             deadlineDescription: false,
-            organizer: true, // *; mentor enters text in input; array strings
-            duration: true, //? or number
+            organizer: true,
+            duration: true,
             comment: true,
-            isFeedback: false, // *; switcher
+            isFeedback: false,
             feedback: false,
-            materials: true, // {links: string | null, video: string | null, images: string | null}
-            stage: true, // *; select
-            course: true, // *; mentor enters text in input           
+            materials: true,
+            stage: true,         
         }
     },
 
     {
         key: "self education",
-        template:{
-            name: true, // *; mentor enters text in input
-            type: true, // *; select
+        template: {
+            name: true,
             form: false,
             place: false,
-            kind: true, // *; select
-            tags: true, // select | input | textarea
+            kind: true,
+            tags: true,
             dateTime: true,
-            description: true, // mentor enters text in textarea
-            descriptionUrl: true, // mentor enters text in input
+            description: true,
+            descriptionUrl: true,
             eventURL: false,
             deadlinedateTime: false,
             deadlineDescription: false,
-            organizer: true, // *; mentor enters text in input; array strings
-            duration: false, //? or number
+            organizer: true,
+            duration: false,
             comment: true,
-            isFeedback: false, // *; switcher
+            isFeedback: false,
             feedback: false,
-            materials: true, // {links: string | null, video: string | null, images: string | null}
-            stage: true, // *; select
-            course: true, // *; mentor enters text in input           
+            materials: true,
+            stage: true,        
         }
     },
 
     {
         key: "meetup",
-        template:{
-            name: true, // *; mentor enters text in input
-            type: true, // *; select
-            form: true, // offline
+        template: {
+            name: true,
+            form: true,
             place: true,
-            kind: false, // *; select
-            tags: true, // select | input | textarea
+            kind: false,
+            tags: true,
             dateTime: true,
-            description: true, // mentor enters text in textarea
-            descriptionUrl: true, // mentor enters text in input
+            description: true,
+            descriptionUrl: true,
             eventURL: true,
             deadlinedateTime: false,
             deadlineDescription: false,
-            organizer: true, // *; mentor enters text in input; array strings
-            duration: true, //? or number
+            organizer: true,
+            duration: true,
             comment: true,
-            isFeedback: true, // *; switcher
+            isFeedback: true,
             feedback: false,
-            materials: false, // {links: string | null, video: string | null, images: string | null}
-            stage: false, // *; select
-            course: false, // *; mentor enters text in input           
+            materials: false,
+            stage: false,        
         }
     },
 
     {
-        key:"interview",
-        template:{
-            name: true, // *; mentor enters text in input
-            type: true, // *; select
+        key: "interview",
+        template: {
+            name: true,
             form: false,
             place: false,
-            kind: true, // *; select
-            tags: true, // select | input | textarea
+            kind: true,
+            tags: true,
             dateTime: true,
-            description: true, // mentor enters text in textarea
-            descriptionUrl: true, // mentor enters text in input
+            description: true,
+            descriptionUrl: true,
             eventURL: true,
             deadlinedateTime: true,
             deadlineDescription: true,
-            organizer: true, // *; mentor enters text in input; array strings
-            duration: false, //? or number
+            organizer: true,
+            duration: false,
             comment: true,
-            isFeedback: true, // *; switcher
+            isFeedback: true,
             feedback: true,
-            materials: true, // {links: string | null, video: string | null, images: string | null}
-            stage: true, // *; select
-            course: true, // *; mentor enters text in input           
+            materials: true,
+            stage: true,          
         }
     },
     
     {
         key: "presentation",
-        template:{
-            name: true, // *; mentor enters text in input
-            type: true, // *; select
+        template: {
+            name: true,
             form: true,
             place: true,
-            kind: false, // *; select
-            tags: true, // select | input | textarea
+            kind: false,
+            tags: true,
             dateTime: true,
-            description: true, // mentor enters text in textarea
-            descriptionUrl: true, // mentor enters text in input
+            description: true,
+            descriptionUrl: true,
             eventURL: true,
             deadlinedateTime: false,
             deadlineDescription: false,
-            organizer: true, // *; mentor enters text in input; array strings
-            duration: false, //? or number
+            organizer: true,
+            duration: false,
             comment: true,
-            isFeedback: false, // *; switcher
+            isFeedback: false,
             feedback: false,
-            materials: true, // {links: string | null, video: string | null, images: string | null}
-            stage: true, // *; select
-            course: true, // *; mentor enters text in input           
+            materials: true,
+            stage: true,      
         }
     },
     {
-        key:"other",
-        template:{
-            name: true, // *; mentor enters text in input
-            type: true, // *; select
+        key: "other",
+        template: {
+            name: true,
             form: true,
             place: true,
-            kind: true, // *; select
-            tags: true, // select | input | textarea
+            kind: true,
+            tags: true,
             dateTime: true,
-            description: true, // mentor enters text in textarea
-            descriptionUrl: true, // mentor enters text in input
+            description: true,
+            descriptionUrl: true,
             eventURL: true,
             deadlinedateTime: true,
             deadlineDescription: true,
-            organizer: true, // *; mentor enters text in input; array strings
-            duration: true, //? or number
+            organizer: true,
+            duration: true,
             comment: true,
-            isFeedback: true, // *; switcher
+            isFeedback: true,
             feedback: true,
-            materials: true, // {links: string | null, video: string | null, images: string | null}
-            stage: true, // *; select
-            course: true, // *; mentor enters text in input           
+            materials: true,
+            stage: true,        
         }
     }
 ]
-
-
-
-// * - must be completed by the mentor  
+  

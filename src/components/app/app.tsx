@@ -288,6 +288,7 @@ const App: React.FC = () => {
   return (
     <Layout>
       <Header
+        appData={appData}
         settings={settings}
         changeWorkSpace={changeWorkSpace}
         changeRole={changeRole}

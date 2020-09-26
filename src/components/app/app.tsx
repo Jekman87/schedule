@@ -247,14 +247,12 @@ const App: React.FC = () => {
   const content = appData.length ? addWorkSpace(settings.workSpace) : null;
   const editWindow = editWindowState.isShow ?
     <EditWindow
-      /*
       settings={settings}
       event={editWindowState.eventData}
       createEvent={createEvent}
       updateEvent={updateEvent}
       deleteModalEvent={deleteModalEvent}
       closeModal={closeModal}
-      */
     /> : null;
   const infoWindow = infoWindowState.isShow ?
     <InfoWindow

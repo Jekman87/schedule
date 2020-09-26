@@ -104,9 +104,12 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
   }
 
   const handleEventClick = (clickInfo: EventClickArg) => {
-    if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove()
-    }
+    // console.log('clickInfo', clickInfo);
+    // console.log('id', clickInfo.event._def.publicId);
+    showInfoWindow(clickInfo.event._def.publicId);
+    // if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+    //   clickInfo.event.remove()
+    // }
   }
 
   const handleEvents = (events: EventApi[]) => {
@@ -172,7 +175,7 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
           // initialEvents={myEvents} // alternatively, use the `events` setting to fetch from a feed
           // select={handleDateSelect}
           eventContent={renderEventContent} // custom render function
-          // eventClick={handleEventClick}
+          eventClick={handleEventClick}
           eventsSet={handleEvents} // called after events are initialized/added/changed/removed
           /* you can update a remote database when these fire:
           eventAdd={function(){}}

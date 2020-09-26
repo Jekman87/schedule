@@ -2,13 +2,16 @@ import React from 'react';
 import { Menu, Button, Dropdown, Switch } from 'antd';
 
 import { SettingsType } from '../../constants/interfaces';
+import { saveSchedule } from '../../helpers/utils';
 import { ROLE, TIME_ZONE, WORK_SPACE, EVENT_CONFIG } from '../../constants/constants';
 
 import { AppstoreTwoTone, ProfileTwoTone, CalendarTwoTone, FileWordTwoTone, FireTwoTone } from '@ant-design/icons';
 
+
 import './header.scss';
 
 interface Props {
+  appData: any,
   settings: SettingsType
   changeWorkSpace: (space: string) => void
   changeRole: (role: string) => void
@@ -16,8 +19,8 @@ interface Props {
   showNewEventModal: () => void
 }
 
-const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, changeRole, changeTimeZone, showNewEventModal }) => {
-  
+const Header: React.FunctionComponent<Props> = ({ appData, settings, changeWorkSpace, changeRole, changeTimeZone, showNewEventModal }) => {
+
   const onChange = (checked: boolean) => {
     console.log(`switch to ${checked}`);
     if (checked) {
@@ -111,7 +114,7 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, cha
           twoToneColor='#4caf50'
           style={{ fontSize: '2rem' }} 
           className="table-header__icon table-header__icon-file"
-          onClick={() => console.log('Сохраняем файл')} />
+          onClick={() => saveSchedule(appData, settings)} />
         <FireTwoTone
           twoToneColor='#ff9800'
           style={{ fontSize: '2rem' }} 

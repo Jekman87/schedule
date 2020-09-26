@@ -245,6 +245,7 @@ const App: React.FC = () => {
   return (
     <>
       <Header
+        appData={appData}
         settings={settings}
         changeWorkSpace={changeWorkSpace}
         changeRole={changeRole}

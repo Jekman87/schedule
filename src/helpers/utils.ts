@@ -75,6 +75,25 @@ function addEventColors(rowData:any) {
   return rowColor + deadlineColor + inactiveEventColor;
 }
 
+function saveSchedule(arrayWithData:any, settings:any) {
+  const FileSaver = require('file-saver');
+  
+  let stringForSaving = ''
+
+  arrayWithData.forEach((el:any, index:any) => {
+    stringForSaving += index + ' | ';
+    stringForSaving += convertDateTime(el.dateTime, false, settings.timeZone) + ' | ';
+    stringForSaving += el.event.name + ' | ';
+    stringForSaving += el.event.type + ' | ';
+    stringForSaving += el.event.description + ' | ';
+    stringForSaving += el.event.deadlineDescription  + '\n';
+  })
+
+  const file = new File([stringForSaving], "Schedule13.txt", {type: "text/plain;charset=utf-8"});
+
+  FileSaver.saveAs(file);
+}
+
 function convertDateTime(timestamp: number, toTime?: boolean, timezone?: string): string {
   let time = moment(timestamp);
 
@@ -89,4 +108,4 @@ function convertDateTime(timestamp: number, toTime?: boolean, timezone?: string)
   return time.format('dd, D MMM YYYY');
 }
 
-export { storage, createAppData, addColorToRow, convertDateTime, addEventColors };
+export { storage, createAppData, addColorToRow, convertDateTime, addEventColors, saveSchedule };

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Menu, Button, Dropdown, Switch } from 'antd';
+import { Menu, Button, Dropdown, Switch, Tooltip } from 'antd';
 
 import { SettingsType } from '../../constants/interfaces';
-import { ROLE, TIME_ZONE, WORK_SPACE } from '../../constants/constants';
+import { ROLE, TIME_ZONE, WORK_SPACE, EVENT_CONFIG } from '../../constants/constants';
 
-import { AppstoreTwoTone, ProfileTwoTone, CalendarTwoTone } from '@ant-design/icons';
+import { AppstoreTwoTone, ProfileTwoTone, CalendarTwoTone, FileWordTwoTone, FireTwoTone } from '@ant-design/icons';
+
 
 import './header.scss';
 
@@ -14,9 +15,21 @@ interface Props {
   changeRole: (role: string) => void
   changeTimeZone: (timezone: string) => void
   showEditWindow: () => void
+  changeTaskFilter: (taskFilter: string) => void
+  changeVisibilityOldEvengs: (visibilityOldEvents: boolean) => void
+  downloadSchedule: () => void
 }
 
-const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, changeRole, changeTimeZone, showEditWindow }) => {
+const Header: React.FunctionComponent<Props> = ({
+  settings,
+  changeWorkSpace,
+  changeRole,
+  changeTimeZone,
+  showEditWindow,
+  changeTaskFilter,
+  changeVisibilityOldEvengs,
+  downloadSchedule,
+}) => {
 
   const onChange = (checked: boolean) => {
     console.log(`switch to ${checked}`);
@@ -27,7 +40,36 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, cha
     }
   }
 
-  const menu = (
+  const eventTypes = (
+    <Menu>
+      <Menu.Item key='all'>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="null"
+          onClick={(event) => {
+            event.preventDefault();
+            changeTaskFilter('')
+        }}>all</a>
+      </Menu.Item>
+      {EVENT_CONFIG.type.map((el, index) => {
+        return (
+          <Menu.Item key={el}>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="null"
+              onClick={(event) => {
+                event.preventDefault();
+                changeTaskFilter(el)
+            }}>{el}</a>
+          </Menu.Item>
+        )
+      })}
+    </Menu>
+  );
+
+  const timezones = (
     <Menu>
       {Object.values(TIME_ZONE).map((el) => {
         return (
@@ -37,7 +79,7 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, cha
             rel="noopener noreferrer"
             href="null"
             onClick={(event) => {
-              event?.preventDefault();
+              event.preventDefault();
               changeTimeZone(el.location);
             }}
           >
@@ -60,29 +102,68 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, cha
 
     <div className="header__status">
 
-      <div className="header__navigation">
+    <div className="header__navigation-block">
 
-        <div className="header__button-block">
+      <div className="header__button-block">
+        <Tooltip placement="top" title={'Table view'}>
           <AppstoreTwoTone
             twoToneColor={settings.workSpace === 'Table' ? '#fd594d' : '#1890ff'}
             style={{ fontSize: '2rem' }}
             className="table-header__icon"
             onClick={() => changeWorkSpace(WORK_SPACE.table)} />
+        </Tooltip>
+        <Tooltip placement="top" title={'List view'}>
           <ProfileTwoTone
             twoToneColor={settings.workSpace === 'List' ? '#fd594d' : '#1890ff'}
             style={{ fontSize: '2rem' }}
             className="table-header__icon"
             onClick={() => changeWorkSpace(WORK_SPACE.list)} />
+        </Tooltip>
+        <Tooltip placement="top" title={'Сalendar view'}>
           <CalendarTwoTone
             twoToneColor={settings.workSpace === 'Calendar' ? '#fd594d' : '#1890ff'}
             style={{ fontSize: '2rem' }}
             className="table-header__icon"
             onClick={() => changeWorkSpace(WORK_SPACE.calendar)} />
-        </div>
+        </Tooltip>
+        <Tooltip placement="top" title={'Download schedule'}>
+          <FileWordTwoTone
+            twoToneColor='#4caf50'
+            style={{ fontSize: '2rem' }}
+            className="table-header__icon table-header__icon-file"
+            onClick={() => downloadSchedule()} />
+        </Tooltip>
+        <Tooltip placement="top" title={'Visibility of old events'}>
+          <FireTwoTone
+            twoToneColor={settings.visibilityOldEvents ? '#aaa' : '#ff9800'}
+            style={{ fontSize: '2rem' }}
+            className="table-header__icon table-header__icon-fire"
+            onClick={() => changeVisibilityOldEvengs(!settings.visibilityOldEvents)} />
+        </Tooltip>
+      </div>
 
-        <Dropdown overlay={menu} placement="bottomCenter" arrow>
-          <Button>{settings.timeZone}</Button>
+      <div>
+        <Dropdown
+          arrow
+          overlay={timezones}
+          placement="bottomCenter"
+          className="header__drop-down">
+            <Tooltip placement="top" title={'Change timezone'}>
+              <Button>{settings.timeZone}</Button>
+            </Tooltip>
         </Dropdown>
+
+        <Dropdown
+          arrow
+          overlay={eventTypes}
+          placement="bottomCenter"
+          className="header__drop-down">
+            <Tooltip placement="top" title={'Filter by type'}>
+              <Button>{settings.taskFilter ? settings.taskFilter : 'all'}</Button>
+            </Tooltip>
+        </Dropdown>
+      </div>
+
       </div>
 
       <div className="header__role-block">
@@ -93,13 +174,13 @@ const Header: React.FunctionComponent<Props> = ({ settings, changeWorkSpace, cha
             className="header__switcher"
             onChange={onChange} />
         </div>
-        <Button
-          disabled={settings.role === 'Student' ? true : false}
-          type="primary"
-          className="header__button"
-          onClick={() => showEditWindow()}>Add Event</Button>
+        {settings.role === 'Mentor'
+          ? <Button
+            type="primary"
+            className="header__button"
+            onClick={() => showEditWindow()}>Add Event</Button>
+          : null}
       </div>
-
     </div>
 
     </div>

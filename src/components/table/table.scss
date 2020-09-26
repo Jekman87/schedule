@@ -29,11 +29,18 @@
 }
 
 .table-block tr {
+  height: 50px;
   transition: all 0.7s !important;
 }
 
 .table-block tr td {
   transition: all 0.5s !important;
+}
+
+.table__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (hover:hover) {
@@ -55,7 +62,7 @@
   }
 
   .table-block a:hover {
-    color: rgba(255, 0, 0, 0.959);
+    color: #1f6ed8;
     transition: all 0.5s;
   }
 }

@@ -12,10 +12,9 @@ export interface AppEventType {
 export interface SettingsType {
   workSpace: string
   role: string
-  accessibility: boolean
   timeZone: string
-  styles: object
-  visibility: string
+  taskFilter: string
+  visibilityOldEvents: boolean
 };
 
 export interface ModalStateType {

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg, formatDate } from '@fullcalendar/react';
+import FullCalendar, { /*EventApi, DateSelectArg,*/ EventClickArg, EventContentArg, /*formatDate*/ } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone'
 import { EventInput } from '@fullcalendar/react';
-import { red } from '@ant-design/colors';
 
 import './calendar.scss';
 
@@ -17,20 +16,20 @@ interface Props {
 }
 
 
-interface CalendarState {
-  weekendsVisible: boolean
-  currentEvents: EventApi[]
-}
+// interface CalendarState {
+//   weekendsVisible: boolean
+//   currentEvents: EventApi[]
+// }
 
 
 
 
-let eventGuid = 0
-let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+// let eventGuid = 0
+// let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
-function createEventId() {
-  return String(eventGuid++)
-}
+// function createEventId() {
+//   return String(eventGuid++)
+// }
 
 const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoWindow }) => {
 
@@ -72,82 +71,38 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
     })
     console.log('settings :', myEvents);
     setMyEvents(eventsArray);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings, appData]);
 
 
+  // console.log('Appdata: ', appData);
+  // console.log('myEvents: ', myEvents);
+  // const [currentEvents, setcurrentEvents] = useState<EventApi[]>([]);
 
-  console.log('Appdata: ', appData);
-  console.log('myEvents: ', myEvents);
-  const [weekendsVisible, setWeekendsVidible] = useState<boolean>(true);
-  const [currentEvents, setcurrentEvents] = useState<EventApi[]>([]);
+  // const handleDateSelect = (selectInfo: DateSelectArg) => {
+  //   let title = prompt('Please enter a new title for your event')
+  //   let calendarApi = selectInfo.view.calendar
 
+  //   calendarApi.unselect() // clear date selection
 
-  const handleWeekendsToggle = () => {
-    setWeekendsVidible((s) => !s)
-  }
-
-  const handleDateSelect = (selectInfo: DateSelectArg) => {
-    let title = prompt('Please enter a new title for your event')
-    let calendarApi = selectInfo.view.calendar
-
-    calendarApi.unselect() // clear date selection
-
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      })
-    }
-  }
+  //   if (title) {
+  //     calendarApi.addEvent({
+  //       id: createEventId(),
+  //       title,
+  //       start: selectInfo.startStr,
+  //       end: selectInfo.endStr,
+  //       allDay: selectInfo.allDay
+  //     })
+  //   }
+  // }
 
   const handleEventClick = (clickInfo: EventClickArg) => {
-    // console.log('clickInfo', clickInfo);
-    // console.log('id', clickInfo.event._def.publicId);
     showInfoWindow(clickInfo.event._def.publicId);
-    // if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    //   clickInfo.event.remove()
-    // }
   }
 
-  const handleEvents = (events: EventApi[]) => {
-    setcurrentEvents(events);
-  }
-
-
-  const renderSidebar = () => {
-    return (
-      <div className='demo-app-sidebar'>
-        <div className='demo-app-sidebar-section'>
-          <h2>Instructions</h2>
-          <ul>
-            <li>Select dates and you will be prompted to create a new event</li>
-            <li>Drag, drop, and resize events</li>
-            <li>Click an event to delete it</li>
-          </ul>
-        </div>
-        <div className='demo-app-sidebar-section'>
-          <label>
-            <input
-              type='checkbox'
-              checked={weekendsVisible}
-              onChange={handleWeekendsToggle}
-            ></input>
-            toggle weekends
-          </label>
-        </div>
-        <div className='demo-app-sidebar-section'>
-          <h2>All Events ({currentEvents.length})</h2>
-          <ul>
-            {currentEvents.map(renderSidebarEvent)}
-          </ul>
-        </div>
-      </div>
-    )
-  }
-
+  // const handleEvents = (events: EventApi[]) => {
+  //   setcurrentEvents(events);
+  // }
 
 
   return (
@@ -170,13 +125,13 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
           selectMirror={true}
           // dayMaxEventRows={true}
           dayMaxEvents={6}
-          weekends={weekendsVisible}
+          weekends={true}
           events={myEvents} // alternatively, use the `events` setting to fetch from a feed
           // initialEvents={myEvents} // alternatively, use the `events` setting to fetch from a feed
           // select={handleDateSelect}
           eventContent={renderEventContent} // custom render function
           eventClick={handleEventClick}
-          eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+          // eventsSet={handleEvents} // called after events are initialized/added/changed/removed
           /* you can update a remote database when these fire:
           eventAdd={function(){}}
           eventChange={function(){}}
@@ -189,17 +144,6 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
     </div>
   )
 }
-
-
-function renderSidebarEvent(event: EventApi) {
-  return (
-    <li key={event.id}>
-      <b>{formatDate(event.start!, { year: 'numeric', month: 'short', day: 'numeric' })}</b>
-      <i>{event.title}</i>
-    </li>
-  )
-}
-
 
 function renderEventContent(eventContent: EventContentArg) {
   return (

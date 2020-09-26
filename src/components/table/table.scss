@@ -29,11 +29,21 @@
 }
 
 .table-block tr {
+  height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition: all 0.7s !important;
 }
 
 .table-block tr td {
+  height: 50px;
   transition: all 0.5s !important;
+}
+
+.table__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (hover:hover) {

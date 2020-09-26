@@ -90,6 +90,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
+      className: 'table__description',
       width: 300,
       render: (text:any, row:any) => {
         if(row.isDeadline) {
@@ -126,6 +127,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
       dataIndex: 'comment',
       key: 'comment',
       width: 200,
+      className: 'table__description',
     }
   ];
 
@@ -234,7 +236,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
     }})
     return tableData;
   }
-  
+
   useEffect(getNewColumnData, [])
   useEffect(getNewRowData, [])
   useEffect(initVision, [])

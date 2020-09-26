@@ -77,7 +77,7 @@ function addEventColors(rowData:any) {
 
 function saveSchedule(arrayWithData:any, settings:any) {
   const FileSaver = require('file-saver');
-  
+
   let stringForSaving = ''
 
   arrayWithData.forEach((el:any, index:any) => {
@@ -89,7 +89,7 @@ function saveSchedule(arrayWithData:any, settings:any) {
     stringForSaving += el.event.deadlineDescription  + '\n';
   })
 
-  const file = new File([stringForSaving], "Schedule13.txt", {type: "text/plain;charset=utf-8"});
+  const file = new File([stringForSaving], "Schedule.txt", {type: "text/plain;charset=utf-8"});
 
   FileSaver.saveAs(file);
 }

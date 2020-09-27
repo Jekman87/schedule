@@ -1,24 +1,12 @@
 .calendar {
-  // font-size: 2rem;
-
+   
   display: flex;
   min-height: 100%;
-  // padding: 3rem 1rem;
-  // font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 14px;
   width: 100%;
   background-color: #ffffff;
 
-  // html,
-  // body,
-  // body > div,
-  // body > div > div {
-  //   /* the react root */
-  //   margin: 0;
-  //   padding: 0;
-  //   // height: 100%;
-  // }
-
+  
   h2 {
     margin: 0;
     font-size: 16px;
@@ -35,23 +23,15 @@
   }
 
   b {
-    /* used for event dates/times */
     margin-right: 3px;
   }
-  .demo-app-sidebar {
-    width: 300px;
-    line-height: 1.5;
-    background: #eaf9ff;
-    border-right: 1px solid #d3e2e8;
-  }
 
-  .demo-app-sidebar-section {
-    padding: 2em;
-  }
-
-  .demo-app-main {
+  .app-main {
     flex-grow: 1;
     padding: 3em;
+    @media (max-width: 576px) {
+      padding: 2em 1em;
+    }
   }
 
   .fc {
@@ -99,5 +79,54 @@
   .type__other,
   .type__codewars {
     box-shadow: 2px 2px 4px 1px #40373740;
+  }
+
+  .type__project-task{
+    background-color:#01c153;
+    
+  }
+  .type__js-task{
+    background-color:  #9900ff;
+   
+  }
+  .type__test {
+    background-color:#4e4efa;
+    
+  }
+  .type__crosscheck{
+    background-color:#008000;
+    
+  }
+  .type__review{
+    background-color:  #ff9900;
+    
+  }
+  .type__broadcast-live{
+    background-color:  #E91E63;
+    
+  }
+  .type__self-education{
+    background-color: #ff5722;
+   
+  }
+  .type__meetup{
+    background-color: #ff3471;
+    
+  }
+  .type__interview{
+    background-color:#03a9f4;
+    
+  }
+  .type__presentation{
+    background-color: #0d606b;
+    
+  }
+  .type__other{
+    background-color:  #ec54d3;
+    
+  }
+  .type__codewars{
+    background-color:#005fff;
+    
   }
 }

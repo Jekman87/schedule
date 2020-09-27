@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-import { saveAs } from 'file-saver';
-
 import { Table, Popover, Checkbox } from 'antd';
 import { EyeInvisibleTwoTone, EyeTwoTone, EditTwoTone, DownSquareTwoTone, DeleteTwoTone } from '@ant-design/icons';
 
+import { column_options, convertDateToTime } from './options'
 import { SettingsType } from '../../constants/interfaces';
 import { addEventColors } from '../../helpers/utils';
-
-import moment from 'moment';
-import 'moment-timezone';
 
 import './table.scss';
 
@@ -21,59 +17,17 @@ interface Props {
   deleteEvent: (id:string) => void,
 }
 
-
-function convertDateToTime(timestamp: number, toTime?: boolean, timezone?: string): string {
-  let time = moment(timestamp);
-
-  if (timezone) {
-    time.tz(timezone);
-  }
-
-  if (toTime) {
-    return time.format('HH:mm:ss');
-  }
-
-  return time.format('DD-MM-YYYY');
-}
-
 const TableComponent: React.FunctionComponent<Props> = ({
   appData, settings,
   showInfoWindow, showEditWindow, deleteEvent }) => {
-  const plainOptions = ['Date', 'Type', 'Name', 'Description', 'Organizer', 'Comment'];
-
-  let string13 = ''
-
-  convertationDataFromApi().forEach((el:any, index:any) => {
-    string13 += index + ' | ';
-    string13 += convertDateToTime(el.dateTime, false, settings.timeZone) + ' | ';
-    string13 += el.name + ' | ';
-    string13 += el.type + ' | ';
-    string13 += el.description + ' | ';
-    string13 += el.deadlineDescription  + '\n';
-  })
-
-  var FileSaver = require('file-saver');
-  var file = new File([string13], "hello world.txt", {type: "text/plain;charset=utf-8"});
-
 
   const selectionType = 'checkbox';
 
-
-
-
-  const options = [
-    {label: 'Course', value: 'Course'},
-    {label: 'Stage', value: 'Stage'},
-    {label: 'Date', value: 'Date', disabled: true},
-    {label: 'Type', value: 'Type', disabled: true},
-    {label: 'Form', value: 'Form'},
-    {label: 'Name', value: 'Name', disabled: true},
-    {label: 'Description', value: 'Description', disabled: true},
-    {label: 'Duration', value: 'Duration'},
-    {label: 'Organizer', value: 'Organizer'},
-    {label: 'Place', value: 'Place'},
-    {label: 'Comment', value: 'Comment'},
-  ];
+  const [plainOptions, setPlainOptions] = useState<any[]>(['Date', 'Type', 'Name', 'Description', 'Organizer', 'Comment'])
+  const [dataWithoutHiddenComponents, setNewData] = useState<any[]>([])
+  const [dataWithoutHiddenColumns, setNewColumnsData] = useState<any[]>([])
+  const [activeRows, setActiveRows] = useState<any[]>([])
+  const [hideRows, setHideRows] = useState<boolean>(false)
 
   const columns = [
     {
@@ -126,9 +80,9 @@ const TableComponent: React.FunctionComponent<Props> = ({
       dataIndex: 'name',
       key: 'name',
       width: 200,
-      render: (text:any, row:any) => <a href={row.descriptionUrl
+      render: (text:any, row:any) => <a href={ row.descriptionUrl
         ? row.descriptionUrl
-        : row.eventURL}
+        : row.eventURL }
         rel="noopener noreferrer"
         target="_blank">{text}</a>,
     },
@@ -136,6 +90,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
+      className: 'table__description',
       width: 300,
       render: (text:any, row:any) => {
         if(row.isDeadline) {
@@ -172,15 +127,20 @@ const TableComponent: React.FunctionComponent<Props> = ({
       dataIndex: 'comment',
       key: 'comment',
       width: 200,
+      className: 'table__description',
     }
   ];
 
-  const [dataWithoutHiddenComponents, setNewData] = useState<any[]>([])
-  const [dataWithoutHiddenColumns, setNewColumnsData] = useState<any[]>([])
-  const [activeRows, setActiveRows] = useState<any[]>([])
-  const [hideRows, setHideRows] = useState<boolean>(false)
+  function initStartColumnData() {
+    const dataFromPreviousSessions = localStorage.getItem('columns')
+    if (dataFromPreviousSessions !== null) {
+      const parsePreviousSessionsData = JSON.parse(dataFromPreviousSessions)
+      setPlainOptions(parsePreviousSessionsData);
+      return parsePreviousSessionsData
+    } else return plainOptions
+  }
 
-  function getNewColumnData(activeColumn:any = plainOptions) {
+  function getNewColumnData(activeColumn:any = initStartColumnData()) {
     let currentData:any = [...columns]
     const newData:any = []
 
@@ -193,50 +153,73 @@ const TableComponent: React.FunctionComponent<Props> = ({
   }
 
   function onChange(checkedValues:any) {
+    localStorage.setItem('columns', JSON.stringify(checkedValues))
     getNewColumnData(checkedValues)
-  }
-
-  const rowSelection = {
-    onChange: (selectedRowKeys:any, selectedRows:any) => {
-      setActiveRows(selectedRowKeys)
-      // console.log(selectedRowKeys)
-    }
-  };
-
-  function getNewRowData() {
-    let currentData:any = []
-
-    if(hideRows) {
-      currentData = dataWithoutHiddenComponents
-    } else {
-      currentData = convertationDataFromApi()
-    }
-
-
-    activeRows.forEach((el) => {
-      currentData = currentData.filter((element:any) => element.key !== el)
-    })
-    // console.log(currentData)
-    setNewData(currentData)
-  }
-
-  function hideSelectedRows() {
-    getNewRowData();
-    setHideRows(true);
-  }
-
-  function showHiddenRows() {
-    setHideRows(false);
   }
 
   const content = (
     <div>
     <Checkbox.Group
-      options={options}
+      options={column_options}
       defaultValue={plainOptions}
       onChange={onChange} />
     </div>
   );
+
+  const rowSelection = {
+    onChange: (selectedRowKeys:any, selectedRows:any) => {
+      setActiveRows(selectedRowKeys)
+    }
+  };
+
+  function getNewRowData() {
+    let currentData:any = convertationDataFromApi()
+
+    let valuesForSorting = [];
+
+    const dataFromPreviousSessions = localStorage.getItem('rows')
+    if (dataFromPreviousSessions !== null && dataFromPreviousSessions !== '[]') {
+      valuesForSorting = JSON.parse(dataFromPreviousSessions)
+    } else valuesForSorting = activeRows
+
+    valuesForSorting.forEach((el:any) => {
+      currentData = currentData.filter((element:any) => element.key !== el)
+    })
+
+    setNewData(currentData)
+  }
+
+  function saveRows(arrayWithCheckedValues:any) {
+    let curentDataArray = []
+
+    const dataFromPreviousSessions = localStorage.getItem('rows')
+    if (dataFromPreviousSessions !== null) {
+      curentDataArray = JSON.parse(dataFromPreviousSessions)
+    }
+
+    const concatAllRows = [...curentDataArray, ...arrayWithCheckedValues]
+    const uniqueArrayWithRows = Array.from(new Set(concatAllRows))
+
+    localStorage.setItem('rows', JSON.stringify(uniqueArrayWithRows))
+  }
+
+  function hideSelectedRows() {
+    saveRows(activeRows)
+    getNewRowData();
+    setHideRows(true);
+  }
+
+  function showHiddenRows() {
+    localStorage.removeItem('rows')
+    setHideRows(false);
+  }
+
+  function initVision() {
+    const dataFromPreviousSessions = localStorage.getItem('rows')
+    if (dataFromPreviousSessions !== null && dataFromPreviousSessions !== '[]') {
+      setHideRows(true);
+    }
+  }
 
   function convertationDataFromApi() {
     const tableData = appData.map((el:any) => {
@@ -249,6 +232,10 @@ const TableComponent: React.FunctionComponent<Props> = ({
   }
 
   useEffect(getNewColumnData, [])
+  useEffect(getNewRowData, [])
+  useEffect(initVision, [])
+  useEffect(getNewColumnData, [settings.timeZone])
+  useEffect(getNewRowData, [appData])
 
   return (
     <div>
@@ -272,23 +259,29 @@ const TableComponent: React.FunctionComponent<Props> = ({
             : "table-header__icon table-header__icon-show none-visibility"}
           onClick={() => showHiddenRows()} />
 
-        <EditTwoTone
-          onClick={() => showEditWindow(activeRows[0].id)}
-          twoToneColor="#1890ff"
-          style={{ fontSize: '2rem' }}
-          className={
-            activeRows.length !== 0 && activeRows.length < 2
-            ? "table-header__icon"
-            : "table-header__icon table-header__icon-hide none-visibility"} />
+        {settings.role === 'Mentor'
+          ? <EditTwoTone
+              onClick={() => showEditWindow(activeRows[0].id)}
+              twoToneColor="#1890ff"
+              style={{ fontSize: '2rem' }}
+              className={
+              activeRows.length !== 0 && activeRows.length < 2
+                ? "table-header__icon"
+                : "table-header__icon table-header__icon-hide none-visibility"} />
+          : null
+        }
 
-        <DeleteTwoTone
-          onClick={() => deleteEvent(activeRows[0].id)}
-          twoToneColor="#fd594d"
-          style={{ fontSize: '2rem' }}
-          className={
+        {settings.role === 'Mentor'
+          ? <DeleteTwoTone
+            onClick={() => deleteEvent(activeRows[0].id)}
+            twoToneColor="#fd594d"
+            style={{ fontSize: '2rem' }}
+            className={
             activeRows.length !== 0 && activeRows.length < 2
-            ? "table-header__icon"
-            : "table-header__icon table-header__icon-hide none-visibility"} />
+              ? "table-header__icon"
+              : "table-header__icon table-header__icon-hide none-visibility"} />
+          : null
+        }
 
         <div>
           <Popover content={content} placement="right" trigger="click">
@@ -320,7 +313,6 @@ const TableComponent: React.FunctionComponent<Props> = ({
 
         onRow = {record =>({
           onClick:(event) => {
-            // FileSaver.saveAs(file);
             if((event.target as HTMLElement).tagName !== "A") {
               showInfoWindow(record.id)
             }

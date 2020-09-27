@@ -29,11 +29,18 @@
 }
 
 .table-block tr {
-  transition: all 0.7s !important;
+  height: 50px;
+  transition: all 0.8s !important;
 }
 
 .table-block tr td {
-  transition: all 0.5s !important;
+  transition: all 0.8s !important;
+}
+
+.table__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (hover:hover) {
@@ -45,17 +52,17 @@
 
   .table-block tr:hover td {
     background: unset !important;
-    transition: all 0.5s !important;
+    transition: all 0.8s !important;
     cursor: default;
   }
 
   .table-block tr:hover {
-    transition: all 0.5s !important;
+    transition: all 0.8s !important;
     box-shadow: 0 0 0 0 white inset;
   }
 
   .table-block a:hover {
-    color: rgba(255, 0, 0, 0.959);
+    color: #1f6ed8;
     transition: all 0.5s;
   }
 }

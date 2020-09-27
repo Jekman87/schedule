@@ -97,7 +97,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
 
   console.log('info-window props', event, props);
   return (
-   
+
     <Modal
       title={`RSS ${event.course}${stage}`}
       centered

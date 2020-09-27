@@ -26,7 +26,7 @@
   padding: 0.5rem;
 }
 
-.header__navigation {
+.header__navigation-block {
   display: flex;
   flex-direction: column;
 }
@@ -38,7 +38,6 @@
 .header__role {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
 }
 
 .header__button {
@@ -52,6 +51,14 @@
 .header__icon {
   padding: 0.5rem;
   transition: all 0.8s;
+}
+
+.table-header__icon-file {
+  margin-left: 1rem;
+}
+
+.header__drop-down {
+  margin: 0.5rem;
 }
 
 @media (hover:hover) {

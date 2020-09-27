@@ -67,6 +67,9 @@ const TableComponent: React.FunctionComponent<Props> = ({
       key: 'type',
       align: 'center',
       width: 100,
+      render: (type:any, row:any) => {
+        return row.isDeadline ? <p className="table__deadline">DEADLINE</p> : type
+      }
     },
     {
       title: 'Form',
@@ -319,12 +322,9 @@ const TableComponent: React.FunctionComponent<Props> = ({
           }
         })}
 
-        columns={dataWithoutHiddenColumns}
+        columns={ dataWithoutHiddenColumns }
 
-        dataSource={hideRows
-          ? dataWithoutHiddenComponents
-          : convertationDataFromApi()
-        }
+        dataSource={ hideRows ? dataWithoutHiddenComponents : convertationDataFromApi() }
       />
     </div>
   );

@@ -313,6 +313,7 @@ const App: React.FC = () => {
       showEditWindow={showEditWindow}
       deleteModalEvent={deleteModalEvent}
       closeModal={closeModal}
+      updateEvent={updateEvent}
     /> : null;
 
   console.log('Settings: ', settings);

@@ -27,7 +27,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
   const [dataWithoutHiddenComponents, setNewData] = useState<any[]>([])
   const [dataWithoutHiddenColumns, setNewColumnsData] = useState<any[]>([])
   const [activeRows, setActiveRows] = useState<any[]>([])
-  const [activeRowsId, setactiveRowsId] = useState<any[]>([])
+  const [activeRowsId, setActiveRowsId] = useState<any[]>([])
   const [hideRows, setHideRows] = useState<boolean>(false)
 
   const columns = [
@@ -173,7 +173,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
   const rowSelection = {
     onChange: (selectedRowKeys:any, selectedRows:any) => {
       setActiveRows(selectedRowKeys);
-      setactiveRowsId(selectedRows);
+      setActiveRowsId(selectedRows);
     }
   };
 

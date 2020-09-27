@@ -14,7 +14,11 @@ import { grey } from '@ant-design/colors';
 import { convertDateTime } from '../../helpers/utils';
 
 import './list.scss';
+import { addColorToRow } from '../../helpers/utils';
 
+function addDeadlineColor(isDeadline: boolean) {
+  return isDeadline ? ' type__deadline' : '';
+}
 interface Props {
   appData: any[];
   settings: any;
@@ -27,11 +31,12 @@ const SList: React.FunctionComponent<Props> = ({ appData, settings, showInfoWind
       <List
         itemLayout='horizontal'
         dataSource={appData}
-        renderItem={({ event }, index) => (
+        renderItem={({ event, isDeadline }) => (
           <div onClick={() => {showInfoWindow(event.id)}}>
             <Badge.Ribbon text={event.type} color={grey[4]}>
-            <List.Item>
+            <List.Item >
               <List.Item.Meta
+                className={`${addColorToRow(event.type)} ${addDeadlineColor(isDeadline)}`}
                 avatar={
                   <Avatar
                     size='large'
@@ -65,6 +70,8 @@ const SList: React.FunctionComponent<Props> = ({ appData, settings, showInfoWind
                     <a
                       href={event.descriptionUrl}
                       className='li-title'
+                      target="_blank"
+                      rel='noopener noreferrer'
                       style={{ color: `${grey[7]}` }}>
                       {event.name}
                     </a>

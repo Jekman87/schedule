@@ -174,11 +174,11 @@ const App: React.FC = () => {
         .then(() => {
           const newAppData = appData?.filter((eventObj) => eventObj.event.id !== id) || null;
           setAppData(newAppData);
-          // openNotification(NotificationType.success, 'Event deleted!');
+          openNotification(NotificationType.SUCCESS, 'Event deleted!');
           console.log('deleteEvent');
         })
         .catch((err) => {
-          // openNotification(NotificationType.error, 'Event not deleted!');
+          openNotification(NotificationType.ERROR, 'Event not deleted!');
           console.log('not deleteEvent: ', err);
         });
 
@@ -200,11 +200,11 @@ const App: React.FC = () => {
             data: newData,
           };
         });
-        // openNotification(NotificationType.success, 'Event created!');
+        openNotification(NotificationType.SUCCESS, 'Event created!');
         console.log('createEvent');
       })
       .catch((err) => {
-        // openNotification(NotificationType.error, 'Event not created!');
+        openNotification(NotificationType.ERROR, 'Event not created!');
         console.log('not createEvent: ', err);
       });
     setEditWindowState({
@@ -226,11 +226,11 @@ const App: React.FC = () => {
             data: newData,
           };
         });
-        // openNotification(NotificationType.success, 'Event updated!');
+        openNotification(NotificationType.SUCCESS, 'Event updated!');
         console.log('updateEvent');
       })
       .catch((err) => {
-        // openNotification(NotificationType.error, 'Event not updated!');
+        openNotification(NotificationType.ERROR, 'Event not updated!');
         console.log('not updateEvent: ', err);
       });
     setEditWindowState({

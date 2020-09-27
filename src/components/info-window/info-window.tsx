@@ -14,11 +14,12 @@ import {
   NotificationOutlined,
   ClockCircleOutlined,
   ReadOutlined,
-  FieldTimeOutlined,
   CalendarOutlined,
   LinkOutlined,
-  FormOutlined
+  FormOutlined,
+  HistoryOutlined
 } from '@ant-design/icons';
+import { convertDateTime } from '../../helpers/utils';
 import { red } from '@ant-design/colors';
 
 const { Title, Text, Link, Paragraph } = Typography;
@@ -33,12 +34,12 @@ interface Props {
 
 // ДОЛЖЕН ПРИХОДИТЬ ИВЕНТ В ПРОПСАХ
 
-const InfoWindow: React.FunctionComponent<Props> = ({ event, closeModal, ...props }: Props) => {
+const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModal, ...props }: Props) => {
   // const { event } = props;
   // const [visible, setVisible] = useState(true);
   const stage = event.stage === '' ? '' : ` Stage#${event.stage}`;
 
-  const CreateLink = (link:any, text:any) => {
+  const CreateLink = (link: any, text: any) => {
 
     return (
       <Popover placement="bottomLeft" content={<Link href={link} target="_blank">{link}</Link>} trigger="hover">
@@ -46,12 +47,16 @@ const InfoWindow: React.FunctionComponent<Props> = ({ event, closeModal, ...prop
           <Link className="modal-font" href={link} target="_blank">
             <span className="icon usual-icon"><LinkOutlined />
             </span>
-                {text}
-                </Link>
+            {text}
+          </Link>
         </Paragraph>
       </Popover>
     );
   }
+
+
+
+
   console.log('info-window props', event, props);
 
   //  return <div></div>;
@@ -133,14 +138,14 @@ const InfoWindow: React.FunctionComponent<Props> = ({ event, closeModal, ...prop
         <Col span={12}>
           <Paragraph className="modal-font">
             <span className="icon start-icon"><CalendarOutlined /></span>
-            <i>start: </i><strong>{event.dateTime}</strong>
+            <i>start: </i><strong> {convertDateTime(event.dateTime, false, settings.timeZone)}   <span className="start-icon"><ClockCircleOutlined /></span> {convertDateTime(event.dateTime, true, settings.timeZone)}</strong>
           </Paragraph>
           <Paragraph type="danger" className="modal-font">
             <span className="icon deadline-icon"><CalendarOutlined /></span>
-            <i>deadline: </i><strong>{event.deadlinedateTime}</strong>
+            <i>deadline: </i><strong>{convertDateTime(event.deadlinedateTime, false, settings.timeZone)}   <span><ClockCircleOutlined /> </span>{convertDateTime(event.deadlinedateTime, true, settings.timeZone)}</strong>
           </Paragraph>
           <Paragraph className="modal-font">
-            <span className="icon usual-icon"><ClockCircleOutlined /></span>
+            <span className="icon usual-icon"><HistoryOutlined /></span>
             <i>it can take you about </i><strong>{event.duration}</strong>
           </Paragraph>
           <Paragraph className="modal-font">

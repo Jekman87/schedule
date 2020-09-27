@@ -27,6 +27,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
   const [dataWithoutHiddenComponents, setNewData] = useState<any[]>([])
   const [dataWithoutHiddenColumns, setNewColumnsData] = useState<any[]>([])
   const [activeRows, setActiveRows] = useState<any[]>([])
+  const [activeRowsId, setactiveRowsId] = useState<any[]>([])
   const [hideRows, setHideRows] = useState<boolean>(false)
 
   const columns = [
@@ -171,7 +172,8 @@ const TableComponent: React.FunctionComponent<Props> = ({
 
   const rowSelection = {
     onChange: (selectedRowKeys:any, selectedRows:any) => {
-      setActiveRows(selectedRowKeys)
+      setActiveRows(selectedRowKeys);
+      setactiveRowsId(selectedRows);
     }
   };
 
@@ -264,7 +266,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
 
         {settings.role === 'Mentor'
           ? <EditTwoTone
-              onClick={() => showEditWindow(activeRows[0])}
+              onClick={() => showEditWindow(activeRowsId[0].id)}
               twoToneColor="#1890ff"
               style={{ fontSize: '2rem' }}
               className={
@@ -276,7 +278,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
 
         {settings.role === 'Mentor'
           ? <DeleteTwoTone
-            onClick={() => deleteEvent(activeRows[0])}
+            onClick={() => deleteEvent(activeRowsId[0].id)}
             twoToneColor="#fd594d"
             style={{ fontSize: '2rem' }}
             className={

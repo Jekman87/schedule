@@ -1,4 +1,4 @@
-import { Button, Badge, Card, Popover, Row, Col, Tag, Form, Input, Comment, List, Popconfirm, message /*, Space*/ } from 'antd';
+import { Button, Badge, Card, Popover, Row, Col, Tag, Form, Input, Comment, List, Popconfirm, message } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import React from 'react';
 import { Typography } from 'antd';
@@ -35,6 +35,7 @@ interface Props {
   showEditWindow: any;
   deleteModalEvent: any;
   closeModal: any;
+  updateEvent: any;
 }
 
 
@@ -43,7 +44,7 @@ interface commentData {
   content: any;
 }
 
-const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEditWindow, settings, event, closeModal, ...props }: Props) => {
+const InfoWindow: React.FunctionComponent<Props> = ({ updateEvent, deleteModalEvent, showEditWindow, settings, event, closeModal, ...props }: Props) => {
 
   const stage = event.stage === '' ? '' : ` Stage#${event.stage}`;
 
@@ -79,16 +80,16 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
     return (
       <Form
         {...layout}
-        onFinish={(e)=> {
+        onFinish={(e) => {
           event.feedback.push(e);
-          console.log(event);
+          updateEvent(event.id, event);
         }}
       >
         <Form.Item
           label="Username"
           name="author"
           rules={[{ required: true, message: 'Please input your username!' }]}>
-          <Input placeholder="Enter your github (max 40 symbols)" maxLength={40}/>
+          <Input placeholder="Enter your github (max 40 symbols)" maxLength={40} />
         </Form.Item>
         <Form.Item
           label="Your Feedback"
@@ -97,8 +98,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
           <TextArea placeholder="Your feedback (max 300 symbols)" maxLength={300} rows={4} autoSize={{ minRows: 2, maxRows: 6 }} />
         </Form.Item>
         <Form.Item {...tailLayout}>
-          {/* <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary"> */}
-          <Button type="primary" htmlType="submit" /*onClick={onSubmit}*/>
+          <Button type="primary" htmlType="submit">
             Add Feedback
           </Button>
 
@@ -107,22 +107,14 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
       </Form>
     )
   };
-  // const feedbackHandleSubmit = (e: React.FormEvent) => {
-  //   console.log(e);
-  // }
-  /* доделать фидбэк*/
+
   const feedbackStudentElement = (settings.role === "Student") ? (
     <Row>
       <Typography>
         <Title className="feedback-title" level={3}><span className="icon usual-icon"><FormOutlined /></span>Feedback </Title>
       </Typography>
       <Col span={24}>
-        <Feedback
-        // onChange={this.handleChange}
-        // onSubmit={feedbackHandleSubmit}
-        // submitting={submitting}
-        // value={value}
-        />
+        <Feedback />
       </Col>
     </Row>
   ) : null;
@@ -138,11 +130,10 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
       ),
     }
   });
-  //
+
 
   const feedbacksArray = ((event.feedback.length > 0) && (settings.role === "Mentor")) ? (
     <>
-      {/* <Typography> */}
       <Title className="feedback-title" level={3}><span className="icon usual-icon"><MessageOutlined /></span>Feedbacks </Title>
       <List
         className="comment-list"
@@ -158,19 +149,15 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
           </li>
         )}
       />
-      {/* </Typography> */}
     </>
-
   ) : null;
 
 
   const confirm = (e: any, id: any) => {
-    console.log(e);
     deleteModalEvent(id);
   }
 
   const cancel = (e: any) => {
-    console.log(e);
     message.error('Canceled', 3);
   }
 
@@ -181,27 +168,25 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
     </Paragraph>) : null;
 
 
-  /* не рендерить этот параграф если нет даты дедлайна */
   const deadlinedateTimeParagraph = (event.deadlinedateTime > 0) ? (
     <Paragraph type="danger" className="modal-font">
       <span className="icon deadline-icon"><CalendarOutlined /></span>
       <i>deadline: </i><strong>{convertDateTime(event.deadlinedateTime, false, settings.timeZone)}   <span><ClockCircleOutlined /> </span>{convertDateTime(event.deadlinedateTime, true, settings.timeZone)}</strong>
     </Paragraph>) : null;
 
-  /* не рендерить этот параграф если нет дюрэйшн */
+
   const durationParagraph = (event.duration) ? (<Paragraph className="modal-font">
     <span className="icon usual-icon"><HistoryOutlined /></span>
     <i>it can take you about </i><strong>{event.duration}</strong>
   </Paragraph>) : null;
 
-  /* не рендерить этот параграф если нет орга, разсплитить и сджойнить имена  */
+
   const organizerParagraph = (event.organizer.length > 0) ? (<Paragraph className="modal-font">
     <span className="icon usual-icon"><UserOutlined /></span>
     <i>organizer: </i><span>{event.organizer.join(', ')}</span>
   </Paragraph>) : null;
 
 
-  /* здесь нужно размапить массив тегов выбрать на каждый вид цвет */
   const tagsParagraph = (event.tags.length > 0) ? (
     <Paragraph>
       {
@@ -242,13 +227,13 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
       }
     </Paragraph>) : null;
 
-  /* не рендерить если нет  */
+
   const descriptionParagraph = (event.description) ? (
     <Paragraph className="modal-font">
       {event.description}
     </Paragraph>) : null;
 
-  /* не рендерить если нет*/
+
   const descriptionUrlElement = (event.descriptionUrl) ? (CreateLink(event.descriptionUrl, 'link to description', 0)) : null;
 
   const materialsLinks: any[] = [];
@@ -261,7 +246,8 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
   if (event.materials.images.length > 0) {
     event.materials.images.map((el: any) => materialsLinks.push(CreateLink(el.link, el.discription || 'link', materialsLinks.length)));
   }
-  console.log('mat link', materialsLinks)
+
+
   const materialsElement = (materialsLinks.length > 0) ? (
     <Row>
       <Typography>
@@ -270,7 +256,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
       </Typography>
     </Row>) : null;
 
-  /* не рендерить если нет*/
+
   const deadlineDescriptionElement = (event.deadlineDescription) ? (
     <Row>
       <Typography>
@@ -282,8 +268,6 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
     </Row>) : null;
 
 
-
-  /* не рендерить этот параграф если нет, сделать 1 функцию на прием текста и параметра на эти 3 параграфа */
   const kindElement = (event.kind) ?
     (<Paragraph className="modal-font"><i>kind:</i> <span>{event.kind}</span></Paragraph>) :
     null;
@@ -294,10 +278,12 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
     (<Paragraph className="modal-font"><i>form:</i> <span>{event.form}</span></Paragraph>) :
     null;
 
+
   const placeElement = (event.place) ?
     (<Paragraph className="modal-font"><span className="icon usual-icon"><EnvironmentOutlined /></span><i>place:</i> <span>{event.place}</span></Paragraph>) :
     null;
-  /* не рендерить если нет, переделать на CreateLink  я ее уже написала */
+
+
   const eventURLElement = (event.eventURL) ? (CreateLink(event.eventURL, 'link to event', 0)) : null;
 
   const commentElement = (event.comment) ? (
@@ -309,6 +295,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
         </Paragraph>
       </Typography>
     </Row>) : null;
+
 
   const badgeColor = (event.form === 'online') ? '#45e21e' : '#3c0058'
   const editButtons = (settings.role === 'Mentor') ? <><span className="edit-icon"><EditOutlined onClick={() => showEditWindow(event.id)} /></span>
@@ -322,8 +309,8 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
       <span className="edit-icon"><DeleteOutlined /></span>
     </Popconfirm></> : null;
 
-  return (
 
+  return (
     <Modal
       title={`RSS ${event.course}${stage}`}
       centered
@@ -332,8 +319,6 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
       footer={null}
       keyboard={true}
       bodyStyle={{ backgroundColor: '#ffe7e3', }}
-    //bodyStyle= здесь функция которая навешивает цсс свойства в зависимости от типа ивента или попробовать навесить классы готовой функцией из апп
-    // width={"80%"}
     >
       <Badge.Ribbon text={event.form} color={badgeColor}>
         <Card bordered={false} style={{ backgroundColor: 'transparent', }}><Title level={2}>
@@ -358,138 +343,40 @@ const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEdit
           </Popover>
           {event.name}
           {editButtons}
-          {/* <span className="edit-icon"><DeleteOutlined /></span> */}
         </Title>
         </Card>
       </Badge.Ribbon>
 
       <Row justify="space-between">
         <Col xs={24} md={14}>
-          {/* не рендерить этот параграф если нет даты старта */}
+
           {dateTimeParagraph}
-          {/* <Paragraph className="modal-font">
-            <span className="icon start-icon"><CalendarOutlined /></span>
-            <i>start: </i><strong> {convertDateTime(event.dateTime, false, settings.timeZone)}   <span className="start-icon"><ClockCircleOutlined /></span> {convertDateTime(event.dateTime, true, settings.timeZone)}</strong>
-          </Paragraph> */}
-
-          {/* не рендерить этот параграф если нет даты дедлайна */}
           {deadlinedateTimeParagraph}
-          {/* <Paragraph type="danger" className="modal-font">
-            <span className="icon deadline-icon"><CalendarOutlined /></span>
-            <i>deadline: </i><strong>{convertDateTime(event.deadlinedateTime, false, settings.timeZone)}   <span><ClockCircleOutlined /> </span>{convertDateTime(event.deadlinedateTime, true, settings.timeZone)}</strong>
-          </Paragraph> */}
-
-
-          {/* не рендерить этот параграф если нет дюрэйшн */}
           {durationParagraph}
-          {/* <Paragraph className="modal-font">
-            <span className="icon usual-icon"><HistoryOutlined /></span>
-            <i>it can take you about </i><strong>{event.duration}</strong>
-          </Paragraph> */}
-
-
-          {/* не рендерить этот параграф если нет орга, разсплитить и сджойнить имена  */}
           {organizerParagraph}
-          {/* <Paragraph className="modal-font">
-            <span className="icon usual-icon"><UserOutlined /></span>
-            <i>organizer: </i><span>{event.organizer}</span>
-          </Paragraph> */}
         </Col>
         <Col xs={24} md={8}>
-          {/* не рендерить этот параграф если нет, сделать 1 функцию на прием текста и параметра на эти 3 параграфа */}
           {kindElement}
           {typeElement}
           {formElement}
-          {/* <Paragraph className="modal-font"><i>kind:</i> <span>{event.kind}</span></Paragraph>
-          <Paragraph className="modal-font"><i>type:</i> <span>{event.type}</span></Paragraph>
-          <Paragraph className="modal-font"><i>form:</i> <span>{event.form}</span></Paragraph> */}
-          {/* не рендерить если нет, переделать на CreateLink  я ее уже написала */}
           {placeElement}
           {eventURLElement}
-          {/* <Popover placement="bottomLeft" content={<Link href={event.eventURL} target="_blank">{event.eventURL}</Link>} trigger="hover">
-            <Paragraph className="modal-font">
-              <Link className="modal-font" href={event.eventURL} target="_blank">
-                <span className="icon usual-icon"><LinkOutlined />
-                </span>
-                link to event
-                </Link>
-            </Paragraph>
-          </Popover> */}
         </Col>
       </Row>
-
       <Row>
         <Typography>
           <Title level={3}>Description</Title>
-
-          {/* здесь нужно размапить массив тегов выбрать на каждый вид цвет */}
           {tagsParagraph}
-          {/* <Paragraph>
-
-            <Tag color="success">
-              {event.tags}
-            </Tag>
-          </Paragraph> */}
-
-
-          {/* не рендерить если нет  */}
           {descriptionParagraph}
-          {/* <Paragraph className="modal-font">
-            {event.description}
-          </Paragraph> */}
-
-
-          {/* не рендерить если нет*/}
-          {/* {CreateLink(event.descriptionUrl, 'link to description')} */}
           {descriptionUrlElement}
-          {/* <Paragraph className="modal-font"><Link className="modal-font" href={event.descriptionUrl} target="_blank">
-            <span className="icon usual-icon"><LinkOutlined /></span>link to description
-          </Link>
-          </Paragraph> */}
         </Typography>
       </Row>
-      {/* не рендерить если нет*/}
       {deadlineDescriptionElement}
-      {/* <Row>
-        <Typography>
-          <Title level={3}>Description of Deadline</Title>
-          <Paragraph className="modal-font">
-            {event.deadlineDescription}
-          </Paragraph>
-        </Typography>
-      </Row> */}
-      {/* не рендерить если нет картинок ссылок или видео размапить массив */}
       {commentElement}
       {materialsElement}
-      {/* <Row>
-        <Typography>
-          <Title level={4}>Materials:</Title>
-          <Paragraph className="modal-font"><Link className="modal-font" href={event.materials.links[0].link} target="_blank">
-            <span className="icon duration-icon"><LinkOutlined /></span>{event.materials.links[0].discription}
-          </Link>
-          </Paragraph>
-        </Typography>
-      </Row> */}
       {feedbacksArray}
-      {/* доделать фидбэк*/}
-
       {feedbackStudentElement}
-      {/* <Row>
-        <Typography>
-
-          <Title className="feedback-title" level={3}><span className="icon usual-icon"><FormOutlined /></span>Feedback </Title>
-        </Typography>
-        <Col span={24}>
-          <Feedback
-          // onChange={this.handleChange}
-          // onSubmit={this.handleSubmit}
-          // submitting={submitting}
-          // value={value}
-          />
-        </Col>
-      </Row> */}
     </Modal>
-
   );
 }
 

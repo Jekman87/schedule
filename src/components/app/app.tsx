@@ -11,8 +11,9 @@ import InfoWindow from '../info-window'
 import EditWindow from '../edit-window'
 
 import ApiService from '../../services/api-service';
-import { storage, createAppData, saveSchedule } from '../../helpers/utils';
+import { storage, createAppData, saveSchedule, openNotification } from '../../helpers/utils';
 import { LoadDataType, SettingsType, ModalStateType, EventType, AppEventType } from '../../constants/interfaces';
+import { NotificationType } from '../../constants/enums';
 import {
   ROLE,
   TIME_ZONE,
@@ -152,13 +153,13 @@ const App: React.FC = () => {
   const showInfoWindow = (id: string): void => {
     const currentEvent: EventType | null = appData?.find(el => el.event.id === id)?.event || null;
 
-    setInfoWindowState({
-      isShow: true,
-      eventData: currentEvent,
-    });
     setEditWindowState({
       isShow: false,
       eventData: null,
+    });
+    setInfoWindowState({
+      isShow: true,
+      eventData: currentEvent,
     });
     console.log('showInfoWindow: ', id);
   }
@@ -173,11 +174,11 @@ const App: React.FC = () => {
         .then(() => {
           const newAppData = appData?.filter((eventObj) => eventObj.event.id !== id) || null;
           setAppData(newAppData);
-          window.alert('Event deleted!');
+          // openNotification(NotificationType.success, 'Event deleted!');
           console.log('deleteEvent');
         })
         .catch((err) => {
-          window.alert('Event was not deleted!');
+          // openNotification(NotificationType.error, 'Event not deleted!');
           console.log('not deleteEvent: ', err);
         });
 
@@ -199,11 +200,11 @@ const App: React.FC = () => {
             data: newData,
           };
         });
-        window.alert('Event created!');
+        // openNotification(NotificationType.success, 'Event created!');
         console.log('createEvent');
       })
       .catch((err) => {
-        window.alert('Event was not created!');
+        // openNotification(NotificationType.error, 'Event not created!');
         console.log('not createEvent: ', err);
       });
     setEditWindowState({
@@ -225,14 +226,13 @@ const App: React.FC = () => {
             data: newData,
           };
         });
-        window.alert('Event updated!');
+        // openNotification(NotificationType.success, 'Event updated!');
         console.log('updateEvent');
       })
       .catch((err) => {
-        window.alert('Event was not updated!');
+        // openNotification(NotificationType.error, 'Event not updated!');
         console.log('not updateEvent: ', err);
       });
-
     setEditWindowState({
       isShow: false,
       eventData: null,
@@ -240,7 +240,6 @@ const App: React.FC = () => {
     console.log('updateEvent');
   }
 
-  // метод вызывается из модалки при удалении события
   const deleteModalEvent = (id: string): void => {
     const isDelete = deleteEvent(id);
 

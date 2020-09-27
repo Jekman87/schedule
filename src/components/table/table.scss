@@ -30,11 +30,11 @@
 
 .table-block tr {
   height: 50px;
-  transition: all 0.7s !important;
+  transition: all 0.8s !important;
 }
 
 .table-block tr td {
-  transition: all 0.5s !important;
+  transition: all 0.8s !important;
 }
 
 .table__description {
@@ -52,12 +52,12 @@
 
   .table-block tr:hover td {
     background: unset !important;
-    transition: all 0.5s !important;
+    transition: all 0.8s !important;
     cursor: default;
   }
 
   .table-block tr:hover {
-    transition: all 0.5s !important;
+    transition: all 0.8s !important;
     box-shadow: 0 0 0 0 white inset;
   }
 

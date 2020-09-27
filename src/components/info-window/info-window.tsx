@@ -14,16 +14,15 @@ interface Props {
 // ДОЛЖЕН ПРИХОДИТЬ ИВЕНТ В ПРОПСАХ
 
 const InfoWindow: React.FunctionComponent<Props> = (props: Props) => {
-  const { event } = props;
   const [visible, setVisible] = useState(true);
 
   return (
     <div className="info-window">
-      {/* <Button type="primary" onClick={() => setVisible(true)}>
+      <Button type="primary" onClick={() => setVisible(true)}>
         Open Modal of 1000px width
       </Button>
       <Modal
-        title={data.event.name}
+        title={'Help me'}
         centered
         visible={visible}
         onOk={() => setVisible(false)}
@@ -34,7 +33,7 @@ const InfoWindow: React.FunctionComponent<Props> = (props: Props) => {
         <p>some contents...</p>
         <p>some contents...</p>
         <p>some contents...</p>
-      </Modal> */}
+      </Modal>
     </div>
   );
 }

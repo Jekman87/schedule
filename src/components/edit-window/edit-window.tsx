@@ -28,10 +28,9 @@ type Props = {
   updateEvent: (id: string, newEvent: object) => void,
   deleteModalEvent: (id: string) => void,
   closeModal: (newEvent: object) => void,
-  showEditWindow: () => void,
 }
 
-const EditWindow: React.FunctionComponent<Props> = ({ settings, event, createEvent, updateEvent, deleteModalEvent, closeModal, showEditWindow }: Props) => {
+const EditWindow: React.FunctionComponent<Props> = ({ settings, event, createEvent, updateEvent, deleteModalEvent, closeModal}: Props) => {
   const api = new ApiService();
   const getAllEvents = () => api.getAllEvents().then((data) => console.log(data));
 
@@ -142,9 +141,6 @@ const EditWindow: React.FunctionComponent<Props> = ({ settings, event, createEve
   const handleCancel: any = () => {
     setVisible(false);
     closeModal(objEvent);
-    const test = showEditWindow();
-    console.log('test', test);
-
   };
 
   const handleAdd: any = () => {

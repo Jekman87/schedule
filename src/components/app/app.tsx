@@ -11,8 +11,9 @@ import InfoWindow from '../info-window'
 import EditWindow from '../edit-window'
 
 import ApiService from '../../services/api-service';
-import { storage, createAppData, saveSchedule } from '../../helpers/utils';
+import { storage, createAppData, saveSchedule, openNotification } from '../../helpers/utils';
 import { LoadDataType, SettingsType, ModalStateType, EventType, AppEventType } from '../../constants/interfaces';
+import { NotificationType } from '../../constants/enums';
 import {
   ROLE,
   TIME_ZONE,
@@ -73,6 +74,7 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    console.log('Prepare data');
     const { visibilityOldEvents, taskFilter } = settings;
     let filteredData: EventType[] = loadData.data;
 
@@ -151,13 +153,13 @@ const App: React.FC = () => {
   const showInfoWindow = (id: string): void => {
     const currentEvent: EventType | null = appData?.find(el => el.event.id === id)?.event || null;
 
-    setInfoWindowState({
-      isShow: true,
-      eventData: currentEvent,
-    });
     setEditWindowState({
       isShow: false,
       eventData: null,
+    });
+    setInfoWindowState({
+      isShow: true,
+      eventData: currentEvent,
     });
     console.log('showInfoWindow: ', id);
   }
@@ -169,8 +171,17 @@ const App: React.FC = () => {
 
     if (isConfirm) {
       api.deleteEvent(id)
-      window.alert('Event deleted!');
-      console.log('deleteEvent');
+        .then(() => {
+          const newAppData = appData?.filter((eventObj) => eventObj.event.id !== id) || null;
+          setAppData(newAppData);
+          openNotification(NotificationType.SUCCESS, 'Event deleted!');
+          console.log('deleteEvent');
+        })
+        .catch((err) => {
+          openNotification(NotificationType.ERROR, 'Event not deleted!');
+          console.log('not deleteEvent: ', err);
+        });
+
       return true;
     }
     return false;
@@ -178,21 +189,50 @@ const App: React.FC = () => {
 
   // метод вызывается из модалки при создании нового события
   const createEvent = (newEvent: object): void => {
-    api.createEvent(newEvent);
-    // добавить в ивенты! при успешном запросе
-    window.alert('Event created!');
+    console.log('Try to create Event: ', newEvent);
+    api.createEvent(newEvent)
+      .then((data) => {
+        setLoadData((state) => {
+          const newData = state.data.concat(data);
+
+          return {
+            ...state,
+            data: newData,
+          };
+        });
+        openNotification(NotificationType.SUCCESS, 'Event created!');
+        console.log('createEvent');
+      })
+      .catch((err) => {
+        openNotification(NotificationType.ERROR, 'Event not created!');
+        console.log('not createEvent: ', err);
+      });
     setEditWindowState({
       isShow: false,
       eventData: null,
     });
-    console.log('createEvent');
   }
 
   // метод вызывается из модалки при редактировании события.
   const updateEvent = (id: string, newEvent: object): void => {
-    api.updateEvent(id, newEvent);
-    // обновить в инвентах! при успешном запросе
-    window.alert('Event updated!');
+    api.updateEvent(id, newEvent)
+      .then((data) => {
+        setLoadData((state) => {
+          let newData = state.data.filter((eventObj) => eventObj.id !== id);
+          newData = newData.concat(data);
+
+          return {
+            ...state,
+            data: newData,
+          };
+        });
+        openNotification(NotificationType.SUCCESS, 'Event updated!');
+        console.log('updateEvent');
+      })
+      .catch((err) => {
+        openNotification(NotificationType.ERROR, 'Event not updated!');
+        console.log('not updateEvent: ', err);
+      });
     setEditWindowState({
       isShow: false,
       eventData: null,
@@ -200,7 +240,6 @@ const App: React.FC = () => {
     console.log('updateEvent');
   }
 
-  // метод вызывается из модалки при удалении события
   const deleteModalEvent = (id: string): void => {
     const isDelete = deleteEvent(id);
 

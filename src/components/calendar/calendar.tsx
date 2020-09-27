@@ -17,7 +17,6 @@ interface Props {
 
 const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoWindow }) => {
 
-  console.log('settings\r\n\r\n');
   const eventsArray: EventInput[] = [];
 
   appData.forEach((el) => {
@@ -38,7 +37,6 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
     } else {
       const event: EventInput = {};
       event.start = new Date(el.event.deadlinedateTime);
-      console.log('background' , event.start)
       event.allDay = true;
       event.backgroundColor = 'red';
       event.display = 'background';
@@ -52,7 +50,7 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
 
   return (
     <div className='calendar'>
-      <div className='demo-app-main'>
+      <div className='app-main'>
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, momentTimezonePlugin]}
           headerToolbar={{

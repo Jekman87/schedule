@@ -261,7 +261,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
 
         {settings.role === 'Mentor'
           ? <EditTwoTone
-              onClick={() => showEditWindow(activeRows[0].id)}
+              onClick={() => showEditWindow(activeRows[0])}
               twoToneColor="#1890ff"
               style={{ fontSize: '2rem' }}
               className={
@@ -273,7 +273,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
 
         {settings.role === 'Mentor'
           ? <DeleteTwoTone
-            onClick={() => deleteEvent(activeRows[0].id)}
+            onClick={() => deleteEvent(activeRows[0])}
             twoToneColor="#fd594d"
             style={{ fontSize: '2rem' }}
             className={

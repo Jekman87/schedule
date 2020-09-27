@@ -26,9 +26,9 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
       event.id = el.event.id;
       event.title = el.event.name;
       event.start = new Date(el.event.dateTime);
-      event.textColor = '#000000';
+      event.textColor = '#ffffff';
       event.classNames = [`type__${el.event.type.split(' ').join('-')}`]
-      event.borderColor = 'transparent';
+      event.borderColor = '#00000038';
       event.display = 'block';
       if (el.event.deadlinedateTime !== 0) {
         event.end = new Date(el.event.deadlinedateTime);
@@ -67,7 +67,7 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
           selectable={true}
           selectMirror={true}
 
-          dayMaxEvents={6}
+          dayMaxEvents={5}
           weekends={true}
           events={eventsArray}
           eventContent={renderEventContent} // custom render function

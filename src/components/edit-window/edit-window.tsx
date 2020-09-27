@@ -19,8 +19,6 @@ import './edit-window.scss';
 const { Title } = Typography;
 const { TextArea } = Input;
 
-
-
 type Props = {
   settings: object,
   event: EventType | null,
@@ -40,7 +38,6 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
     return arrayEvents;
   }
 
-
   const materialLinks: any = [];
   const materialImage: any = [];
   const materialVideo: any = [];
@@ -53,11 +50,11 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
     newPlace: '',
     newKind: '',
     newTags: [],
-    newDateTime: {},
+    newDateTime: 0,
     newDescription: '',
     newDescriptionUrl: '',
     newEventUrl: '',
-    newDedlineDateTime: {},
+    newDedlineDateTime: 0,
     newDeadlineDescription: '',
     newOrganizer: [],
     newDuration: '',
@@ -72,13 +69,11 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
     newStage: '',
   }
 
-
   const [globalStateModalWindow, setGlobalStateModalWindow] = useState(defaultState);
 
   const [isDisabled, setDisabled] = useState(false);
   const [isNewType, setIsNewType] = useState(false);
 
-  // const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(true);
 
   const [currentType, setCurrentType] = useState({
@@ -105,7 +100,6 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
   );
 
   const objEvent: any = {
-    // key: newName + new Date(),
     name: globalStateModalWindow.newName,
     type: globalStateModalWindow.newType,
     form: globalStateModalWindow.newForm,

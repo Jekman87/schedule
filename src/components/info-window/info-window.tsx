@@ -234,6 +234,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
       </Typography>
     </Row>) : null;
 
+  const badgeColor = (event.form === 'online') ? '#45e21e' : '#3c0058'
 
   return (
 
@@ -248,7 +249,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
     //bodyStyle= здесь функция которая навешивает цсс свойства в зависимости от типа ивента или попробовать навесить классы готовой функцией из апп
     // width={"80%"}
     >
-      <Badge.Ribbon text={event.form} color={'#45e21e'}>
+      <Badge.Ribbon text={event.form} color={badgeColor}>
         <Card bordered={false} style={{ backgroundColor: 'transparent', }}><Title level={2}>
           <Popover content={event.type} title="event type">
             {event.type === 'test' ? (

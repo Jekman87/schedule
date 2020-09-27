@@ -90,6 +90,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
+      className: 'table__description',
       width: 300,
       render: (text:any, row:any) => {
         if(row.isDeadline) {
@@ -126,6 +127,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
       dataIndex: 'comment',
       key: 'comment',
       width: 200,
+      className: 'table__description',
     }
   ];
 
@@ -171,7 +173,7 @@ const TableComponent: React.FunctionComponent<Props> = ({
   };
 
   function getNewRowData() {
-    let currentData:any = []
+    let currentData:any = convertationDataFromApi()
 
     let valuesForSorting = [];
 
@@ -179,12 +181,6 @@ const TableComponent: React.FunctionComponent<Props> = ({
     if (dataFromPreviousSessions !== null && dataFromPreviousSessions !== '[]') {
       valuesForSorting = JSON.parse(dataFromPreviousSessions)
     } else valuesForSorting = activeRows
-
-    if(hideRows) {
-      currentData = dataWithoutHiddenComponents
-    } else {
-      currentData = convertationDataFromApi()
-    }
 
     valuesForSorting.forEach((el:any) => {
       currentData = currentData.filter((element:any) => element.key !== el)
@@ -234,10 +230,12 @@ const TableComponent: React.FunctionComponent<Props> = ({
     }})
     return tableData;
   }
-  
+
   useEffect(getNewColumnData, [])
   useEffect(getNewRowData, [])
   useEffect(initVision, [])
+  useEffect(getNewColumnData, [settings.timeZone])
+  useEffect(getNewRowData, [appData])
 
   return (
     <div>
@@ -272,7 +270,6 @@ const TableComponent: React.FunctionComponent<Props> = ({
                 : "table-header__icon table-header__icon-hide none-visibility"} />
           : null
         }
-
 
         {settings.role === 'Mentor'
           ? <DeleteTwoTone

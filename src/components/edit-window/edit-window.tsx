@@ -12,7 +12,6 @@ import {
 import OptionsObject from './options';
 import { EventType } from '../../constants/interfaces';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
-import ApiService from '../../services/api-service';
 import { templateModalWindow } from './template';
 import './edit-window.scss';
 

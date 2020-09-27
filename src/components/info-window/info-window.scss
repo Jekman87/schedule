@@ -25,7 +25,7 @@
     }
   }
 
-  h2 span {
+  .event-icon {
     margin-right: 1rem;
   }
   .ant-modal-title {
@@ -41,6 +41,18 @@
     @media (max-width: 576px) {
       font-size: 1.4rem;
     }
+  }
+
+  .edit-icon{
+    margin-left: 0.8rem;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #00000073;
+    transition: all 0.3s ease;
+  }
+
+  .edit-icon:hover{
+    color: inherit;
   }
 
   .modal-font {

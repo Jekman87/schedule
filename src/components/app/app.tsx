@@ -309,12 +309,10 @@ const App: React.FC = () => {
   const infoWindow = infoWindowState.isShow ?
     <InfoWindow
       event={infoWindowState.eventData}
-      /*
       settings={settings}
       showEditWindow={showEditWindow}
       deleteModalEvent={deleteModalEvent}
       closeModal={closeModal}
-      */
     /> : null;
 
   console.log('Settings: ', settings);

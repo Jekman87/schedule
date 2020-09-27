@@ -17,7 +17,6 @@ interface Props {
 
 const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoWindow }) => {
 
-  console.log('settings\r\n\r\n');
   const eventsArray: EventInput[] = [];
 
   appData.forEach((el) => {
@@ -26,9 +25,9 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
       event.id = el.event.id;
       event.title = el.event.name;
       event.start = new Date(el.event.dateTime);
-      event.textColor = '#000000';
+      event.textColor = '#ffffff';
       event.classNames = [`type__${el.event.type.split(' ').join('-')}`]
-      event.borderColor = 'transparent';
+      event.borderColor = '#00000038';
       event.display = 'block';
       if (el.event.deadlinedateTime !== 0) {
         event.end = new Date(el.event.deadlinedateTime);
@@ -38,7 +37,6 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
     } else {
       const event: EventInput = {};
       event.start = new Date(el.event.deadlinedateTime);
-      console.log('background' , event.start)
       event.allDay = true;
       event.backgroundColor = 'red';
       event.display = 'background';
@@ -52,7 +50,7 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
 
   return (
     <div className='calendar'>
-      <div className='demo-app-main'>
+      <div className='app-main'>
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, momentTimezonePlugin]}
           headerToolbar={{
@@ -67,7 +65,7 @@ const Calendar: React.FunctionComponent<Props> = ({ settings, appData, showInfoW
           selectable={true}
           selectMirror={true}
 
-          dayMaxEvents={6}
+          dayMaxEvents={5}
           weekends={true}
           events={eventsArray}
           eventContent={renderEventContent} // custom render function

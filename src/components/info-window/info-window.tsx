@@ -1,4 +1,4 @@
-import { Button, Badge, Card, Popover, Row, Col, Tag, Form, Input /*, Space*/ } from 'antd';
+import { Button, Badge, Card, Popover, Row, Col, Tag, Form, Input, Popconfirm, message } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import React from 'react';
 import { Typography } from 'antd';
@@ -19,7 +19,9 @@ import {
   FormOutlined,
   HistoryOutlined,
   StopOutlined,
-  EnvironmentOutlined
+  EnvironmentOutlined,
+  EditOutlined,
+  DeleteOutlined
 } from '@ant-design/icons';
 import { convertDateTime } from '../../helpers/utils';
 
@@ -34,12 +36,11 @@ interface Props {
   closeModal: any;
 }
 
-const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModal, ...props }: Props) => {
+const InfoWindow: React.FunctionComponent<Props> = ({ deleteModalEvent, showEditWindow, settings, event, closeModal, ...props }: Props) => {
 
   const stage = event.stage === '' ? '' : ` Stage#${event.stage}`;
 
   const CreateLink = (link: any, text: any) => {
-
     return (
       <Popover placement="bottomLeft" content={<Link href={link} target="_blank">{link}</Link>} trigger="hover">
         <Paragraph className="modal-font">
@@ -96,8 +97,16 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
     )
   };
 
-  console.log('info-window props', event, props);
-  //
+  const confirm = (e: any, id: any) => {
+    console.log(e);
+    deleteModalEvent(id);
+  }
+
+  const cancel = (e: any) => {
+    console.log(e);
+    message.error('Canceled', 3);
+  }
+
   const dateTimeParagraph = (event.dateTime > 0) ? (
     <Paragraph className="modal-font">
       <span className="icon start-icon"><CalendarOutlined /></span>
@@ -218,7 +227,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
     (<Paragraph className="modal-font"><i>form:</i> <span>{event.form}</span></Paragraph>) :
     null;
 
-    const placeElement = (event.place) ?
+  const placeElement = (event.place) ?
     (<Paragraph className="modal-font"><span className="icon usual-icon"><EnvironmentOutlined /></span><i>place:</i> <span>{event.place}</span></Paragraph>) :
     null;
   /* не рендерить если нет, переделать на CreateLink  я ее уже написала */
@@ -235,6 +244,16 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
     </Row>) : null;
 
   const badgeColor = (event.form === 'online') ? '#45e21e' : '#3c0058'
+  const editButtons = (settings.role === 'Mentor') ? <><span className="edit-icon"><EditOutlined onClick={() => showEditWindow(event.id)} /></span>
+    <Popconfirm
+      title="Are you sure delete this task?"
+      onConfirm={() => confirm('click', event.id)}
+      onCancel={cancel}
+      okText="Yes"
+      cancelText="No"
+    >
+      <span className="edit-icon"><DeleteOutlined /></span>
+    </Popconfirm></> : null;
 
   return (
 
@@ -252,7 +271,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
       <Badge.Ribbon text={event.form} color={badgeColor}>
         <Card bordered={false} style={{ backgroundColor: 'transparent', }}><Title level={2}>
           <Popover content={event.type} title="event type">
-            {event.type === 'test' ? (
+            <span className="event-icon">{event.type === 'test' ? (
               <QuestionOutlined />
             ) : event.type === 'crosscheck' || event.type === 'review' ? (
               <SearchOutlined />
@@ -268,9 +287,11 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
               <NotificationOutlined />
             ) : (
                             <LaptopOutlined />
-                          )}
+                          )}</span>
           </Popover>
           {event.name}
+          {editButtons}
+          {/* <span className="edit-icon"><DeleteOutlined /></span> */}
         </Title>
         </Card>
       </Badge.Ribbon>

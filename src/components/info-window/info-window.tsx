@@ -38,7 +38,20 @@ const InfoWindow: React.FunctionComponent<Props> = ({ event, closeModal, ...prop
   // const [visible, setVisible] = useState(true);
   const stage = event.stage === '' ? '' : ` Stage#${event.stage}`;
 
+  const CreateLink = (link:any, text:any) => {
 
+    return (
+      <Popover placement="bottomLeft" content={<Link href={link} target="_blank">{link}</Link>} trigger="hover">
+        <Paragraph className="modal-font">
+          <Link className="modal-font" href={link} target="_blank">
+            <span className="icon usual-icon"><LinkOutlined />
+            </span>
+                {text}
+                </Link>
+        </Paragraph>
+      </Popover>
+    );
+  }
   console.log('info-window props', event, props);
 
   //  return <div></div>;
@@ -180,10 +193,11 @@ const InfoWindow: React.FunctionComponent<Props> = ({ event, closeModal, ...prop
             {event.description}
 
           </Paragraph>
-          <Paragraph className="modal-font"><Link className="modal-font" href={event.descriptionUrl} target="_blank">
+          {CreateLink(event.descriptionUrl, 'link to description')}
+          {/* <Paragraph className="modal-font"><Link className="modal-font" href={event.descriptionUrl} target="_blank">
             <span className="icon usual-icon"><LinkOutlined /></span>link to description
           </Link>
-          </Paragraph>
+          </Paragraph> */}
           <Title level={4}>Materials:</Title>
           {/* <Paragraph className="modal-font"><Link className="modal-font" href={event.materials.links[0].link} target="_blank">
             <span className="icon duration-icon"><LinkOutlined /></span>{event.materials.links[0].discription}

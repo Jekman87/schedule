@@ -43,6 +43,11 @@
   white-space: nowrap;
 }
 
+.table__deadline {
+  color: #c5370b;
+  font-weight: bold;
+}
+
 @media (hover:hover) {
   .table-header__icon:hover {
     cursor: pointer;
@@ -57,6 +62,13 @@
   }
 
   .table-block tr:hover {
+    opacity: 0.7;
+    transition: all 0.8s !important;
+    box-shadow: 0 0 0 0 white inset;
+  }
+
+  .table-block td:hover {
+    cursor: pointer !important;
     transition: all 0.8s !important;
     box-shadow: 0 0 0 0 white inset;
   }
@@ -64,5 +76,9 @@
   .table-block a:hover {
     color: #1f6ed8;
     transition: all 0.5s;
+  }
+
+  .table-block input:hover {
+    cursor: default;
   }
 }

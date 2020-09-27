@@ -74,7 +74,6 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log('Prepare data');
     const { visibilityOldEvents, taskFilter } = settings;
     let filteredData: EventType[] = loadData.data;
 
@@ -93,7 +92,7 @@ const App: React.FC = () => {
     }
 
     setAppData(createAppData(filteredData));
-  }, [loadData.data, settings]);
+  }, [loadData, settings]);
 
   useEffect(() => {
     storage(SCHEDULE_STORAGE_KEY, settings);
@@ -101,32 +100,26 @@ const App: React.FC = () => {
 
   const changeWorkSpace = (workSpace: string): void => {
     setSettings((settings) => ({...settings, workSpace}));
-    console.log('Setting changeWorkSpace: ', workSpace);
   }
 
   const changeRole = (role: string): void => {
     setSettings((settings) => ({...settings, role}));
-    console.log('Setting changeRole: ', role);
   }
 
   const changeTimeZone = (timeZone: string): void => {
     setSettings((settings) => ({...settings, timeZone}));
-    console.log('Setting changeTimeZone: ', timeZone);
   }
 
   const changeTaskFilter = (taskFilter: string): void => {
     setSettings((settings) => ({...settings, taskFilter}));
-    console.log('Setting changeTaskFilter: ', taskFilter);
   }
 
   const changeVisibilityOldEvengs = (visibilityOldEvents: boolean): void => {
     setSettings((settings) => ({...settings, visibilityOldEvents}));
-    console.log('Setting changeVisibilityOldEvengs: ', visibilityOldEvents);
   }
 
   const downloadSchedule = (): void => {
     saveSchedule(appData, settings);
-    console.log('Setting downloadSchedule');
   }
 
   // метод вызывается при нажатии на кнопку в хедере AddEvent
@@ -146,7 +139,6 @@ const App: React.FC = () => {
       isShow: true,
       eventData: currentEvent,
     });
-    console.log('showEditWindow: ', id);
   }
 
   // показать модалку с инфой о событии при клике по строке
@@ -161,7 +153,6 @@ const App: React.FC = () => {
       isShow: true,
       eventData: currentEvent,
     });
-    console.log('showInfoWindow: ', id);
   }
 
   // метод вызывается из таблицы при удалении события
@@ -175,7 +166,6 @@ const App: React.FC = () => {
           const newAppData = appData?.filter((eventObj) => eventObj.event.id !== id) || null;
           setAppData(newAppData);
           openNotification(NotificationType.SUCCESS, 'Event deleted!');
-          console.log('deleteEvent');
         })
         .catch((err) => {
           openNotification(NotificationType.ERROR, 'Event not deleted!');
@@ -189,7 +179,6 @@ const App: React.FC = () => {
 
   // метод вызывается из модалки при создании нового события
   const createEvent = (newEvent: object): void => {
-    console.log('Try to create Event: ', newEvent);
     api.createEvent(newEvent)
       .then((data) => {
         setLoadData((state) => {
@@ -201,7 +190,6 @@ const App: React.FC = () => {
           };
         });
         openNotification(NotificationType.SUCCESS, 'Event created!');
-        console.log('createEvent');
       })
       .catch((err) => {
         openNotification(NotificationType.ERROR, 'Event not created!');
@@ -227,7 +215,6 @@ const App: React.FC = () => {
           };
         });
         openNotification(NotificationType.SUCCESS, 'Event updated!');
-        console.log('updateEvent');
       })
       .catch((err) => {
         openNotification(NotificationType.ERROR, 'Event not updated!');
@@ -237,7 +224,6 @@ const App: React.FC = () => {
       isShow: false,
       eventData: null,
     });
-    console.log('updateEvent');
   }
 
   const deleteModalEvent = (id: string): void => {
@@ -245,7 +231,6 @@ const App: React.FC = () => {
 
     if (isDelete) {
       closeModal();
-      console.log('deleteModalEvent');
     }
   }
 

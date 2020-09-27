@@ -1,12 +1,69 @@
-.info-window {
-  font-size: 2rem;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  background-color: #00000073;
+.ant-modal-root {
+  // font-size: 2rem;
+  // width: 100vw;
+  // height: 100vh;
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+  // z-index: 1000;
 
+  // background-color: #00000073;
+  // position: fixed;
+  // top: 0;
+  // right: 0;
+  // bottom: 0;
+  // left: 0;
+  // z-index: 1000;
+  // height: 100%;
+
+  h2.ant-typography{
+    text-align: center;
+    font-size: 2rem;
+    color:#002577;
+  }
+
+  h2 span{
+    margin-right: 1rem;
+  }
   .ant-modal-title {
     text-align: center;
     font-size: 1.7em;
+    color:#091f33;
   }
+
+  .modal-font{
+    font-size: 1.1rem;
+  }
+
+  .icon{
+    margin-right: .5rem;
+  }
+  .start-icon{
+    color: green;
+  }
+  .usual-icon{
+    color: blue;
+  }
+  .deadline-icon{
+    color: red;
+  }
+  .feedback-title-wrapper{
+    display: flex;
+    align-items: baseline;
+  }
+
+  .feedback-title{
+    margin-right: .5rem;
+  }
+
+  // .site-badge-online.ant-badge-count{
+  // background-color: #ffe7e3 !important;
+  
+  // box-shadow: 0 0 0 1px #d9d9d9;
+  // }
+
+  // .ant-modal-body{
+  //   overflow-x: hidden;
+  //   overflow-y: auto;
+  // }
 }

@@ -12,7 +12,7 @@ import {
 import OptionsObject from './options';
 import { EventType } from '../../constants/interfaces';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
-// import ApiService from '../../services/api-service';
+import ApiService from '../../services/api-service';
 import { templateModalWindow } from './template';
 import './edit-window.scss';
 
@@ -31,20 +31,20 @@ type Props = {
 }
 
 const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEvent, closeModal }: Props) => {
-  // const api = new ApiService();
-  // const getAllEvents = () => api.getAllEvents().then((data) => console.log(data));
-  // const createEvent = (newEvent: object) => api.createEvent(newEvent).then((data) => console.log(data));
+  const api = new ApiService();
+  const getAllEvents = () => api.getAllEvents().then((data) => console.log(data));
 
-  // function dataUpdate() {
-  //   let arrayEvents = getAllEvents();
-  //   arrayEvents += objEvent;
-  //   return arrayEvents;
-  // }
+  function dataUpdate() {
+    let arrayEvents = getAllEvents();
+    arrayEvents += objEvent;
+    return arrayEvents;
+  }
 
 
-  const materialLinks: string = '';
-  const materialImage: string = '';
-  const materialVideo: string = '';
+  const materialLinks: any = [];
+  const materialImage: any = [];
+  const materialVideo: any = [];
+  const arrayOrganizers: any = [];
 
   const defaultState = {
     newName: '',
@@ -59,15 +59,15 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
     newEventUrl: '',
     newDedlineDateTime: {},
     newDeadlineDescription: '',
-    newOrganizer: '',
+    newOrganizer: [],
     newDuration: '',
     newComment: '',
     newIsFeedback: false,
     newFeedback: false,
     newMaterials: {
-      video: materialVideo,
-      image: materialImage,
-      links: materialLinks,
+      video: [],
+      image: [],
+      links: [],
     },
     newStage: '',
   }
@@ -129,7 +129,8 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
 
   const handleOk: any = () => {
     console.log(objEvent);
-    closeModal(objEvent);
+    dataUpdate();
+    createEvent(objEvent);
   };
 
   const handleCancel: any = () => {
@@ -276,7 +277,11 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
       }
       {
         currentType.organizer && <Form.Item label="Organizer">
-          <Input onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newOrganizer: (el.target as HTMLInputElement).value })} />
+          <Input onChange={(el) => {
+            const link = (el.target as HTMLInputElement).value.trim();
+            arrayOrganizers.push(link);
+            setGlobalStateModalWindow({ ...globalStateModalWindow, newOrganizer: arrayOrganizers })
+          }} />
         </Form.Item>
       }
       {
@@ -320,30 +325,35 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
         <Form.Item label="Materials:">
           <Form.Item label="Add image">
             <Input onChange={(el) => {
+              const link = (el.target as HTMLInputElement).value.trim();
+              materialImage.push(link);
               setGlobalStateModalWindow({
                 ...globalStateModalWindow, newMaterials: {
                   ...globalStateModalWindow.newMaterials,
-                  image: (el.target as HTMLInputElement).value
+                  image: materialImage
                 }
               })
             }} />
           </Form.Item>
           <Form.Item label="Add Video">
             <Input onChange={(el) => {
+              const link = (el.target as HTMLInputElement).value.trim();
+              materialVideo.push(link);
               setGlobalStateModalWindow({
                 ...globalStateModalWindow, newMaterials: {
-                  ...globalStateModalWindow.newMaterials,
-                  video: (el.target as HTMLInputElement).value
+                  ...globalStateModalWindow.newMaterials, video: materialVideo
                 }
               })
             }} />
           </Form.Item>
           <Form.Item label="Add link">
             <Input onChange={(el) => {
+              const link = (el.target as HTMLInputElement).value.trim();
+              materialLinks.push(link);
               setGlobalStateModalWindow({
                 ...globalStateModalWindow, newMaterials: {
                   ...globalStateModalWindow.newMaterials,
-                  links: (el.target as HTMLInputElement).value
+                  links: materialLinks
                 }
               })
             }} />

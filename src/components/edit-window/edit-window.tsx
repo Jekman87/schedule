@@ -28,9 +28,10 @@ type Props = {
   updateEvent: (id: string, newEvent: object) => void,
   deleteModalEvent: (id: string) => void,
   closeModal: (newEvent: object) => void,
+  showEditWindow: () => void,
 }
 
-const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEvent, closeModal }: Props) => {
+const EditWindow: React.FunctionComponent<Props> = ({ settings, event, createEvent, updateEvent, deleteModalEvent, closeModal, showEditWindow }: Props) => {
   const api = new ApiService();
   const getAllEvents = () => api.getAllEvents().then((data) => console.log(data));
 
@@ -50,7 +51,7 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
     newName: event?.name || '',
     newType: event?.type || '',
     newForm: event?.form || '',
-    newPlace: event?.place||  '',
+    newPlace: event?.place || '',
     newKind: event?.kind || '',
     newTags: event?.form || [],
     newDateTime: event?.dateTime || 0,
@@ -60,7 +61,7 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
     newDedlineDateTime: event?.deadlinedateTime || 0,
     newDeadlineDescription: event?.deadlineDescription || '',
     newOrganizer: event?.organizer || [],
-    newDuration: event?.duration ||  '',
+    newDuration: event?.duration || '',
     newComment: event?.comment || '',
     newIsFeedback: event?.isFeedback || false,
     newFeedback: event?.feedback || false,
@@ -129,7 +130,7 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
 
   const handleOk: any = () => {
     console.log(objEvent);
-    if (event === null){
+    if (event === null) {
       createEvent(objEvent);
     }
     if (event !== null) {
@@ -141,7 +142,9 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
   const handleCancel: any = () => {
     setVisible(false);
     closeModal(objEvent);
-    console.log(event?.name);
+    const test = showEditWindow();
+    console.log('test', test);
+
   };
 
   const handleAdd: any = () => {
@@ -186,7 +189,6 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
       form = (
         <>
           <Select onChange={(e) => {
-
             console.log(globalStateModalWindow.newIsFeedback);
             for (let i: number = 0; i < templateModalWindow.length; i += 1) {
               if (e === templateModalWindow[i].key) {
@@ -195,8 +197,9 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
               }
             }
             setGlobalStateModalWindow({ ...defaultState, newType: e as HTMLSelectElement["value"] });
-          }
-          }>{OptionsObject()}</Select>
+          }}
+          defaultValue={globalStateModalWindow.newType}
+          >{OptionsObject()}</Select>
         </>
       )
     }
@@ -215,20 +218,29 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
       }
       {
         currentType.form && <Form.Item label="Form">
-          <Select onChange={(e) => setGlobalStateModalWindow({ ...globalStateModalWindow, newForm: e as HTMLSelectElement["value"] })}>
-            <Select.Option value={"online"}>online</Select.Option>
-            <Select.Option value={"offline"}>offline</Select.Option>
+          <Select
+            onChange={(e) => setGlobalStateModalWindow({ ...globalStateModalWindow, newForm: e as HTMLSelectElement["value"] })}
+            value={globalStateModalWindow.newForm}
+          >
+            <Select.Option value="online">online</Select.Option>
+            <Select.Option value="offline">offline</Select.Option>
           </Select>
         </Form.Item>
       }
       {
         currentType.place && <Form.Item label="Place">
-          <Input onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newPlace: (el.target as HTMLInputElement).value })} />
+          <Input 
+          onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newPlace: (el.target as HTMLInputElement).value })} 
+          value={globalStateModalWindow.newPlace}
+          />
         </Form.Item>
       }
       {
         currentType.kind && <Form.Item label="Kind">
-          <Select onChange={(e) => setGlobalStateModalWindow({ ...globalStateModalWindow, newKind: e as HTMLSelectElement["value"] })}>
+          <Select 
+          onChange={(e) => setGlobalStateModalWindow({ ...globalStateModalWindow, newKind: e as HTMLSelectElement["value"] })}
+          value={globalStateModalWindow.newKind}
+          >
             <Select.Option value={"basic"}>basic</Select.Option>
             <Select.Option value={"optional"}>optional</Select.Option>
           </Select>
@@ -239,7 +251,8 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
           <Select
             mode="tags"
             value={globalStateModalWindow.newTags}
-            onChange={(e) => setGlobalStateModalWindow({ ...globalStateModalWindow, newTags: e })}>
+            onChange={(e) => setGlobalStateModalWindow({ ...globalStateModalWindow, newTags: e })}
+            >
             <Select.Option value={"html"}>html</Select.Option>
             <Select.Option value={"css"}>css</Select.Option>
             <Select.Option value={"js"}>js</Select.Option>
@@ -258,17 +271,26 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
       }
       {
         currentType.description && <Form.Item label="Description">
-          <TextArea onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newDescription: (el.target as HTMLTextAreaElement).value })} />
+          <TextArea 
+          onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newDescription: (el.target as HTMLTextAreaElement).value })} 
+          defaultValue={globalStateModalWindow.newDescription}
+          />
         </Form.Item>
       }
       {
         currentType.descriptionUrl && <Form.Item label="Description Url">
-          <Input onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newDescriptionUrl: (el.target as HTMLInputElement).value })} />
+          <Input 
+          onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newDescriptionUrl: (el.target as HTMLInputElement).value })} 
+          defaultValue={globalStateModalWindow.newDescriptionUrl}
+          />
         </Form.Item>
       }
       {
         currentType.eventURL && <Form.Item label="Event URL">
-          <Input onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newEventUrl: (el.target as HTMLInputElement).value })} />
+          <Input 
+          onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newEventUrl: (el.target as HTMLInputElement).value })} 
+          defaultValue={globalStateModalWindow.newEventUrl}
+          />
         </Form.Item>
       }
       {
@@ -278,7 +300,10 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
       }
       {
         currentType.deadlineDescription && <Form.Item label="DeadlineDescription">
-          <TextArea onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newDeadlineDescription: (el.target as HTMLTextAreaElement).value })} />
+          <TextArea
+           onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newDeadlineDescription: (el.target as HTMLTextAreaElement).value })} 
+           value={globalStateModalWindow.newDeadlineDescription}
+           />
         </Form.Item>
       }
       {
@@ -287,17 +312,25 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
             const link = (el.target as HTMLInputElement).value.trim();
             arrayOrganizers.push(link);
             setGlobalStateModalWindow({ ...globalStateModalWindow, newOrganizer: arrayOrganizers })
-          }} />
+          }} 
+          value={globalStateModalWindow.newOrganizer}
+          />
         </Form.Item>
       }
       {
         currentType.duration && <Form.Item label="Duration">
-          <Input onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newDuration: (el.target as HTMLInputElement).value })} />
+          <Input 
+          onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newDuration: (el.target as HTMLInputElement).value })} 
+          value={globalStateModalWindow.newDuration}
+          />
         </Form.Item>
       }
       {
         currentType.comment && <Form.Item label="Comment">
-          <TextArea onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newComment: (el.target as HTMLTextAreaElement).value })} />
+          <TextArea 
+          onChange={(el) => setGlobalStateModalWindow({ ...globalStateModalWindow, newComment: (el.target as HTMLTextAreaElement).value })} 
+          value={globalStateModalWindow.newComment}
+          />
         </Form.Item>
       }
       {
@@ -305,6 +338,7 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
           <Switch
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
+            checked={globalStateModalWindow.newIsFeedback}
 
             onChange={(checked) => {
               setGlobalStateModalWindow({ ...globalStateModalWindow, newIsFeedback: checked })
@@ -339,7 +373,8 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
                   image: materialImage
                 }
               })
-            }} />
+            }} 
+            />
           </Form.Item>
           <Form.Item label="Add Video">
             <Input onChange={(el) => {
@@ -368,7 +403,10 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
       }
       {
         currentType.stage && <Form.Item label="Stage">
-          <Select onChange={(e) => setGlobalStateModalWindow({ ...globalStateModalWindow, newStage: e as HTMLSelectElement["value"] })}>
+          <Select 
+          onChange={(e) => setGlobalStateModalWindow({ ...globalStateModalWindow, newStage: e as HTMLSelectElement["value"] })}
+          value={globalStateModalWindow.newStage}
+          >
             <Select.Option key={"stage" + 1} value="1">1</Select.Option>
             <Select.Option key={"stage" + 2} value="2">2</Select.Option>
             <Select.Option key={"stage" + 3} value="3">3</Select.Option>

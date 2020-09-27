@@ -135,7 +135,7 @@ const App: React.FC = () => {
     let currentEvent: EventType | null = null;
 
     if (id) {
-      currentEvent = appData?.find(el => el.event.id === id)?.event || null;
+      currentEvent = appData?.find(el => (el.event.id || "") + el.isDeadline === id)?.event || null;
     }
 
     setInfoWindowState({
@@ -151,7 +151,7 @@ const App: React.FC = () => {
 
   // показать модалку с инфой о событии при клике по строке
   const showInfoWindow = (id: string): void => {
-    const currentEvent: EventType | null = appData?.find(el => el.event.id === id)?.event || null;
+    const currentEvent: EventType | null = appData?.find(el => (el.event.id || "") + el.isDeadline === id)?.event || null;
 
     setEditWindowState({
       isShow: false,
@@ -304,6 +304,7 @@ const App: React.FC = () => {
       createEvent={createEvent}
       updateEvent={updateEvent}
       deleteModalEvent={deleteModalEvent}
+      showEditWindow={showEditWindow}
       closeModal={closeModal}
     /> : null;
   const infoWindow = infoWindowState.isShow ?

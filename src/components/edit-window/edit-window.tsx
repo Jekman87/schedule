@@ -31,22 +31,13 @@ type Props = {
 }
 
 const EditWindow: React.FunctionComponent<Props> = ({ settings, event, createEvent, updateEvent, deleteModalEvent, closeModal}: Props) => {
-  const api = new ApiService();
-  const getAllEvents = () => api.getAllEvents().then((data) => console.log(data));
-
-  function dataUpdate() {
-    let arrayEvents = getAllEvents();
-    arrayEvents += objEvent;
-    return arrayEvents;
-  }
-
-
   const materialLinks: any = [];
   const materialImage: any = [];
   const materialVideo: any = [];
   const arrayOrganizers: any = [];
 
   const defaultState = {
+    id: event?.id,
     newName: event?.name || '',
     newType: event?.type || '',
     newForm: event?.form || '',
@@ -133,9 +124,8 @@ const EditWindow: React.FunctionComponent<Props> = ({ settings, event, createEve
       createEvent(objEvent);
     }
     if (event !== null) {
-      // updateEvent(event?.id, objEvent);
+      updateEvent(objEvent.id, objEvent);
     }
-    dataUpdate();
   };
 
   const handleCancel: any = () => {
@@ -305,7 +295,7 @@ const EditWindow: React.FunctionComponent<Props> = ({ settings, event, createEve
       {
         currentType.organizer && <Form.Item label="Organizer">
           <Input onChange={(el) => {
-            const link = (el.target as HTMLInputElement).value.trim();
+            const link = (el.target as HTMLInputElement).value;
             arrayOrganizers.push(link);
             setGlobalStateModalWindow({ ...globalStateModalWindow, newOrganizer: arrayOrganizers })
           }} 
@@ -334,11 +324,10 @@ const EditWindow: React.FunctionComponent<Props> = ({ settings, event, createEve
           <Switch
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
-            checked={globalStateModalWindow.newIsFeedback}
+            defaultChecked={globalStateModalWindow.newIsFeedback}
 
             onChange={(checked) => {
-              setGlobalStateModalWindow({ ...globalStateModalWindow, newIsFeedback: checked })
-              setGlobalStateModalWindow({ ...globalStateModalWindow, newFeedback: checked })
+              setGlobalStateModalWindow({ ...globalStateModalWindow, newIsFeedback: checked, newFeedback: checked })
               console.log(checked);
               return;
             }

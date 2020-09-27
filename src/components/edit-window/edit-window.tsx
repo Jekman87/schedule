@@ -19,6 +19,8 @@ import './edit-window.scss';
 const { Title } = Typography;
 const { TextArea } = Input;
 
+
+
 type Props = {
   settings: object,
   event: EventType | null,
@@ -38,42 +40,45 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
     return arrayEvents;
   }
 
+
   const materialLinks: any = [];
   const materialImage: any = [];
   const materialVideo: any = [];
   const arrayOrganizers: any = [];
 
   const defaultState = {
-    newName: '',
-    newType: '',
-    newForm: '',
-    newPlace: '',
-    newKind: '',
-    newTags: [],
-    newDateTime: 0,
-    newDescription: '',
-    newDescriptionUrl: '',
-    newEventUrl: '',
-    newDedlineDateTime: 0,
-    newDeadlineDescription: '',
-    newOrganizer: [],
-    newDuration: '',
-    newComment: '',
-    newIsFeedback: false,
-    newFeedback: false,
-    newMaterials: {
+    newName: event?.name || '',
+    newType: event?.type || '',
+    newForm: event?.form || '',
+    newPlace: event?.place||  '',
+    newKind: event?.kind || '',
+    newTags: event?.form || [],
+    newDateTime: event?.dateTime || 0,
+    newDescription: event?.description || '',
+    newDescriptionUrl: event?.descriptionUrl || '',
+    newEventUrl: event?.eventURL || '',
+    newDedlineDateTime: event?.deadlinedateTime || 0,
+    newDeadlineDescription: event?.deadlineDescription || '',
+    newOrganizer: event?.organizer || [],
+    newDuration: event?.duration ||  '',
+    newComment: event?.comment || '',
+    newIsFeedback: event?.isFeedback || false,
+    newFeedback: event?.feedback || false,
+    newMaterials: event?.materials || {
       video: [],
       image: [],
       links: [],
     },
-    newStage: '',
+    newStage: event?.stage || '',
   }
+
 
   const [globalStateModalWindow, setGlobalStateModalWindow] = useState(defaultState);
 
   const [isDisabled, setDisabled] = useState(false);
   const [isNewType, setIsNewType] = useState(false);
 
+  // const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(true);
 
   const [currentType, setCurrentType] = useState({
@@ -100,6 +105,7 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
   );
 
   const objEvent: any = {
+    // key: newName + new Date(),
     name: globalStateModalWindow.newName,
     type: globalStateModalWindow.newType,
     form: globalStateModalWindow.newForm,
@@ -123,13 +129,19 @@ const EditWindow = ({ settings, event, createEvent, updateEvent, deleteModalEven
 
   const handleOk: any = () => {
     console.log(objEvent);
+    if (event === null){
+      createEvent(objEvent);
+    }
+    if (event !== null) {
+      // updateEvent(event?.id, objEvent);
+    }
     dataUpdate();
-    createEvent(objEvent);
   };
 
   const handleCancel: any = () => {
     setVisible(false);
     closeModal(objEvent);
+    console.log(event?.name);
   };
 
   const handleAdd: any = () => {

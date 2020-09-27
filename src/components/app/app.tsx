@@ -244,10 +244,8 @@ const App: React.FC = () => {
 
       case WORK_SPACE.calendar:
         return <Calendar
-                /*
                 settings={settings}
                 showInfoWindow={showInfoWindow}
-                */
                 appData={appData} />
 
       default:

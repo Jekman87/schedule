@@ -1,4 +1,4 @@
-import { Button, Badge, Card, Popover, Timeline, Row, Col, Tag, Divider } from 'antd';
+import { Button, Badge, Card, Popover, Row, Col, Tag, Form, Input, Space } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import React from 'react';
 import { Typography } from 'antd';
@@ -17,11 +17,13 @@ import {
   CalendarOutlined,
   LinkOutlined,
   FormOutlined,
-  HistoryOutlined
+  HistoryOutlined,
+  StopOutlined
 } from '@ant-design/icons';
 import { convertDateTime } from '../../helpers/utils';
 
 const { Title, Link, Paragraph } = Typography;
+const { TextArea } = Input;
 
 interface Props {
   event: any;
@@ -32,7 +34,7 @@ interface Props {
 }
 
 const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModal, ...props }: Props) => {
-  
+
   const stage = event.stage === '' ? '' : ` Stage#${event.stage}`;
 
   const CreateLink = (link: any, text: any) => {
@@ -50,9 +52,52 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
     );
   }
 
-  console.log('info-window props', event, props);
+  const Feedback = () => {
+    if (!event.isFeedback) {
+      return (
+        <Col span={24}>
+          <div className="feedback-false deadline-icon"><StopOutlined /></div>
+        </Col>
+      );
+    }
+    const layout = {
+      labelCol: { span: 6, md:{ span: 5 }, xl:{ span: 3}},
+      wrapperCol: { span: 24, xl:{ span: 18} },
+    };
+    const tailLayout = {
+      wrapperCol: { offset: 0, sm:{ offset: 6 },  md:{ offset: 5 }, xl:{ offset: 3, span: 18}, span: 24},
+    };
+    return (
+      <Form
+        {...layout}
+      >
+        <Form.Item
+          label="Username"
+          name="username"
+          rules={[{ required: true, message: 'Please input your username!' }]}>
+          <Input placeholder="Enter your github" />
+        </Form.Item>
+        <Form.Item
+          label="Your Feedback"
+          name="feedback"
+          rules={[{ required: true, message: 'Please input your feedback!' }]}>
+          <TextArea placeholder="Your feedback" rows={4} autoSize={{ minRows: 2, maxRows: 6 }} />
+        </Form.Item>
+        <Form.Item {...tailLayout}>
+          {/* <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary"> */}
+          <Button type="primary" htmlType="submit">
+            Add Feedback
+          </Button>
 
+        </Form.Item>
+
+      </Form>
+    )
+  };
+
+  console.log('info-window props', event, props);
   return (
+   
     <Modal
       title={`RSS ${event.course}${stage}`}
       centered
@@ -62,7 +107,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
       keyboard={true}
       bodyStyle={{ backgroundColor: '#ffe7e3', }}
       //bodyStyle= здесь функция которая навешивает цсс свойства в зависимости от типа ивента или попробовать навесить классы готовой функцией из апп
-      width={"80%"}
+      // width={"80%"}
     >
       <Badge.Ribbon text={event.form} color={'#45e21e'}>
         <Card bordered={false} style={{ backgroundColor: 'transparent', }}><Title level={2}>
@@ -92,7 +137,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
       </Badge.Ribbon>
 
       <Row justify="space-between">
-        <Col span={12}>
+        <Col xs={24} md={14}>
           {/* не рендерить этот параграф если нет даты старта */}
           <Paragraph className="modal-font">
             <span className="icon start-icon"><CalendarOutlined /></span>
@@ -114,8 +159,8 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
             <i>organizer: </i><span>{event.organizer}</span>
           </Paragraph>
         </Col>
-        <Col span={8}>
-        {/* не рендерить этот параграф если нет, сделать 1 функцию на прием текста и параметра на эти 3 параграфа */}
+        <Col xs={24} md={8}>
+          {/* не рендерить этот параграф если нет, сделать 1 функцию на прием текста и параметра на эти 3 параграфа */}
           <Paragraph className="modal-font"><i>kind:</i> <span>{event.kind}</span></Paragraph>
           <Paragraph className="modal-font"><i>type:</i> <span>{event.type}</span></Paragraph>
           <Paragraph className="modal-font"><i>form:</i> <span>{event.form}</span></Paragraph>
@@ -136,7 +181,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
         <Typography>
           <Title level={3}>Description</Title>
           <Paragraph>
-          {/* здесь нужно размапить массив тегов выбрать на каждый вид цвет */}
+            {/* здесь нужно размапить массив тегов выбрать на каждый вид цвет */}
             <Tag color="success">
               {event.tags}
             </Tag>
@@ -146,7 +191,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
             {event.description}
 
           </Paragraph>
-           {/* не рендерить если нет*/}
+          {/* не рендерить если нет*/}
           {CreateLink(event.descriptionUrl, 'link to description')}
           {/* <Paragraph className="modal-font"><Link className="modal-font" href={event.descriptionUrl} target="_blank">
             <span className="icon usual-icon"><LinkOutlined /></span>link to description
@@ -160,7 +205,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
           </Paragraph> */}
         </Typography>
       </Row>
-          {/* не рендерить если нет*/}
+      {/* не рендерить если нет*/}
       <Row>
         <Typography>
           <Title level={3}>Description of Deadline</Title>
@@ -172,14 +217,19 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
       {/* доделать фидбэк*/}
       <Row>
         <Typography>
-          <div className="feedback-title-wrapper">
-            <Title className="feedback-title" level={3}>Feedback </Title>
-            <Button type="primary" icon={<FormOutlined />} size='large' />
-          </div>
-          <Paragraph className="modal-font">
-            {event.deadlineDescription}
-          </Paragraph>
+
+          <Title className="feedback-title" level={3}><span className="icon usual-icon"><FormOutlined /></span>Feedback </Title>
+          {/* <Button type="primary" icon={<FormOutlined />} size='large' /> */}
+
         </Typography>
+        <Col span={24}>
+          <Feedback
+          // onChange={this.handleChange}
+          // onSubmit={this.handleSubmit}
+          // submitting={submitting}
+          // value={value}
+          />
+        </Col>
       </Row>
     </Modal>
 

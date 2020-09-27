@@ -1,64 +1,94 @@
 .ant-modal-root {
   // font-size: 2rem;
-  // width: 100vw;
-  // height: 100vh;
-  // position: absolute;
-  // top: 0;
-  // left: 0;
-  // z-index: 1000;
-
-  // background-color: #00000073;
-  // position: fixed;
-  // top: 0;
-  // right: 0;
-  // bottom: 0;
-  // left: 0;
-  // z-index: 1000;
-  // height: 100%;
-
-  h2.ant-typography{
-    text-align: center;
-    font-size: 2rem;
-    color:#002577;
+  .ant-modal {
+    width: 80% !important;
+    @media (max-width: 576px) {
+      width: 98% !important;
+    }
   }
 
-  h2 span{
+  h2.ant-typography {
+    text-align: center;
+    font-size: 3.6rem;
+    color: #002577;
+    @media (max-width: 1200px) {
+      font-size: 3.2rem;
+    }
+    @media (max-width: 992px) {
+      font-size: 2.8rem;
+    }
+    @media (max-width: 576px) {
+      font-size: 2rem;
+    }
+    @media (max-width: 576px) {
+      font-size: 1.7rem;
+    }
+  }
+
+  h2 span {
     margin-right: 1rem;
   }
   .ant-modal-title {
     text-align: center;
-    font-size: 1.7em;
-    color:#091f33;
+    font-size: 2rem;
+    color: #091f33;
+    @media (max-width: 992px) {
+      font-size: 1.8rem;
+    }
+    @media (max-width: 768px) {
+      font-size: 1.6rem;
+    }
+    @media (max-width: 576px) {
+      font-size: 1.4rem;
+    }
   }
 
-  .modal-font{
-    font-size: 1.1rem;
+  .modal-font {
+    font-size: 1.2rem;
+    // @media (max-width: 992px) {
+    //   font-size: 1.3rem;
+    // }
+    // @media (max-width: 768px) {
+    //   font-size: 1.2rem;
+    // }
+    @media (max-width: 576px) {
+      font-size: 1rem;
+    }
   }
 
-  .icon{
-    margin-right: .5rem;
+  .icon {
+    margin-right: 0.5rem;
   }
-  .start-icon{
+  .start-icon {
     color: green;
   }
-  .usual-icon{
+  .usual-icon {
     color: blue;
   }
-  .deadline-icon{
+  .deadline-icon {
     color: red;
   }
-  .feedback-title-wrapper{
+  .feedback-title-wrapper {
     display: flex;
     align-items: baseline;
   }
 
-  .feedback-title{
-    margin-right: .5rem;
+  .feedback-title {
+    margin-right: 0.5rem;
+  }
+
+  .feedback-false {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5rem;
   }
 
   // .site-badge-online.ant-badge-count{
   // background-color: #ffe7e3 !important;
-  
+
   // box-shadow: 0 0 0 1px #d9d9d9;
   // }
 

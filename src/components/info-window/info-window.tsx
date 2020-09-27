@@ -1,4 +1,4 @@
-import { Button, Badge, Card, Popover, Row, Col, Tag, Form, Input /*, Space*/ } from 'antd';
+import { Button, Badge, Card, Popover, Row, Col, Tag, Form, Input, Comment, List /*, Space*/ } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import React from 'react';
 import { Typography } from 'antd';
@@ -19,7 +19,8 @@ import {
   FormOutlined,
   HistoryOutlined,
   StopOutlined,
-  EnvironmentOutlined
+  EnvironmentOutlined,
+  MessageOutlined,
 } from '@ant-design/icons';
 import { convertDateTime } from '../../helpers/utils';
 
@@ -34,14 +35,25 @@ interface Props {
   closeModal: any;
 }
 
+interface commentData {
+  author: string;
+  content: any;
+}
+
+// interface feedbackData {
+//   onSubmin: feedbackHandleSubmit;
+// }
+
+
+
 const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModal, ...props }: Props) => {
 
   const stage = event.stage === '' ? '' : ` Stage#${event.stage}`;
-
-  const CreateLink = (link: any, text: any) => {
+  console.log("console props", settings);
+  const CreateLink = (link: any, text: any, key: number) => {
 
     return (
-      <Popover placement="bottomLeft" content={<Link href={link} target="_blank">{link}</Link>} trigger="hover">
+      <Popover key={key} placement="bottomLeft" content={<Link href={link} target="_blank">{link}</Link>} trigger="hover">
         <Paragraph className="modal-font">
           <Link className="modal-font" href={link} target="_blank">
             <span className="icon usual-icon"><LinkOutlined />
@@ -71,22 +83,26 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
     return (
       <Form
         {...layout}
+        onFinish={(e)=> {
+          event.feedback.push(e);
+          console.log(event);
+        }}
       >
         <Form.Item
           label="Username"
-          name="username"
+          name="author"
           rules={[{ required: true, message: 'Please input your username!' }]}>
-          <Input placeholder="Enter your github" />
+          <Input placeholder="Enter your github (max 40 symbols)" maxLength={40}/>
         </Form.Item>
         <Form.Item
           label="Your Feedback"
-          name="feedback"
+          name="text"
           rules={[{ required: true, message: 'Please input your feedback!' }]}>
-          <TextArea placeholder="Your feedback" rows={4} autoSize={{ minRows: 2, maxRows: 6 }} />
+          <TextArea placeholder="Your feedback (max 300 symbols)" maxLength={300} rows={4} autoSize={{ minRows: 2, maxRows: 6 }} />
         </Form.Item>
         <Form.Item {...tailLayout}>
           {/* <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary"> */}
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" /*onClick={onSubmit}*/>
             Add Feedback
           </Button>
 
@@ -95,9 +111,62 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
       </Form>
     )
   };
+  // const feedbackHandleSubmit = (e: React.FormEvent) => {
+  //   console.log(e);
+  // }
+  /* доделать фидбэк*/
+  const feedbackStudentElement = (settings.role === "Student") ? (
+    <Row>
+      <Typography>
+        <Title className="feedback-title" level={3}><span className="icon usual-icon"><FormOutlined /></span>Feedback </Title>
+      </Typography>
+      <Col span={24}>
+        <Feedback
+        // onChange={this.handleChange}
+        // onSubmit={feedbackHandleSubmit}
+        // submitting={submitting}
+        // value={value}
+        />
+      </Col>
+    </Row>
+  ) : null;
 
-  console.log('info-window props', event, props);
+
+  const data: commentData[] = event.feedback.map((el: any) => {
+    return {
+      author: el.author,
+      content: (
+        <p>
+          {el.text}
+        </p>
+      ),
+    }
+  });
   //
+
+  const feedbacksArray = ((event.feedback.length > 0) && (settings.role === "Mentor")) ? (
+    <>
+      {/* <Typography> */}
+      <Title className="feedback-title" level={3}><span className="icon usual-icon"><MessageOutlined /></span>Feedbacks </Title>
+      <List
+        className="comment-list"
+        header={`${event.feedback.length} replies`}
+        itemLayout="horizontal"
+        dataSource={data}
+        renderItem={(item) => (
+          <li>
+            <Comment
+              author={item.author}
+              content={item.content}
+            />
+          </li>
+        )}
+      />
+      {/* </Typography> */}
+    </>
+
+  ) : null;
+
   const dateTimeParagraph = (event.dateTime > 0) ? (
     <Paragraph className="modal-font">
       <span className="icon start-icon"><CalendarOutlined /></span>
@@ -129,7 +198,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
   const tagsParagraph = (event.tags.length > 0) ? (
     <Paragraph>
       {
-        event.tags.map((el: any) => {
+        event.tags.map((el: any, ind: number) => {
           let color = "success"
           switch (el) {
             case 'js':
@@ -158,7 +227,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
               break;
           }
           return (
-            <Tag color={color}>
+            <Tag color={color} key={ind}>
               {el}
             </Tag>
           );
@@ -173,17 +242,17 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
     </Paragraph>) : null;
 
   /* не рендерить если нет*/
-  const descriptionUrlElement = (event.descriptionUrl) ? (CreateLink(event.descriptionUrl, 'link to description')) : null;
+  const descriptionUrlElement = (event.descriptionUrl) ? (CreateLink(event.descriptionUrl, 'link to description', 0)) : null;
 
   const materialsLinks: any[] = [];
   if (event.materials.links.length > 0) {
-    event.materials.links.map((el: any) => materialsLinks.push(CreateLink(el.link, el.discription || 'link')));
+    event.materials.links.map((el: any) => materialsLinks.push(CreateLink(el.link, el.discription || 'link', materialsLinks.length)));
   }
   if (event.materials.video.length > 0) {
-    event.materials.video.map((el: any) => materialsLinks.push(CreateLink(el.link, el.discription || 'link')));
+    event.materials.video.map((el: any) => materialsLinks.push(CreateLink(el.link, el.discription || 'link', materialsLinks.length)));
   }
   if (event.materials.images.length > 0) {
-    event.materials.images.map((el: any) => materialsLinks.push(CreateLink(el.link, el.discription || 'link')));
+    event.materials.images.map((el: any) => materialsLinks.push(CreateLink(el.link, el.discription || 'link', materialsLinks.length)));
   }
   console.log('mat link', materialsLinks)
   const materialsElement = (materialsLinks.length > 0) ? (
@@ -218,11 +287,11 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
     (<Paragraph className="modal-font"><i>form:</i> <span>{event.form}</span></Paragraph>) :
     null;
 
-    const placeElement = (event.place) ?
+  const placeElement = (event.place) ?
     (<Paragraph className="modal-font"><span className="icon usual-icon"><EnvironmentOutlined /></span><i>place:</i> <span>{event.place}</span></Paragraph>) :
     null;
   /* не рендерить если нет, переделать на CreateLink  я ее уже написала */
-  const eventURLElement = (event.eventURL) ? (CreateLink(event.eventURL, 'link to event')) : null;
+  const eventURLElement = (event.eventURL) ? (CreateLink(event.eventURL, 'link to event', 0)) : null;
 
   const commentElement = (event.comment) ? (
     <Row>
@@ -382,13 +451,14 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
           </Paragraph>
         </Typography>
       </Row> */}
+      {feedbacksArray}
       {/* доделать фидбэк*/}
-      <Row>
+
+      {feedbackStudentElement}
+      {/* <Row>
         <Typography>
 
           <Title className="feedback-title" level={3}><span className="icon usual-icon"><FormOutlined /></span>Feedback </Title>
-          {/* <Button type="primary" icon={<FormOutlined />} size='large' /> */}
-
         </Typography>
         <Col span={24}>
           <Feedback
@@ -398,7 +468,7 @@ const InfoWindow: React.FunctionComponent<Props> = ({ settings, event, closeModa
           // value={value}
           />
         </Col>
-      </Row>
+      </Row> */}
     </Modal>
 
   );

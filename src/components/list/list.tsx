@@ -22,14 +22,14 @@ interface Props {
 }
 
 const SList: React.FunctionComponent<Props> = ({ appData, settings, showInfoWindow }) => {
-  console.log(appData[0])
   return (
     <div className='list'>
       <List
         itemLayout='horizontal'
         dataSource={appData}
         renderItem={({ event }, index) => (
-          <Badge.Ribbon text={event.type} color={grey[4]}>
+          <div onClick={() => {showInfoWindow(event.id)}}>
+            <Badge.Ribbon text={event.type} color={grey[4]}>
             <List.Item>
               <List.Item.Meta
                 avatar={
@@ -83,6 +83,7 @@ const SList: React.FunctionComponent<Props> = ({ appData, settings, showInfoWind
               />
             </List.Item>
           </Badge.Ribbon>
+        </div>
         )}
       />
     </div>

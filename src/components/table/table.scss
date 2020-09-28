@@ -1,0 +1,84 @@
+.table-header {
+  display: flex;
+}
+
+.table-header__icon {
+  padding: 0.5rem;
+  transition: all 0.8s;
+}
+
+.none-visibility {
+  display: none !important;
+}
+
+.table-block a {
+  color:black ;
+  text-decoration: underline;
+  transition: all 0.5s;
+}
+
+.table-block p {
+  margin: 0;
+}
+
+.table-block th {
+  background: #8bc34a5e !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  transition: all 0.5s !important;
+}
+
+.table-block tr {
+  height: 50px;
+  transition: all 0.8s !important;
+}
+
+.table-block tr td {
+  transition: all 0.8s !important;
+}
+
+.table__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table__deadline {
+  color: #c5370b;
+  font-weight: bold;
+}
+
+@media (hover:hover) {
+  .table-header__icon:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: all 0.8s;
+  }
+
+  .table-block tr:hover td {
+    background: unset !important;
+    transition: all 0.8s !important;
+    cursor: default;
+  }
+
+  .table-block tr:hover {
+    opacity: 0.7;
+    transition: all 0.8s !important;
+    box-shadow: 0 0 0 0 white inset;
+  }
+
+  .table-block td:hover {
+    cursor: pointer !important;
+    transition: all 0.8s !important;
+    box-shadow: 0 0 0 0 white inset;
+  }
+
+  .table-block a:hover {
+    color: #1f6ed8;
+    transition: all 0.5s;
+  }
+
+  .table-block input:hover {
+    cursor: default;
+  }
+}

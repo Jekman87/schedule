@@ -1,0 +1,132 @@
+.calendar {
+   
+  display: flex;
+  min-height: 100%;
+  font-size: 14px;
+  width: 100%;
+  background-color: #ffffff;
+
+  
+  h2 {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0 0 0 1.5em;
+  }
+
+  li {
+    margin: 1.5em 0;
+    padding: 0;
+  }
+
+  b {
+    margin-right: 3px;
+  }
+
+  .app-main {
+    flex-grow: 1;
+    padding: 3em;
+    @media (max-width: 576px) {
+      padding: 2em 1em;
+    }
+  }
+
+  .fc {
+    /* the calendar root */
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .fc-event .fc-event-main {
+    overflow: hidden;
+  }
+
+  .fc .fc-button-primary {
+    outline: none;
+    color: #fff;
+    background: #1890ff;
+    border-color: #1890ff;
+    text-shadow: 0 -1px 0 #0000001f;
+    -webkit-box-shadow: 0 2px 0 #0000000b;
+    box-shadow: 0 2px 0 #0000000b;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+
+  .fc .fc-button-primary:hover {
+    color: #fff;
+    background: #40a9ff;
+    border-color: #40a9ff;
+  }
+
+  .fc .fc-button-primary:focus {
+    outline: 0;
+    box-shadow: none;
+  }
+
+  .type__project-task,
+  .type__js-task,
+  .type__test,
+  .type__crosscheck,
+  .type__review,
+  .type__broadcast-live,
+  .type__self-education,
+  .type__meetup,
+  .type__interview,
+  .type__presentation,
+  .type__other,
+  .type__codewars {
+    box-shadow: 2px 2px 4px 1px #40373740;
+  }
+
+  .type__project-task{
+    background-color:#01c153;
+    
+  }
+  .type__js-task{
+    background-color:  #9900ff;
+   
+  }
+  .type__test {
+    background-color:#4e4efa;
+    
+  }
+  .type__crosscheck{
+    background-color:#008000;
+    
+  }
+  .type__review{
+    background-color:  #ff9900;
+    
+  }
+  .type__broadcast-live{
+    background-color:  #E91E63;
+    
+  }
+  .type__self-education{
+    background-color: #ff5722;
+   
+  }
+  .type__meetup{
+    background-color: #ff3471;
+    
+  }
+  .type__interview{
+    background-color:#03a9f4;
+    
+  }
+  .type__presentation{
+    background-color: #0d606b;
+    
+  }
+  .type__other{
+    background-color:  #ec54d3;
+    
+  }
+  .type__codewars{
+    background-color:#005fff;
+    
+  }
+}

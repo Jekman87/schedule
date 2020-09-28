@@ -1,0 +1,60 @@
+.ant-layout {
+  background-color: transparent !important;
+}
+
+.type__project-task {
+  background-color: #ffea2f78;
+}
+
+.type__js-task {
+  background-color: #00000070;
+}
+
+.type__test {
+  background-color: #0000ff26;
+}
+
+.type__crosscheck {
+  background-color: #00800057;
+}
+
+.type__review {
+  background-color: #ff980070;
+}
+
+.type__broadcast-live {
+  background-color: #00968863;
+}
+
+.type__self-education {
+  background-color: #3f51b557;
+}
+
+.type__meetup {
+  background-color: #ff980078;
+}
+
+.type__interview {
+  background-color: #0926797a;
+}
+
+.type__presentation {
+  background-color: #0d606b9a;
+}
+
+.type__other {
+  background-color: #ecec5487;
+}
+
+.type__codewars {
+  background-color: #03a9f42b;
+}
+
+.type__deadline {
+  box-shadow: inset 31px 0 15px -10px #ff000078, inset -31px 0 15px -10px #ff000078;
+}
+
+.type__inactive {
+  background-color: #afafaf24;
+  opacity: 0.4;
+}
